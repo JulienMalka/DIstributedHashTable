@@ -15,7 +15,28 @@
 
 START_TEST(add_value_does_retrieve_same_value)
 {
-    puts("Ecrivez ici vos tests et SUPPRIMEZ ce puts");
+    Htable_t table;
+	
+	// Put a pair (key, value) and reading from table
+	const pps_key_t key1 = 'c';
+	const pps_value_t value1 = 42;
+	const pps_key_t key2 = 'a';
+	const pps_value_t value2 = 0;
+	
+	add_Htable_value(table, key1, value1);
+	add_Htable_value(table, key2, value2);
+	
+	const pps_value_t value_read1 = get_Htable_value(table, key1);
+	const pps_value_t value_read2 = get_Htable_value(table, key2);
+
+	ck_assert_int_eq(key1, value_read1);
+	ck_assert_int_eq(key2, value_read2);
+	
+	ck_assert_ptr_nonnull(table);
+	
+	ck_assert_bad_param(add_Htable_value(NULL, key1, value1));
+	ck_assert_err_none(add_Htable_value(table, key1, value1));
+	
 }
 END_TEST
 
