@@ -29,8 +29,8 @@ START_TEST(add_value_does_retrieve_same_value)
 	const pps_value_t value_read1 = get_Htable_value(table, key1);
 	const pps_value_t value_read2 = get_Htable_value(table, key2);
 
-	ck_assert_int_eq(key1, value_read1);
-	ck_assert_int_eq(key2, value_read2);
+	ck_assert_int_eq(value1, value_read1);
+	ck_assert_int_eq(value2, value_read2);
 	
 	ck_assert_ptr_nonnull(table);
 	
