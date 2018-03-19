@@ -1,13 +1,11 @@
-all: mrproper test-hashtable
-
-test-hashtable: hashtable.o test-hashtable.c error.o
-	gcc hashtable.o test-hashtable.c error.o -lcheck -lm -lrt -pthread -lsubunit -o test-hashtable
+all: test-hashtable
+	
+error.o: error.c
 
 hashtable.o: hashtable.c
-	gcc -c hashtable.c -o hashtable.o
-	
-error.o: error.c error.h
-	gcc -o error.o -c error.c
+
+test-hashtable: hashtable.o error.o
+	gcc hashtable.o error.o -lcheck -lm -lrt -pthread -lsubunit -o test-hashtable
 	
 clean:
 	rm -f *.o core
