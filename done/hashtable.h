@@ -16,10 +16,7 @@
  * Definition of type for local hash-tables keys
  */
 
-
 typedef char pps_key_t;
-
-
 
 /*
  * Definition of type for local hash-tables values
@@ -31,39 +28,24 @@ typedef int32_t pps_value_t;
 /*
  * key-value pair
  */
-/* TODO WEEK 04:
- * Définir ici le type kv_pair_t (et...).
- */
- 
  
  typedef struct{
 	 pps_key_t key;
 	 pps_value_t value;
 	 
 	 } kv_pair_t; 
- 
- 
-
 /*
  * Definition of type for local hash-tables buckets
  */
-/* TODO WEEK 04:
- * Définir ici le type bucket_t (et...).
- */
 
 typedef pps_value_t bucket_t;
-
 
 /*
  * Definition of local hash-table type
  */
 #define HTABLE_SIZE 256
-/* TODO WEEK 04:
- * Définir ici le type Htable_t (et...).
- */
  
 typedef bucket_t Htable_t[HTABLE_SIZE];
-
 
 
 // Only from week 07

@@ -1,11 +1,11 @@
-all:  test-hashtable
+all:  week04
 	
 error.o: error.c  
 
-week04.o: week04.c
+hashtable.o: hashtable.c
 
-test-hashtable.o : test-hashtable.c
+week04.o : week04.c
 
-test-hashtable: week04.o error.o test-hashtable.o
-	gcc test-hashtable.o week04.o error.o -lcheck -lm -lrt -pthread -lsubunit -o test-hashtable
+week04: hashtable.o error.o week04.o
+	gcc week04.o hashtable.o error.o -lcheck -lm -lrt -pthread -lsubunit -o test-hashtable
 
