@@ -23,6 +23,12 @@
  * (et supprimer ces trois lignes de commentaire).
  */
 
+/*typedef struct{
+	const char* name;
+	node_t server;
+	int socket;
+	} client_t;
+*/
 /**
  * @brief client_init function arguments.
  *        To be defined in week 05 and THEN UPDATED in week 10.
