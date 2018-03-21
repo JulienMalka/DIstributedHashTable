@@ -23,12 +23,12 @@
  * (et supprimer ces trois lignes de commentaire).
  */
 
-/*typedef struct{
+typedef struct{
 	const char* name;
 	node_t server;
 	int socket;
 	} client_t;
-*/
+
 /**
  * @brief client_init function arguments.
  *        To be defined in week 05 and THEN UPDATED in week 10.
@@ -37,6 +37,14 @@
  * Définir ici le type client_init_args_t
  * (et supprimer ces trois lignes de commentaire).
  */
+
+
+typedef struct{
+  const char* name;
+  client_t* client;
+} client_init_args_t
+
+
 
 /**
  * @brief does all the work to be done at the end of life of a client
