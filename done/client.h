@@ -42,7 +42,7 @@ typedef struct{
 typedef struct{
   const char* name;
   client_t* client;
-} client_init_args_t
+} client_init_args_t;
 
 
 

@@ -1,21 +1,26 @@
+#include <stdio.h>
+
 #include "error.h"
 #include "hashtable.h"
+#include "client.h"
+#include "config.h"
+#include "system.h"
+
 
 
 
 error_code network_get(client_t client, pps_key_t key, pps_value_t *value){
+	
 	// Set up socket with a receive timeout of 1 s.
-    int s;
-    s = get_socket(1);
+    int s = client.socket;
+    
 
     // Load server address.
-    struct sockaddr_in srv_addr;
+    node_t srv_addr = client.server;
     get_server_addr(PPS_DEFAULT_IP, PPS_DEFAULT_PORT, &srv_addr);
 
     // Read user input from stdin.
-    unsigned int request = 0; // assume we want to send a single integer value
-    printf("What int value do you want to send? ");
-    scanf("%d", &request);
+    pps_key_t request = key;
 
     // Prepare outgoing message with htonl.
     unsigned int out_msg;
@@ -26,29 +31,23 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value){
            PPS_DEFAULT_IP, PPS_DEFAULT_PORT, request);
     if (sendto(s, &out_msg, sizeof(out_msg), 0,
                (struct sockaddr *)&srv_addr, sizeof(srv_addr)) == -1)
-        die("sendto");
+      return ERR_NETWORK;
 
     // Receive response.
-    unsigned int in_msg = 0;
+    unsigned int in_msg;
     ssize_t in_msg_len = recv(s, &in_msg, sizeof(in_msg), 0);
-    if (in_msg_len == sizeof(in_msg)) { // Valid response.
+    if (in_msg_len == sizeof(in_msg)) { 
+		// Valid response.
         // Parse response with ntohl
-        int response;
+        pps_value_t response;
         response = ntohl(in_msg);
-        printf("Received response: %d\n", response);
-    } else if (in_msg_len == -1) { // Timeout.
-        puts("Receive timeout.");
-    } else { // Wrong message size.
-        puts("Received invalid response.");
-    }
+		*value = response;
+	}	
 
-    // Clean up socket.
-    close(s);
-
-    return 0;
+    return ERR_NONE;
 }
 
 error_code network_put(client_t client, pps_key_t key, pps_value_t value){
 	
-	
+	return ERR_NONE;
 }
