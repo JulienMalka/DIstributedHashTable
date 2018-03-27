@@ -38,13 +38,10 @@ typedef struct{
  * (et supprimer ces trois lignes de commentaire).
  */
 
-
 typedef struct{
   const char* name;
   client_t* client;
 } client_init_args_t;
-
-
 
 /**
  * @brief does all the work to be done at the end of life of a client
