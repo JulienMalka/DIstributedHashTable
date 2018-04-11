@@ -26,7 +26,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value){
     // Send message.
     printf("Sending message to %s:%d: %d\n",
            PPS_DEFAULT_IP, PPS_DEFAULT_PORT, request);
-    if (sendto(s, &out_msg, sizeof(out_msg), 0,
+    if (sendto(client.socket, &out_msg, sizeof(out_msg), 0,
                (struct sockaddr *) &srv_addr, sizeof(srv_addr)) == -1)
       return ERR_NETWORK;
 
