@@ -21,23 +21,24 @@ int main(void){
 	client.socket = s;
 	node_init(&client.server, PPS_DEFAULT_IP, PPS_DEFAULT_PORT, 0);
 
+	pps_value_t get_value;
+
 	while(1){
 		
-		pps_value_t value;
 		pps_key_t key;
 		int ok = 1;
 				
 		while (ok == 1){		
-			int error = scanf("%c %d", &key, &value);
+			int error = scanf("%c", &key);
 			if (error != 1) ok = 0;
 			else printf("FAIL\n");
 		}
 		printf("OK\n");
 		
-		network_put(client, key, value);
+		network_get(client, key, &get_value);
 	}
 	
-	
+	printf("value = %d", get_value);
 	
 	return 0;
 }
