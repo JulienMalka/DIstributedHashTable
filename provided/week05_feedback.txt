@@ -1,0 +1,18 @@
+Submission has no tag 'week05'. Using master (sha: c5b6bec0325f0c70c8236eb392126b634040f5dc)
+--------
+Checking for expected files
+Found expected file done/node.c on master, not on tag week05
+Found expected file done/network.c on master, not on tag week05
+Found expected file done/hashtable.c on master, not on tag week05
+Found expected file done/Makefile on master, not on tag week05
+Found expected file done/client.h on master, not on tag week05
+Found expected file done/pps-client-put.c on master, not on tag week05
+Found expected file done/week04.c on master, not on tag week05
+Found expected file done/pps-launch-server.c on master, not on tag week05
+Found expected file done/hashtable.h on master, not on tag week05
+Didn't find expected file done/pps-client-get.c on master or on tag week05
+Found expected file done/client.c on master, not on tag week05
+Found expected file done/node.h on master, not on tag week05
+--------
+Unable to build target 'pps-client-get'
+Unable to build all targets
