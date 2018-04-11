@@ -11,15 +11,8 @@
 
 int main(void){
 	
-	int s;
-	s = get_socket(0);
-	
-	//Bind server to the address:port
-	bind_server(s, PPS_DEFAULT_IP, PPS_DEFAULT_PORT);
-	
-	client_t client;
-	client.socket = s;
-	node_init(&client.server, PPS_DEFAULT_IP, PPS_DEFAULT_PORT, 0);
+	client_init_args_t client_i;
+	client_init(client_i);
 
 	while(1){
 		
@@ -27,17 +20,15 @@ int main(void){
 		pps_key_t key;
 		int ok = 1;
 				
-		while (ok == 1){		
+		while (ok){		
 			int error = scanf("%c %d", &key, &value);
 			if (error != 1) ok = 0;
 			else printf("FAIL\n");
 		}
 		printf("OK\n");
 		
-		network_put(client, key, value);
+		network_put(*client_i.client, key, value);
 	}
-	
-	
 	
 	return 0;
 }
