@@ -8,6 +8,7 @@
 #include "network.h"
 #include "config.h"
 #include "error.h"
+#include "client.h"
 
 int main(void){
 
@@ -24,19 +25,21 @@ int main(void){
 		pps_key_t key;
 		int ok = 1;
 
-		while (ok){
-			int error = scanf("%c", &key);
-			if (!error) ok = 0;
-			else printf("FAIL\n");
+		while (scanf("%c", &key)!=1){
+
+			printf("LOL\n");
+
 		}
 
 
 		error_code error = network_get(*client_i.client, key, &get_value);
+		printf("%d", error);
 		if(error == ERR_NONE){
 		printf("OK %d", get_value);
 	}else{
 
-		printf("FAIL\n")
+		printf("PTDR\n");
+		printf("OK %d", get_value);
 	}
 	}
 

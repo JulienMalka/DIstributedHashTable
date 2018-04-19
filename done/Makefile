@@ -1,25 +1,27 @@
-all:  week04 week05
-	
-error.o: error.c  
+all:  week05
+
+error.o: error.c
 
 hashtable.o: hashtable.c
 
-week04.o : week04.c
+system.o: system.c
 
-week04: hashtable.o error.o week04.o
-	gcc week04.o hashtable.o error.o -lcheck -lm -lrt -pthread -lsubunit -o test-hashtable
+client.o: client.c
+
+node.o: node.c
+
+network.o: network.c
 
 week05: pps-launch-server pps-client-get pps-client-put
 
-pps-launch-server: pps-launch-server.o
+pps-launch-server: pps-launch-server.o system.o network.o
 
-pps-client-get: pps-client-get.o
+pps-client-get: pps-client-get.o client.o node.o network.o system.o
 
-pps-client-put: pps-client-put.o
+pps-client-put: pps-client-put.o client.o node.o network.o system.o
 
-pps-launch-server.o: pps-launch-server.c
+pps-launch-server.o: pps-launch-server.c system.h network.h
 
 pps-client-get.o: pps-client-get.c
 
 pps-client-put.o: pps-client-put.c
-
