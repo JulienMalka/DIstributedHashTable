@@ -34,7 +34,7 @@ int main(void){
 
 		error_code error = network_get(*client_i.client, key, &get_value);
 		if(error == ERR_NONE){
-		printf("OK %d", get_value);
+		printf("OK %d\n", get_value);
 		fflush(stdout);
 	}else{
 
