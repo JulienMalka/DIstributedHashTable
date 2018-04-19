@@ -22,9 +22,11 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value){
       return ERR_NETWORK;
 
     // Receive response.
-    int in_msg;
-    ssize_t in_msg_len = recvfrom(client.socket, &in_msg, sizeof(in_msg), 0, (struct sockaddr *) &client.server,(socklen_t *) sizeof(client.server));
-    printf("expect %lu, wanted %lu",in_msg_len, sizeof(in_msg));
+    uint32_t in_msg = 0;
+    ssize_t in_msg_len = recv(client.socket, &in_msg, sizeof(in_msg), 0);//, (struct sockaddr *) &client.server,(socklen_t *) sizeof(client.server));
+    
+    printf("obtained %ld with error %d, wanted %lu, val %d  or  %d",in_msg_len, errno, sizeof(in_msg), in_msg, ntohl(in_msg));
+    
     if (in_msg_len == sizeof(in_msg)) { 
 		// Valid response.
         // Parse response with ntohl.

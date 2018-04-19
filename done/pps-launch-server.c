@@ -65,7 +65,7 @@ int main(void){
 		unsigned int out_msg;
 		out_msg = htonl(get);
 
-		sendto(s, &out_msg, 1, 0,
+		sendto(s, &out_msg, 4, 0,
               (struct sockaddr *) &cli_addr, sizeof(cli_addr));
 		}
 	}
