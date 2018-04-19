@@ -22,24 +22,23 @@ int main(void){
 
 	while(1){
 
+
 		pps_key_t key;
-		int ok = 1;
+		int number=-1;
 
-		while (scanf("%c", &key)!=1){
+		do{
+			 number = scanf(" %c", &key);
+		 }while (number==-1);
 
-			printf("LOL\n");
-
-		}
 
 
 		error_code error = network_get(*client_i.client, key, &get_value);
-		printf("%d", error);
 		if(error == ERR_NONE){
 		printf("OK %d", get_value);
+		fflush(stdout);
 	}else{
 
-		printf("PTDR\n");
-		printf("OK %d", get_value);
+		printf("FAIL\n");
 	}
 	}
 

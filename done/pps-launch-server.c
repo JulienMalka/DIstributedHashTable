@@ -15,6 +15,8 @@ int main(void){
 	//Set up socket
 	int s;
 	s = get_socket(0);
+	
+	Htable_t h_table;
 
 	//Bind server to the address:port
 	bind_server(s, PPS_DEFAULT_IP, PPS_DEFAULT_PORT);
@@ -23,24 +25,29 @@ int main(void){
 		node_t cli_addr;
 		socklen_t addr_len = sizeof(cli_addr);
 		memset(&cli_addr, 0, addr_len);
-      printf("went there");
-			fflush(stdout);
-			pps_key_t in_msg;
-      ssize_t in_msg_len = recvfrom(s, &in_msg, sizeof(in_msg), 0,
+		unsigned char in_msg[5];
+		printf("preparing to receive something\n");
+        ssize_t in_msg_len = recvfrom(s, in_msg, sizeof(in_msg), 0,
                                       (struct sockaddr *) &cli_addr, &addr_len);
-
-				printf("test %d", (int)in_msg_len);
-				fflush(stdout);
-        if (in_msg_len != sizeof(in_msg)) { // Wrong message size.
-            printf("Received invalid message");
+   /*     if (in_msg_len != sizeof(in_msg)) { // Wrong message size.
+			printf("in_msg_len = %lu\n", in_msg_len);
+			printf("sizeof(in:msg) = %lu\n", sizeof(in_msg));
+            printf("Received invalid message\n");
             continue;
-        }
-
-				printf("REICEIVEC");
-				fflush(stdout);
+        }*/
+        
+        printf("Received something\n");
+        printf("%lu\n", sizeof(in_msg));
 
 		// Write Request
 		if (in_msg_len == 5){
+			pps_key_t key = in_msg[0];
+			pps_value_t value = ntohl(in_msg[1] << 24) | (in_msg[2] << 16) | (in_msg[3] << 8) | in_msg[4];
+			
+			add_Htable_value(h_table, key, value);
+			
+		printf("write request = (%c, %d)... sending response\n", key, value);
+			
 			sendto(s, 0, 0, 0,
                (struct sockaddr *) &cli_addr, sizeof(cli_addr));
 		}
@@ -48,22 +55,17 @@ int main(void){
 		// Read Request
 		if (in_msg_len == 1){
 
-		unsigned char* packet;
+		pps_key_t request = in_msg[0];
+		printf("%c\n", request);
 
-		pps_key_t request;
-		request = ntohl(in_msg);
-
-		client_t client;
-		client.server = cli_addr;
-		client.socket = s;
-
-		pps_value_t get;
-		network_get(client, request, &get);
+		pps_value_t get = get_Htable_value(h_table, request);
+		
+		printf("read request = %c ... sending response = %d\n", request, get);
 
 		unsigned int out_msg;
 		out_msg = htonl(get);
 
-		sendto(s, &out_msg, sizeof(out_msg), 0,
+		sendto(s, &out_msg, 1, 0,
               (struct sockaddr *) &cli_addr, sizeof(cli_addr));
 		}
 	}
