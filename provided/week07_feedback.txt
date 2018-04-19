@@ -1,4 +1,4 @@
-Submission has no tag 'week07'. Using master (sha: 512d57db7b11cd0fd390158a6b852d2468da15eb)
+Submission has no tag 'week07'. Using master (sha: 33493496eb6c4ebaaa89957ac526f5b939278d96)
 --------
 Checking for expected files
 Found expected file done/node.c on master, not on tag week07
@@ -384,8 +384,8 @@ stderr:
 Running test scripts
 
 
-Unable to run test '05.basic.sh' because the following executables weren't found: pps-client-put, pps-client-get, pps-launch-server
+Unable to run test '05.basic.sh' because the following executables weren't found: pps-launch-server, pps-client-get, pps-client-put
 -----------
-Unable to run test '06.basic.sh' because the following executables weren't found: pps-client-put, pps-client-get, pps-launch-server
+Unable to run test '06.basic.sh' because the following executables weren't found: pps-launch-server, pps-client-get, pps-client-put
 -----------
-Unable to run test '07.basic.sh' because the following executables weren't found: pps-client-put, pps-client-get, pps-launch-server
+Unable to run test '07.basic.sh' because the following executables weren't found: pps-launch-server, pps-client-get, pps-client-put
