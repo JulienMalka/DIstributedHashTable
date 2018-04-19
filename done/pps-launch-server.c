@@ -17,9 +17,22 @@ int main(void){
 	s = get_socket(0);
 	
 	Htable_t h_table;
+	
+	int ok = 1;
+	char ip[15]; //max 15 characters in an ip adress
+	int port;
+	while(ok){
+		printf("IP port? ");
+		int error = scanf(" %s %d", ip, &port);
+		if (error != 1) ok = 0;
+		else {
+			printf("FAIL\n");
+		}
+	}
 
 	//Bind server to the address:port
-	bind_server(s, PPS_DEFAULT_IP, PPS_DEFAULT_PORT);
+	bind_server(s, ip, port);
+
 	//Receive messages forever
 	while(1){
 		node_t cli_addr;
@@ -29,12 +42,12 @@ int main(void){
 		printf("preparing to receive something\n");
         ssize_t in_msg_len = recvfrom(s, in_msg, sizeof(in_msg), 0,
                                       (struct sockaddr *) &cli_addr, &addr_len);
-   /*     if (in_msg_len != sizeof(in_msg)) { // Wrong message size.
+        if (in_msg_len != 1 && in_msg_len != 5) { // Wrong message size.
 			printf("in_msg_len = %lu\n", in_msg_len);
 			printf("sizeof(in:msg) = %lu\n", sizeof(in_msg));
             printf("Received invalid message\n");
             continue;
-        }*/
+        }
         
         printf("Received something\n");
         printf("%lu\n", sizeof(in_msg));
