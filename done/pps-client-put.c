@@ -1,4 +1,4 @@
-// standard includes 
+// standard includes
 #include <stdio.h>
 
 // for basic socket communication
@@ -10,25 +10,32 @@
 #include "error.h"
 
 int main(void){
-	
+
+	client_t client;
 	client_init_args_t client_i;
+	client_i.client = &client;
+	client_i.name = "test";
 	client_init(client_i);
 
 	while(1){
-		
+
 		pps_value_t value;
 		pps_key_t key;
 		int ok = 1;
-				
-		while (ok){		
+
+		while (ok){
 			int error = scanf("%c %d", &key, &value);
 			if (error != 1) ok = 0;
 			else printf("FAIL\n");
 		}
-		printf("OK\n");
-		
-		network_put(*client_i.client, key, value);
+
+		error_code error = network_put(*client_i.client, key, value);
+		if(error == ERR_NONE){
+			printf("OK\n")
+		}else{
+			printf("FAIL\n")
+		}
 	}
-	
+
 	return 0;
 }
