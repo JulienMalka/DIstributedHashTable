@@ -40,7 +40,7 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value){
     unsigned int value_formated;
     value_formated = htonl(value);
 	
-	//@TODO Overlook formatting outgoing message
+	//@TODO Overlook formatting outgoing messages
 	packet[0] = key;
 	packet[1] = value_formated >> 24;
 	packet[2] = value_formated >> 16;
