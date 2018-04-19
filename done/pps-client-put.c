@@ -32,7 +32,11 @@ int main(void){
 		error_code error = network_put(*client_i.client, key, value);
 		if(error == ERR_NONE){
 			printf("OK\n");
+<<<<<<< HEAD
 		}else{
+=======
+		}else {
+>>>>>>> 3b765c56c74c194c0d4cd44482a116ccab700c07
 			printf("FAIL\n");
 		}
 	}

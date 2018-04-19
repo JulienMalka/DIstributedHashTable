@@ -16,10 +16,7 @@ void client_end(client_t *client){
 error_code client_init(client_init_args_t client_init_args){
 
 client_init_args.client->name = client_init_args.name;
-node_t node;
-const char ip = PPS_DEFAULT_IP;
-node_init(&node, &ip, PPS_DEFAULT_PORT, 0);
-client_init_args.client->server = node;
+node_init(&client_init_args.client->server, PPS_DEFAULT_IP, PPS_DEFAULT_PORT, 0);
 client_init_args.client->socket = get_socket(1);
 return 0;
 }
