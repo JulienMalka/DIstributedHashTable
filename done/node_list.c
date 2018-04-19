@@ -33,14 +33,18 @@ node_list_t *get_nodes()
         while(!feof(file)) {
 
 			if (isspace(current_char)){
-				index = -1;
+				index = 0;
+				current_char = fgetc(file);
 				fscanf(file, "%d", &port);
 				
 				node_t node;
 				node_init(&node, ip, port, 0);
 				node_list_add(nodes, node);
 				
-				while(current_char != '\n') current_char = fgetc(file);                              
+				while(current_char != '\n') {
+					current_char = fgetc(file);  
+				}
+				current_char = fgetc(file);	                            
 			}
 			
 			ip[index] = current_char;
