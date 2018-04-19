@@ -15,39 +15,48 @@ node_list_t *node_list_new()
 
 node_list_t *get_nodes()
 {
-	
+
 	node_list_t* nodes = node_list_new();
-	
+
     FILE* file = fopen(PPS_SERVERS_LIST_FILENAME, "r");
-    
+
     if(file == NULL) {
         //gestion de l'erreur
-    } 
+    }
 
 	int current_char = fgetc(file);
-	
+
 	char ip[15];
 	int index = 0;
 	int port;
-	
+
         while(!feof(file)) {
 
 			if (isspace(current_char)){
 				index = -1;
 				fscanf(file, "%d", &port);
-				
+
 				node_t node;
 				node_init(&node, ip, port, 0);
 				node_list_add(nodes, node);
-				
-				while(current_char != '\n') current_char = fgetc(file);                              
+
+				while(current_char != '\n') current_char = fgetc(file);
 			}
-			
+
 			ip[index] = current_char;
-			
+
 			index += 1;
 			current_char = fgetc(file);
         }
 
 	return nodes;
+}
+
+void node_list_free(node_list_t *list){
+
+for(int i=0; i<list->size;i++){
+	node_end(list->nodes[i]);
+	}
+
+	free(list);
 }
