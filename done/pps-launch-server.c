@@ -44,6 +44,8 @@ int main(void){
 		// Read Request
 		if (in_msg_len == 1){
 			
+		unsigned char* packet;	
+			
 		pps_key_t request;
 		request = ntohl(in_msg);	
 			

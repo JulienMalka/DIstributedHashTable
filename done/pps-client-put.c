@@ -12,6 +12,10 @@
 int main(void){
 	
 	client_init_args_t client_i;
+	client_t client;
+	client_i.name = "client1";
+	client_i.client = &client;
+	
 	client_init(client_i);
 
 	while(1){
