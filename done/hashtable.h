@@ -16,14 +16,13 @@
  * Definition of type for local hash-tables keys
  */
 
-typedef char pps_key_t;
+typedef const char* pps_key_t;
 
 /*
  * Definition of type for local hash-tables values
  */
 
-typedef int32_t pps_value_t;
-
+typedef const char* pps_value_t;
 
 /*
  * key-value pair
@@ -31,21 +30,24 @@ typedef int32_t pps_value_t;
  
  typedef struct{
 	 pps_key_t key;
-	 pps_value_t value;
-	 
+	 pps_value_t value;	 
 	 } kv_pair_t; 
+	 
 /*
  * Definition of type for local hash-tables buckets
  */
 
-typedef pps_value_t bucket_t;
+typedef struct bucket bucket_t;
 
 /*
  * Definition of local hash-table type
  */
 #define HTABLE_SIZE 256
  
-typedef bucket_t Htable_t[HTABLE_SIZE];
+typedef struct { 
+	struct bucket* buckets;
+	size_t size;
+	  } Htable_t;
 
 
 // Only from week 07
@@ -62,12 +64,8 @@ typedef void kv_list_t;
  * @param size number of buckets in the new hash-table
  * @return the newly allocated hash-table
  */
-/* TODO WEEK 07:
- * Définir le bon type de retour ici
- * (remplacer void et ces 4 lignes de commentaire).
- */
-void
-construct_Htable(size_t size);
+
+Htable_t construct_Htable(size_t size);
 
 /**
  * @brief delete the given hash-table
