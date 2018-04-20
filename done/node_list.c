@@ -29,23 +29,35 @@ node_list_t *get_nodes()
 
 	char ip[15];
 	int index = 0;
-	int port;
+	int port = 1;
 
         while(!feof(file)) {
+			printf("current char = %c\n", current_char);
 
 			if (isspace(current_char)){
-				index = 0;
+				printf("Found space and index = %d\n", index);
 				current_char = fgetc(file);
 				fscanf(file, "%d", &port);
+				
+				//take the n first chars, discard else
+				char real_ip[index];
+				
+				for (int i = 0; i < index; i++){
+					real_ip[i] = ip[i];
+				}
+				
+	//			real_ip = {'1','2','7','.','0','.','0','.','1'};
 
 				node_t node;
-				node_init(&node, ip, port, 0);
+				printf("current ip = %s\n", real_ip);
+				node_init(&node, real_ip, port, 0);
 				node_list_add(nodes, node);
 
 				while(current_char != '\n') {
 					current_char = fgetc(file);
 				}
-				current_char = fgetc(file);
+				index = 0;
+	//			current_char = fgetc(file);
 			}
 
 			ip[index] = current_char;
@@ -60,7 +72,7 @@ node_list_t *get_nodes()
 error_code node_list_add(node_list_t *list, node_t node){
 
 	list->size++;
-	if(list->size>list->allocated_size){
+	if(list->size > list->allocated_size){
 
 		node_t* nodes = realloc(list->nodes, list->allocated_size+32);
 		if(nodes==NULL){
