@@ -59,7 +59,7 @@ node_list_t *get_nodes()
 void node_list_free(node_list_t *list){
 
 for(int i=0; i<list->size;i++){
-	node_end(list->nodes[i]);
+	node_end(&list->nodes[i]);
 	}
 
 	free(list);
