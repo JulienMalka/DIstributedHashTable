@@ -9,6 +9,8 @@
 #include "network.h"
 #include "config.h"
 #include "error.h"
+#include <string.h>
+#include <stdlib.h>
 
 
 int main(void)
@@ -39,11 +41,11 @@ int main(void)
         node_t cli_addr;
         socklen_t addr_len = sizeof(cli_addr);
         memset(&cli_addr, 0, addr_len);
-        unsigned char in_msg[5];
+
+         char* in_msg = malloc(MAX_MSG_SIZE);
         printf("preparing to receive something\n");
-        ssize_t in_msg_len = recvfrom(s, in_msg, sizeof(in_msg), 0,
-                                      (struct sockaddr *) &cli_addr, &addr_len);
-        if (in_msg_len != 1 && in_msg_len != 5) { // Wrong message size.
+        ssize_t in_msg_len = recv(s, in_msg, sizeof(in_msg), 0);
+        if (in_msg_len>MAX_MSG_SIZE) { // Wrong message size.
             printf("in_msg_len = %lu\n", in_msg_len);
             printf("sizeof(in:msg) = %lu\n", sizeof(in_msg));
             printf("Received invalid message\n");
@@ -53,33 +55,52 @@ int main(void)
         printf("Received something\n");
         printf("%lu\n", sizeof(in_msg));
 
+       char tolook = '\0';
+
         // Write Request
-        if (in_msg_len == 5) {
-            pps_key_t key = in_msg[0];
-            pps_value_t value = ntohl(in_msg[1] << 24) | (in_msg[2] << 16) | (in_msg[3] << 8) | in_msg[4];
+        if (memchr(in_msg, tolook, in_msg_len)!=NULL) {
+            printf("Received write request \n");
+			       char* ret = memchr(in_msg, tolook, in_msg_len);
+            size_t size_key = strlen(in_msg);
+            char* key = calloc(size_key+1, sizeof(char));
+            for(int i =0; i<size_key;i++){
+
+              key[i] = in_msg[i];
+            }
+
+            key[size_key] = '\0';
+            printf("parsed key");
+            size_t size_value = in_msg_len - size_key;
+            char* value = calloc(size_value+1, sizeof(char));
+            for(int i=0; i<size_value; i++){
+
+              value[i] = ret[i+1];
+
+            }
+
+            value[size_value] = '\0';
 
             add_Htable_value(h_table, key, value);
 
-            printf("write request = (%c, %d)... sending response\n", key, value);
+            printf("write request = (%s, %s)... sending response\n", key, value);
 
             sendto(s, 0, 0, 0,
                    (struct sockaddr *) &cli_addr, sizeof(cli_addr));
         }
 
         // Read Request
-        if (in_msg_len == 1) {
+        if (memchr(&in_msg, 0, in_msg_len)==NULL) {
 
-            pps_key_t request = in_msg[0];
-            printf("%c\n", request);
+            char* request = in_msg;
+            printf("%s\n", request);
 
             pps_value_t get = get_Htable_value(h_table, request);
 
-            printf("read request = %c ... sending response = %d\n", request, get);
+            printf("read request = %s ... sending response = %s\n", request, get);
 
-            unsigned int out_msg;
-            out_msg = htonl(get);
 
-            sendto(s, &out_msg, 4, 0,
+
+            sendto(s, get, strlen(get), 0,
                    (struct sockaddr *) &cli_addr, sizeof(cli_addr));
         }
     }
