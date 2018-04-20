@@ -8,6 +8,7 @@ node_list_t *node_list_new()
 {
 	node_list_t* new = malloc(sizeof(node_list_t));
 	new->size = 0;
+	new->allocated_size = 32;
 	new->nodes = calloc(32, sizeof(node_t));
 	return new;
 }
@@ -40,11 +41,11 @@ node_list_t *get_nodes()
 				node_t node;
 				node_init(&node, ip, port, 0);
 				node_list_add(nodes, node);
-				
+
 				while(current_char != '\n') {
-					current_char = fgetc(file);  
+					current_char = fgetc(file);
 				}
-				current_char = fgetc(file);	                            
+				current_char = fgetc(file);
 			}
 
 			ip[index] = current_char;
@@ -55,6 +56,26 @@ node_list_t *get_nodes()
 
 	return nodes;
 }
+
+error_code node_list_add(node_list_t *list, node_t node){
+
+	list->size++;
+	if(list->size>list->allocated_size){
+
+		node_t* nodes = realloc(list->nodes, list->allocated_size+32);
+		if(nodes==NULL){
+			return ERR_NOMEM;
+			}else{
+		list->allocated_size+=32;
+	}
+	}
+
+	list->nodes[list->size-1] = node;
+	return ERR_NONE;
+
+}
+
+
 
 void node_list_free(node_list_t *list){
 
