@@ -1,5 +1,7 @@
 CFLAGS= -g -std=c99
 all:  week05
+	#Reformat code of every file in folder
+	astyle -A8 *.c
 
 error.o: error.c
 
