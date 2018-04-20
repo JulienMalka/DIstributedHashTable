@@ -13,7 +13,7 @@ error_code add_Htable_value(Htable_t htable, pps_key_t key, pps_value_t value)
 
 pps_value_t get_Htable_value(Htable_t htable, pps_key_t key)
 {
-	return htable[key % HTABLE_SIZE];
+    return htable[key % HTABLE_SIZE];
 }
 
 size_t hash_function(pps_key_t key, size_t size)

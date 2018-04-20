@@ -32,10 +32,10 @@ node_list_t *get_nodes()
     uint16_t port = 0;
 
     while(!feof(file)) {
-        printf("current char = %c\n", current_char);
+      //  printf("current char = %c\n", current_char);
 
         if (isspace(current_char)) {
-            printf("Found space and index = %d\n", index);
+          //  printf("Found space and index = %d\n", index);
             fscanf(file, "%hu", &port);
             current_char = fgetc(file);
 
@@ -47,15 +47,15 @@ node_list_t *get_nodes()
             }
 
             node_t node;
-            printf("current ip = %s and port = %hu\n", real_ip, port);
-            node_init(&node, real_ip, port, port);
+          //  printf("current ip = %s and port = %hu\n", real_ip, port);
+            node_init(&node, real_ip, port, 0);
             node_list_add(nodes, node);
-
+						free(real_ip);
             while(current_char != '\n') {
                 current_char = fgetc(file);
             }
             index = 0;
-            //			current_char = fgetc(file);
+            	current_char = fgetc(file);
         }
 
         ip[index] = current_char;
