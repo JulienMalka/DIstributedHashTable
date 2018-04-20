@@ -1,3 +1,4 @@
+CFLAGS= -g -std=c99
 all:  week05
 
 error.o: error.c
