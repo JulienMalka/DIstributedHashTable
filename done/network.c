@@ -61,14 +61,9 @@ printf("KEY VALUE GOT BY NETWORK (%s,%s)", key, value);
         }
         result[strlen(key)]='\0';
     for(int i=strlen(key)+1; i<strlen(key)+1+strlen(value); i++){
-        result[i] = value[i];
+        result[i] = value[i-strlen(key)-1];
       }
 
-for(int i=0; i<strlen(key)+strlen(value)+1;i++){
-
-printf("char %d : %c\n",result[i]);
-
-}
 
 
       if (sendto(client.socket, result, strlen(key)+strlen(value)+1, 0,
