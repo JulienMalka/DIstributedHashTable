@@ -33,6 +33,12 @@ START_TEST(add_value_does_retrieve_same_value)
 	ck_assert_int_eq(value1, value_read1);
 	ck_assert_int_eq(value2, value_read2);
 	
+	const size_t hashed = hash_function(key1, 0);
+	ck_assert_int_eq(0, hashed);
+	
+	const size_t maxSize = SIZE_MAX;
+	ck_assert_int_eq(0, hash_function(key1, maxSize)); 
+	
 	// tests if reference isn't null
 	ck_assert_ptr_nonnull(table);
 	
