@@ -1,0 +1,16 @@
+#ignore the .o files
+*.o
+
+#ignore the exectuable files
+pps-client-get
+pps-launch-server
+pps-client-put
+week04
+
+#ignore the .orig
+*.orig
+
+#ignore the .gch
+*.gch
+
+
