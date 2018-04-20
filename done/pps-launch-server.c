@@ -34,7 +34,11 @@ int main(void)
     }
 
     //Bind server to the address:port
-    bind_server(s, ip, port);
+  error_code error_bind =  bind_server(s, ip, port);
+
+  if(error_bind!=ERR_NONE){
+    printf("FAILED TO BIND IP"); //TO CHANGE
+  }
 
     //Receive messages forever
     while(1) {

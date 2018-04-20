@@ -67,7 +67,7 @@ printf("KEY VALUE GOT BY NETWORK (%s,%s)", key, value);
 
 
       if (sendto(client.socket, result, strlen(key)+strlen(value)+1, 0,
-                   (struct sockaddr *) &client.server.nodes[i], sizeof(client.server.nodes[i])) == -1) errors +=1;
+                   (struct sockaddr *) &client.server.nodes[i], sizeof(client.server.nodes[i])) ==-1) errors +=1;
 
     }
 
