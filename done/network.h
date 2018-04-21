@@ -35,3 +35,6 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value);
  * @return an error code
  */
 error_code network_del(client_t client, pps_key_t key);
+
+error_code send_packet(int socket, const char* message, size_t size, node_t node);
+char* format_put_request(pps_key_t key, pps_value_t value);

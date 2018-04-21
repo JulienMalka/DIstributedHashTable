@@ -105,7 +105,7 @@ int main(void)
 
 
 
-            sendto(s, get, 5, 0,
+            sendto(s, get, MAX_MSG_ELEM_SIZE, 0,
                    (struct sockaddr *) &cli_addr, sizeof(cli_addr));
         }
     }
