@@ -19,17 +19,17 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 
     for(int i=0; i<client.server.size; i++) {
         int size_to_send = strlen(key);
-        if (sendto(client.socket, &key, size_to_send, 0,
+        if (sendto(client.socket, key, size_to_send, 0,
                    (struct sockaddr *) &client.server.nodes[i], sizeof(client.server.nodes[i])) == -1)
             return ERR_NETWORK;
 
         // Receive response.
-        char* in_msg;
-        ssize_t in_msg_len = recv(client.socket, &in_msg, sizeof(in_msg), 0);//, (struct sockaddr *) &client.server,(socklen_t *) sizeof(client.server));
+        char* in_msg = malloc(MAX_MSG_ELEM_SIZE);
+        ssize_t in_msg_len = recv(client.socket, in_msg, MAX_MSG_ELEM_SIZE, 0);//, (struct sockaddr *) &client.server,(socklen_t *) sizeof(client.server));
 
         printf("obtained %ld with error %d, wanted %lu, val %s",in_msg_len, errno, sizeof(in_msg), in_msg);
 
-        if (in_msg_len == sizeof(in_msg)) {
+        if (in_msg_len != -1) {
             // Valid response.
             // Parse response with ntohl.
             pps_value_t response;
