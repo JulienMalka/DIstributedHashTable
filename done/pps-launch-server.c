@@ -48,7 +48,7 @@ int main(void)
 
          char* in_msg = malloc(MAX_MSG_SIZE);
         printf("preparing to receive something\n");
-        ssize_t in_msg_len = recv(s, in_msg, sizeof(in_msg), 0);
+        ssize_t in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
         if (in_msg_len>MAX_MSG_SIZE) { // Wrong message size.
             printf("in_msg_len = %lu\n", in_msg_len);
             printf("sizeof(in:msg) = %lu\n", sizeof(in_msg));
