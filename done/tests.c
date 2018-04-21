@@ -32,17 +32,14 @@ START_TEST(week04)
     const pps_value_t value2 = "malka";
 
     add_Htable_value(table, key1, value1);
-	printf("1. no segfault until now\n");
     add_Htable_value(table, key2, value2);
     
     print_htable(&table);
     
     const pps_value_t value_read1 = get_Htable_value(table, key1);
-    printf("2. no segfault until now\n");
     const pps_value_t value_read2 = get_Htable_value(table, key2);
-    printf("3. no segfault until now\n");
     
-    printf("value_read1 = %s, value_read2 = %s\n", value_read1, value_read2);
+    printf("\nvalue_read1 = %s, value_read2 = %s\n", value_read1, value_read2);
 
     // tests for input value = read value from get method
     ck_assert_str_eq(value1, value_read1);
