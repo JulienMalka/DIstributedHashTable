@@ -19,9 +19,9 @@ int main(void)
     int s;
     s = get_socket(0);
 
-    Htable_t h_table;
+    Htable_t h_table = construct_Htable(HTABLE_SIZE);
 
-    int ok = 1;
+ /*   int ok = 1;
     char ip[15]; //max 15 characters in an ip adress
     int port;
     while(ok) {
@@ -31,10 +31,10 @@ int main(void)
         else {
             printf("FAIL\n");
         }
-    }
+    }*/
 
     //Bind server to the address:port
-  error_code error_bind =  bind_server(s, ip, port);
+  error_code error_bind =  bind_server(s, PPS_DEFAULT_IP, PPS_DEFAULT_PORT);
 
   if(error_bind!=ERR_NONE){
     printf("FAILED TO BIND IP"); //TO CHANGE

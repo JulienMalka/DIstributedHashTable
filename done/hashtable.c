@@ -14,23 +14,50 @@ Htable_t construct_Htable(size_t size){
 	htable_new.buckets = calloc(size, sizeof(struct bucket));
 	htable_new.size = size;
 	
+	/*
 	for(int i = 0; i < size; i++){
 		htable_new.buckets[i].next = malloc(sizeof(struct bucket));
-	}
+	}*/
 	
 	return htable_new;
 }
 
-struct bucket* create_bucket(kv_pair_t key_value,struct bucket* next){
-	struct bucket* new = malloc(sizeof(struct bucket));
-	new->key_value = key_value;
-	new->next = malloc(sizeof(struct bucket));
-	new->next = next;	
+struct bucket create_bucket(kv_pair_t key_value, struct bucket* next){
+	struct bucket new;
+	new.key_value = key_value;
+	new.next = malloc(sizeof(struct bucket));
+	new.next = next;	
 	return new;
 }
 
+kv_pair_t copy_kv_pair(pps_key_t key, pps_value_t value){
+	
+	char* key_new = calloc(strlen(key), sizeof(char));
+	char* value_new = calloc(strlen(value), sizeof(char));
+	
+	for (int i = 0; i < strlen(key); i++){
+		key_new[i] = key[i];
+	}
+	
+	for (int i = 0; i < strlen(value); i++){
+		value_new[i] = value[i];
+	}
+	
+	kv_pair_t pair_new;
+	pair_new.key = key_new;
+	pair_new.value = value_new;
+	
+	return pair_new;
+}
+
 void delete_bucket(struct bucket* bck){
-	if (bck->next == NULL){
+	if (bck == NULL){}
+	else if (bck->next == NULL){
+		//Free key pointer
+		free(&bck->key_value.key);
+		//Free value pointer
+		free(&bck->key_value.value);
+		//Free the next pointer
 		free(bck->next);	
 	} else {
 		delete_bucket(bck->next);
@@ -39,45 +66,34 @@ void delete_bucket(struct bucket* bck){
 }
 
 void delete_Htable_and_content(Htable_t* table){
-	
 	for(int i = 0; i < table->size; i++){
 		delete_bucket(&table->buckets[i]);
 	}
-	
 	free(table->buckets);
 	table->size = 0;
 	
 }
 
-
-void copy_string(char* target, char* source){
-   while (*source) {
-      *target = *source;
-      source++;
-      target++;
-   }
-   *target = '\0';
-}
-
 error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t value){
 	
+	if (bck == NULL){
+		printf("bck == NULL\n");
+	}
 	
 	kv_pair_t key_value = bck->key_value;
 	
 	if (key == key_value.key){
 		
-		bck->key_value.value = value;
+		kv_pair_t pair_new = copy_kv_pair(key, value);
+		
+		bck->key_value = pair_new;
 		
 	} else if (bck->next == NULL){
-		
-		//@TODO NEED TO COPY VALUE AND KEY => NO PASSAGE PAR REFERENCE
-		
-		kv_pair_t key_value;
-		
-		key_value.key = key;
-		key_value.value = value;
+				
+		kv_pair_t pair_new = copy_kv_pair(key, value);
 
-		bck->next = create_bucket(key_value, NULL);
+		struct bucket bucket_new = create_bucket(pair_new, NULL);
+		bck->next = &bucket_new;
 				
 	} else add_value_to_bucket(bck->next, key, value);
 	
@@ -91,6 +107,10 @@ error_code add_Htable_value(Htable_t htable, pps_key_t key, pps_value_t value)
         return ERR_BAD_PARAMETER;
         
     size_t index = hash_function(key, htable.size);
+    
+    printf("add_Htable_value => key = %s and value = %s \n", key, value);
+    
+    printf("size of htable = %lu and index = %lu\n", htable.size, index);
     
     return add_value_to_bucket(&htable.buckets[index], key, value);
 }
