@@ -3,11 +3,20 @@
 #include "hashtable.h"
 #include "error.h"
 
+/*
+ * Private implementation of the bucket structure
+ * It is a linked list of kv_pair_t
+ */ 
 struct bucket {
 	kv_pair_t key_value;
 	struct bucket* next;
  };
 
+/*
+ * @brief Create a new Htable of parameter size. An htable is an array of buckets.
+ * @param number of buckets in the htable
+ * @return new htable
+ */ 
 Htable_t construct_Htable(size_t size){
 	
 	Htable_t htable_new;
@@ -16,7 +25,12 @@ Htable_t construct_Htable(size_t size){
 	
 	return htable_new;
 }
-
+/*
+ * @brief Create a new bucket.
+ * @param key_value of the bucket 
+ * @param reference to the next bucket
+ * @return reference to the new bucket
+ */ 
 struct bucket* create_bucket(kv_pair_t key_value, struct bucket* next){
 	struct bucket* new = malloc(sizeof(struct bucket));
 	new->key_value = key_value;
@@ -26,11 +40,21 @@ struct bucket* create_bucket(kv_pair_t key_value, struct bucket* next){
 	return new;
 }
 
+/*
+ * @brief free the reference key and value from a kv_pair
+ * @param kv to free
+ */ 
 void kv_pair_free(kv_pair_t *kv){
 	free(&kv->key);
 	free(&kv->value);
 }
 
+/*
+ * @brief Create a deep copy kv_pair from given key and value
+ * @param key
+ * @param value
+ * @return new kv_pair with copies of key and value
+ */ 
 kv_pair_t copy_kv_pair(pps_key_t key, pps_value_t value){
 	
 	char* key_new = calloc(strlen(key), sizeof(char));
@@ -51,6 +75,10 @@ kv_pair_t copy_kv_pair(pps_key_t key, pps_value_t value){
 	return pair_new;
 }
 
+/*
+ * @brief free the linked-list recursively bottom-up approach
+ * @param bck bucket to delete
+ */ 
 void delete_bucket(struct bucket* bck){
 	if (bck == NULL){
 		}
@@ -63,6 +91,10 @@ void delete_bucket(struct bucket* bck){
 	}
 }
 
+/* @TODO
+ * @brief Delete an htable and its content (every bucket)
+ * @param table to delete
+ */ 
 void delete_Htable_and_content(Htable_t* table){
 /*	for(int i = 0; i < table->size; i++){
 		delete_bucket(&table->buckets[i]);
@@ -73,6 +105,13 @@ void delete_Htable_and_content(Htable_t* table){
 	
 }
 
+/*
+ * @brief adds a key value pair to a existent bucket
+ * @param bck bucket to add the pair to
+ * @param key 
+ * @param value
+ * @return ERR_BAD_PARAMETER if value reference is NULL, ERR_NONE otherwise
+ */ 
 error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t value){
 	
 	kv_pair_t key_value = bck->key_value;
@@ -98,6 +137,13 @@ error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t va
 	return ERR_NONE;
 }
 
+/*
+ * @brief adds a key value pair to a existent htable
+ * @param htable to add the pair to
+ * @param key
+ * @param value
+ * @return ERR_BAD_PARAMETER if value reference is NULL, ERR_NONE otherwise
+ */ 
 error_code add_Htable_value(Htable_t htable, pps_key_t key, pps_value_t value)
 {
     if (value == NULL)
@@ -112,31 +158,12 @@ error_code add_Htable_value(Htable_t htable, pps_key_t key, pps_value_t value)
     return add_value_to_bucket(&htable.buckets[index], key, value);
 }
 
-pps_value_t get_value_from_bucket(struct bucket* bck, pps_key_t key);
-
-/*TESTS FUNCTION*/
-void print_bucket(struct bucket* bck){
-	if (bck == NULL){
-		printf("(null), ");
-	} else {
-		printf("kv(%s, %s), ", bck->key_value.key, bck->key_value.value);
-		print_bucket(bck->next);
-	}	
-}
-
-pps_value_t get_Htable_value(Htable_t htable, pps_key_t key)
-{
-	if (key == NULL)
-		return NULL;
-		
-	size_t index = hash_function(key, htable.size);
-//		printf("\nWe got there, looking for %s at index %lu\n", key, index);
-	struct bucket* row = &htable.buckets[index];
-//	print_bucket(row);
-	
-	return get_value_from_bucket(row, key);
-}
-
+/*
+ * @brief Find the value associated to given key in the bucket
+ * @param bck to look in
+ * @param key
+ * @return value associated or NULL if the key does not exist in the htable
+ */ 
 pps_value_t get_value_from_bucket(struct bucket* bck, pps_key_t key){
 	kv_pair_t key_value = bck->key_value;
 	
@@ -150,6 +177,40 @@ pps_value_t get_value_from_bucket(struct bucket* bck, pps_key_t key){
 	} else return get_value_from_bucket(bck->next, key);
 }
 
+/*TESTS FUNCTION*/
+void print_bucket(struct bucket* bck){
+	if (bck == NULL){
+		printf("(null), ");
+	} else {
+		printf("kv(%s, %s), ", bck->key_value.key, bck->key_value.value);
+		print_bucket(bck->next);
+	}	
+}
+
+/*
+ * @brief Find the value associated to given key in the htable
+ * @param htable to look into
+ * @param key
+ * @return value associated or NULL if the key does not exist in the htable
+ */ 
+pps_value_t get_Htable_value(Htable_t htable, pps_key_t key)
+{
+	if (key == NULL)
+		return NULL;
+		
+	size_t index = hash_function(key, htable.size);
+//		printf("\nWe got there, looking for %s at index %lu\n", key, index);
+	struct bucket* row = &htable.buckets[index];
+//	print_bucket(row);
+	return get_value_from_bucket(row, key);
+}
+
+/*
+ * @brief The hash function used to compute the indexes in the htable
+ * @param key to hash
+ * @param size of the htable
+ * @return index
+ */ 
 size_t hash_function(pps_key_t key, size_t size)
 {
     M_REQUIRE(size != 0, SIZE_MAX, "size == %d", 0);
