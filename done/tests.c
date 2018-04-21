@@ -11,51 +11,63 @@
 #include <check.h>
 
 #include "tests.h"
-#include "hashtable.h"
+
+#include "hashtable.c"
 
 #include "node_list.h"
 
 #include <arpa/inet.h>
 
+void print_htable(Htable_t* table);
+
 START_TEST(week04)
 {
-    Htable_t table;
+	printf("\nSTARTING TESTS FOR HTABLE\n\n");
+    Htable_t table = construct_Htable(HTABLE_SIZE);
 
     // Defining tests ressource
-    const pps_key_t key1 = 'c';
-    const pps_value_t value1 = 42;
-    const pps_key_t key2 = 'a';
-    const pps_value_t value2 = 0;
+    const pps_key_t key1 = "antoine";
+    const pps_value_t value1 = "crettenand";
+    const pps_key_t key2 = "julien";
+    const pps_value_t value2 = "malka";
 
     add_Htable_value(table, key1, value1);
+	printf("1. no segfault until now\n");
     add_Htable_value(table, key2, value2);
-
+    
+    print_htable(&table);
+    
     const pps_value_t value_read1 = get_Htable_value(table, key1);
+    printf("2. no segfault until now\n");
     const pps_value_t value_read2 = get_Htable_value(table, key2);
+    printf("3. no segfault until now\n");
+    
+    printf("value_read1 = %s, value_read2 = %s\n", value_read1, value_read2);
 
     // tests for input value = read value from get method
-    ck_assert_int_eq(value1, value_read1);
-    ck_assert_int_eq(value2, value_read2);
-
+    ck_assert_str_eq(value1, value_read1);
+    ck_assert_str_eq(value2, value_read2);
+	/*
     const size_t hashed = hash_function(key1, 0);
     ck_assert_int_eq(0, hashed);
 
     const size_t maxSize = SIZE_MAX;
-    ck_assert_int_eq(0, hash_function(key1, maxSize));
-
-    // tests if reference isn't null
-    ck_assert_ptr_nonnull(table);
-
-    // tests if method outputs correct errors on inputs
-    ck_assert_bad_param(add_Htable_value(NULL, key1, value1));
-    ck_assert_err_none(add_Htable_value(table, key1, value1));
-
+    ck_assert_int_eq(0, hash_function(key1, maxSize));*/
+    
+    delete_Htable_and_content(&table);
 }
 END_TEST
 
+void print_htable(Htable_t* htable){
+	printf("PRINTING CONTENT OF HTABLE\n");
+	for (int i = 0; i < htable->size; i++){
+		printf("\nindex %d ", i);
+		print_bucket(&htable->buckets[i]);		
+	}
+}
+
 void print_nodes(node_t* nodes, size_t size)
 {
-
     char buffer[20];
 
     for (int i = 0; i < size; i++) {
@@ -66,6 +78,7 @@ void print_nodes(node_t* nodes, size_t size)
 
 START_TEST(week05)
 {
+	printf("\nSTARTING TESTS FOR GET_NODES\n\n");
     node_list_t* nodes = node_list_new();
 
     nodes = get_nodes();
@@ -73,6 +86,8 @@ START_TEST(week05)
     print_nodes(nodes->nodes, nodes->size);
 }
 END_TEST
+
+
 
 Suite *hashtable_suite()
 {

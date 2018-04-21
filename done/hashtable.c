@@ -22,12 +22,18 @@ Htable_t construct_Htable(size_t size){
 	return htable_new;
 }
 
-struct bucket create_bucket(kv_pair_t key_value, struct bucket* next){
-	struct bucket new;
-	new.key_value = key_value;
-	new.next = malloc(sizeof(struct bucket));
-	new.next = next;	
+struct bucket* create_bucket(kv_pair_t key_value, struct bucket* next){
+	struct bucket* new = malloc(sizeof(struct bucket));
+	new->key_value = key_value;
+	if(next != NULL)
+	new->next = malloc(sizeof(struct bucket));
+	new->next = next;	
 	return new;
+}
+
+void kv_pair_free(kv_pair_t *kv){
+	free(&kv->key);
+	free(&kv->value);
 }
 
 kv_pair_t copy_kv_pair(pps_key_t key, pps_value_t value){
@@ -52,23 +58,20 @@ kv_pair_t copy_kv_pair(pps_key_t key, pps_value_t value){
 
 void delete_bucket(struct bucket* bck){
 	if (bck == NULL){}
-	else if (bck->next == NULL){
-		//Free key pointer
-		free(&bck->key_value.key);
-		//Free value pointer
-		free(&bck->key_value.value);
-		//Free the next pointer
-		free(bck->next);	
+	else if (bck->next == NULL){// && bck->key_value.key != NULL && bck->key_value.value != NULL){
+		kv_pair_free(&bck->key_value);	
 	} else {
 		delete_bucket(bck->next);
-		free(bck->next);
+		kv_pair_free(&bck->key_value);
+		bck = NULL;
 	}
 }
 
 void delete_Htable_and_content(Htable_t* table){
-	for(int i = 0; i < table->size; i++){
+/*	for(int i = 0; i < table->size; i++){
 		delete_bucket(&table->buckets[i]);
 	}
+*/ 
 	free(table->buckets);
 	table->size = 0;
 	
@@ -82,21 +85,26 @@ error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t va
 	
 	kv_pair_t key_value = bck->key_value;
 	
-	if (key == key_value.key){
+	if (key_value.key == NULL && key_value.value == NULL){
+		kv_pair_t pair_new = copy_kv_pair(key, value);
+		
+		bck->key_value = pair_new;
+		
+	} else if (key == key_value.key){
 		
 		kv_pair_t pair_new = copy_kv_pair(key, value);
 		
 		bck->key_value = pair_new;
 		
 	} else if (bck->next == NULL){
-				
 		kv_pair_t pair_new = copy_kv_pair(key, value);
 
-		struct bucket bucket_new = create_bucket(pair_new, NULL);
-		bck->next = &bucket_new;
+		struct bucket* bucket_new = create_bucket(pair_new, NULL);
+		printf("collision of index\n");
+		bck->next = bucket_new;
 				
 	} else add_value_to_bucket(bck->next, key, value);
-	
+	printf("the seg fault is after\n");
 	
 	return ERR_NONE;
 }
@@ -117,22 +125,40 @@ error_code add_Htable_value(Htable_t htable, pps_key_t key, pps_value_t value)
 
 pps_value_t get_value_from_bucket(struct bucket* bck, pps_key_t key);
 
+/*TESTS FUNCTION*/
+void print_bucket(struct bucket* bck){
+	if (bck == NULL){
+		printf("(null), ");
+	} else {
+		printf("kv(%s, %s), ", bck->key_value.key, bck->key_value.value);
+		print_bucket(bck->next);
+	}	
+}
+
 pps_value_t get_Htable_value(Htable_t htable, pps_key_t key)
 {
+	if (key == NULL)
+		return NULL;
+		
 	size_t index = hash_function(key, htable.size);
+		printf("\nWe got there, looking for %s at index %lu\n", key, index);
 	struct bucket* row = &htable.buckets[index];
-
+	print_bucket(row);
+	
 	return get_value_from_bucket(row, key);
 }
 
 pps_value_t get_value_from_bucket(struct bucket* bck, pps_key_t key){
 	kv_pair_t key_value = bck->key_value;
 	
-	if (key_value.key == key){
-		
-//		pps_value_t new_value;
-//		new_value = key_value.value;
-		
+	printf("(key, value) of current = (%s, %s)\n", key_value.key, key_value.value);
+	
+	if (key_value.key == NULL || key_value.value == NULL){
+		printf("ERROR IS HERE\n");
+	}
+	
+	if (strcmp(key_value.key, key) == 0){
+		printf("WE FOUND THE KEY\n");
 		return key_value.value;
 	} else if (bck->next == NULL){
 		return NULL;

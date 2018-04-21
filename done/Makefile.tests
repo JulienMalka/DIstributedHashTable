@@ -1,6 +1,4 @@
-all: tests
-
-tests: 
-	gcc -o tests tests.c node_list.c error.c hashtable.c node.c system.c -lcheck -lm -lrt -pthread -lsubunit
+all: 
+	gcc -o tests tests.c node_list.c error.c node.c system.c -lcheck -lm -lrt -pthread -lsubunit
 
 
