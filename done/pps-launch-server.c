@@ -68,22 +68,23 @@ int main(void)
             size_t size_key = strlen(in_msg);
             char* key = calloc(size_key+1, sizeof(char));
             for(int i =0; i<size_key;i++){
-
+			  printf("index %d of key = %c\n", i, in_msg[i]);
               key[i] = in_msg[i];
             }
 
             key[size_key] = '\0';
-            printf("parsed key");
+            printf("parsed key\n");
             size_t size_value = in_msg_len - size_key;
+            printf("size of value = %lu and size of in_msg = %lu\n", size_value, in_msg_len);
             char* value = calloc(size_value+1, sizeof(char));
             for(int i=0; i<size_value; i++){
-
+			  printf("index %d of value = %c\n", i, ret[i+1]);
               value[i] = ret[i+1];
-
             }
 
             value[size_value] = '\0';
 
+			printf("Before adding to htable (key, value) = (%s, %s)\n", key, value);
             add_Htable_value(h_table, key, value);
 
             printf("write request = (%s, %s)... sending response\n", key, value);
