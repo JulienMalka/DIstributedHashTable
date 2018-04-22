@@ -45,7 +45,7 @@ START_TEST(week04)
     const pps_value_t value_read3 = get_Htable_value(table, key1);
     const pps_value_t value_read4 = get_Htable_value(table, key3);
 
-	print_htable(&table);
+//	print_htable(&table);
 
     // tests for input value = read value from get method
     ck_assert_str_eq(value1, value_read1);
