@@ -58,33 +58,23 @@ int main(void)
         // Write Request
         if (memchr(in_msg, '\0', in_msg_len)!=NULL) {
               size_t size_value = in_msg_len - strlen(in_msg);
-              printf("SIZE VALUE : %d", size_value);
               char* key = calloc(strlen(in_msg)+1, sizeof(char));
               char* value = calloc(size_value, sizeof(char));
               parse_put_request(in_msg, in_msg_len, key, value);
               add_Htable_value(h_table, key, value);
-
-            printf("write request = (%s, %s)... sending response\n", key, value);
-
-
-            sendto(s, 0, 0, 0,
+              printf("write request = (%s, %s)... sending response\n", key, value);
+              sendto(s, 0, 0, 0,
                    (struct sockaddr *) &cli_addr, sizeof(cli_addr));
         }
 
         // Read Request
         if (memchr(in_msg, 0, in_msg_len)==NULL) {
-
             char* request = in_msg;
             printf("%s\n", request);
-
             pps_value_t get = malloc(MAX_MSG_ELEM_SIZE);
             get = get_Htable_value(h_table, request);
             printf("read request = %s ... sending response = %s\n", request, get);
             if(get!=NULL){
-
-
-
-
 
             sendto(s, get, MAX_MSG_ELEM_SIZE, 0,
                    (struct sockaddr *) &cli_addr, sizeof(cli_addr));

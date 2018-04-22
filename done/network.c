@@ -35,14 +35,15 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 error_code network_put(client_t client, pps_key_t key, pps_value_t value)
 {
 if(key==NULL||value==NULL)return ERR_BAD_PARAMETER;
-printf("KEY VALUE GOT BY NETWORK (%s,%s)", key, value);
+
     int errors = 0;
     for(int i= 0; i<client.server.size; i++) {
 
       char* request = format_put_request(key, value);
       size_t request_len = strlen(key)+strlen(value)+1;
-      error_code error = send_packet(client.socket, request, request_len, client.server.nodes[i]);
-      if(error!=ERR_NONE) errors++;
+      error_code error_send = send_packet(client.socket, request, request_len, client.server.nodes[i]);
+      int error_receive = recv(client.socket, NULL,0,0);
+      if(error_send!=ERR_NONE ||error_receive==-1) errors++;
 }
     if(errors>=1) {
         return ERR_NETWORK;
@@ -58,6 +59,7 @@ if(message==NULL || size<0) return ERR_BAD_PARAMETER;
 
   int error = sendto(socket, message, size, 0,
              (struct sockaddr *) &node, sizeof(node));
+
 
   if(error==-1) return ERR_NETWORK;
 
