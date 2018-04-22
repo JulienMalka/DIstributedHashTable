@@ -6,6 +6,7 @@ pps-client-get
 pps-launch-server
 pps-client-put
 week04
+tests
 
 #ignore the .orig
 *.orig
