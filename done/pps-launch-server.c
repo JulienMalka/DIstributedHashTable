@@ -21,7 +21,7 @@ int main(void)
 
     Htable_t h_table = construct_Htable(HTABLE_SIZE);
 
- /*   int ok = 1;
+   int ok = 1;
     char ip[15]; //max 15 characters in an ip adress
     int port;
     while(ok) {
@@ -31,10 +31,10 @@ int main(void)
         else {
             printf("FAIL\n");
         }
-    }*/
+    }
 
     //Bind server to the address:port
-  error_code error_bind =  bind_server(s, PPS_DEFAULT_IP, PPS_DEFAULT_PORT);
+  error_code error_bind =  bind_server(s, ip, port);
 
   if(error_bind!=ERR_NONE){
     printf("FAILED TO BIND IP"); //TO CHANGE
@@ -48,7 +48,7 @@ int main(void)
 
         char* in_msg = malloc(MAX_MSG_SIZE);
         printf("preparing to receive something\n");
-        ssize_t in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
+        ssize_t in_msg_len = recvfrom(s, in_msg, MAX_MSG_SIZE, 0, (struct sockaddr *) &cli_addr, &addr_len);
         if (in_msg_len>MAX_MSG_SIZE) { // Wrong message size.
             printf("in_msg_len = %lu\n", in_msg_len);
             printf("sizeof(in:msg) = %lu\n", sizeof(in_msg));
@@ -94,7 +94,7 @@ int main(void)
         }
 
         // Read Request
-        if (memchr(&in_msg, 0, in_msg_len)==NULL) {
+        if (memchr(in_msg, 0, in_msg_len)==NULL) {
 
             char* request = in_msg;
             printf("%s\n", request);
@@ -105,7 +105,7 @@ int main(void)
 
 
 
-            sendto(s, get, strlen(get), 0,
+            sendto(s, get, MAX_MSG_ELEM_SIZE, 0,
                    (struct sockaddr *) &cli_addr, sizeof(cli_addr));
         }
     }

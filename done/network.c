@@ -5,37 +5,26 @@
 #include "client.h"
 #include "config.h"
 #include "system.h"
+#include "network.h"
 #include <arpa/inet.h>
 #include <stdlib.h>
 
 error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 {
-  //unsigned char packet[1];
-
-    // Prepare outgoing message with htonl.
-    //packet[0] = key;
-
-    // Send message.
 
     for(int i=0; i<client.server.size; i++) {
         int size_to_send = strlen(key);
-        if (sendto(client.socket, &key, size_to_send, 0,
-                   (struct sockaddr *) &client.server.nodes[i], sizeof(client.server.nodes[i])) == -1)
-            return ERR_NETWORK;
+        error_code error = send_packet(client.socket, key, size_to_send, client.server.nodes[i]);
+        if(error!=ERR_NONE) return error;
 
-        // Receive response.
-        char* in_msg;
-        ssize_t in_msg_len = recv(client.socket, &in_msg, sizeof(in_msg), 0);//, (struct sockaddr *) &client.server,(socklen_t *) sizeof(client.server));
-
+        char* in_msg = malloc(MAX_MSG_ELEM_SIZE);
+        ssize_t in_msg_len = recv(client.socket, in_msg, MAX_MSG_ELEM_SIZE, 0);
         printf("obtained %ld with error %d, wanted %lu, val %s",in_msg_len, errno, sizeof(in_msg), in_msg);
 
-        if (in_msg_len == sizeof(in_msg)) {
-            // Valid response.
-            // Parse response with ntohl.
-            pps_value_t response;
+        if (in_msg_len != -1) {
+
             printf("response is %s\n", in_msg);
-            response = in_msg;
-            *value = response;
+            *value = in_msg;
             return ERR_NONE;
         }
     }
@@ -44,36 +33,47 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 
 error_code network_put(client_t client, pps_key_t key, pps_value_t value)
 {
-
+if(key==NULL||value==NULL)return ERR_BAD_PARAMETER;
 printf("KEY VALUE GOT BY NETWORK (%s,%s)", key, value);
     int errors = 0;
     for(int i= 0; i<client.server.size; i++) {
-		char buffer[20];
-        printf("Sending to %s : %d\n", inet_ntop(AF_INET, &client.server.nodes[i].sin_addr, buffer, 20), ntohs(client.server.nodes[i].sin_port));
-        // Prepare value with htonl.
-       // unsigned int value_formated;
-      //  value_formated = htonl(value);
 
-
-      char *result = calloc(strlen(key)+strlen(value)+1, sizeof(char));
-      for(int i=0; i<strlen(key); i++){
-          result[i] = key[i];
-        }
-        result[strlen(key)]='\0';
-    for(int i=strlen(key)+1; i<strlen(key)+1+strlen(value); i++){
-        result[i] = value[i-strlen(key)-1];
-      }
-
-
-
-      if (sendto(client.socket, result, strlen(key)+strlen(value)+1, 0,
-                   (struct sockaddr *) &client.server.nodes[i], sizeof(client.server.nodes[i])) ==-1) errors +=1;
-
-    }
-
+      char* request = format_put_request(key, value);
+      size_t request_len = strlen(key)+strlen(value)+1;
+      error_code error = send_packet(client.socket, request, request_len, client.server.nodes[i]);
+      if(error!=ERR_NONE) errors++;
+}
     if(errors>=1) {
         return ERR_NETWORK;
     } else {
         return ERR_NONE;
     }
 }
+
+
+error_code send_packet(int socket, const char* message, size_t size, node_t node){
+
+if(message==NULL || size<0) return ERR_BAD_PARAMETER;
+
+  int error = sendto(socket, message, size, 0,
+             (struct sockaddr *) &node, sizeof(node));
+
+  if(error==-1) return ERR_NETWORK;
+
+  return ERR_NONE;
+  }
+
+
+  char* format_put_request(pps_key_t key, pps_value_t value){
+    char *result = calloc(strlen(key)+strlen(value)+1, sizeof(char));
+    for(int i=0; i<strlen(key); i++){
+        result[i] = key[i];
+      }
+      result[strlen(key)]='\0';
+      for(int i=strlen(key)+1; i<strlen(key)+1+strlen(value); i++){
+      result[i] = value[i-strlen(key)-1];
+      }
+      
+      return result;
+
+  }

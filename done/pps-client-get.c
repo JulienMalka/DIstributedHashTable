@@ -9,6 +9,7 @@
 #include "config.h"
 #include "error.h"
 #include "client.h"
+#include "stdlib.h"
 
 int main(void)
 {
@@ -24,18 +25,18 @@ int main(void)
     while(1) {
 
 
-        pps_key_t key;
+        char* key = malloc(MAX_MSG_ELEM_SIZE);
         int number=-1;
 
         do {
-            number = scanf(" %c", &key);
+            number = scanf("%s", key);
         } while (number==-1);
 
 
-
+        printf("Sent read request : %s\n", key);
         error_code error = network_get(*client_i.client, key, &get_value);
         if(error == ERR_NONE) {
-            printf("OK %d\n", get_value);
+            printf("OK %s\n", get_value);
             fflush(stdout);
         } else {
 
