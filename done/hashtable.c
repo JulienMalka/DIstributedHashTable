@@ -126,6 +126,8 @@ error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t va
 		bck->key_value = copy_kv_pair(key, value);
 
 	} else if (strcmp(key, key_value.key) == 0){
+		
+		kv_pair_free(&bck->key_value);
 
 		bck->key_value = copy_kv_pair(key, value);
 
@@ -136,8 +138,10 @@ error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t va
 		bck->next = bucket_new;
 
 	} else add_value_to_bucket(bck->next, key, value);
-
-	return ERR_NONE;
+	
+	printf("successfully replaced %s, %s to the hashtable \n", bck->key_value.key, bck->key_value.value);
+	
+	return 0;
 }
 
 /*
@@ -168,6 +172,7 @@ pps_value_t get_value_from_bucket(struct bucket* bck, pps_key_t key){
 	if (key_value.key == NULL || key_value.value == NULL)
 		return NULL;
 	else if (strcmp(key_value.key, key) == 0){
+		printf("We are looking for key = %s and found stored value = %s\n", key, key_value.value);
 		return key_value.value;
 	} else if (bck->next == NULL){
 		return NULL;
@@ -187,6 +192,7 @@ pps_value_t get_Htable_value(Htable_t htable, pps_key_t key)
 
 	size_t index = hash_function(key, htable.size);
 	struct bucket* row = &htable.buckets[index];
+	printf("We are looking for key = %s", key);
 	return get_value_from_bucket(row, key);
 }
 
