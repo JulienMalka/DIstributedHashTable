@@ -21,7 +21,6 @@ Htable_t construct_Htable(size_t size){
 
 	Htable_t htable_new;
 	htable_new.buckets = calloc(size, sizeof(struct bucket));
-	printf("ALLOCATION MEMORY\n");
 	htable_new.size = size;
 
 	return htable_new;
@@ -34,7 +33,6 @@ Htable_t construct_Htable(size_t size){
  */
 struct bucket* create_bucket(kv_pair_t key_value, struct bucket* next){
 	struct bucket* new = malloc(sizeof(struct bucket));
-	printf("ALLOCATION MEMORY\n");
 	new->key_value = key_value;
 
 	new->next = malloc(sizeof(struct bucket));
@@ -49,7 +47,6 @@ struct bucket* create_bucket(kv_pair_t key_value, struct bucket* next){
 void kv_pair_free(kv_pair_t *kv){
 	free((char*) kv->key);
 	free((char*) kv->value);
-	printf("2x DE-ALLOCATION MEMORY\n");
 }
 
 /*
@@ -62,7 +59,6 @@ kv_pair_t copy_kv_pair(pps_key_t key, pps_value_t value){
 
 	char* key_new = calloc(strlen(key), sizeof(char));
 	char* value_new = calloc(strlen(value), sizeof(char));
-	printf("2x ALLOCATION MEMORY\n");
 
 	for (int i = 0; i < strlen(key); i++){
 		key_new[i] = key[i];
@@ -87,6 +83,7 @@ void delete_bucket(struct bucket* bck){
 	if (bck == NULL){}
 	else if (bck->key_value.key == NULL || bck->key_value.value == NULL){}
 	else if (bck->next == NULL){
+		free(bck->next);
 		kv_pair_free(&bck->key_value);
 	} else {
 		delete_bucket(bck->next);
@@ -105,7 +102,6 @@ void delete_Htable_and_content(Htable_t* table){
 
 	free(table->buckets);
 	table->buckets = NULL;
-	printf("DE-ALLOCATION MEMORY\n");
 	table->size = 0;
 
 }
@@ -138,9 +134,7 @@ error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t va
 		bck->next = bucket_new;
 
 	} else add_value_to_bucket(bck->next, key, value);
-	
-	printf("successfully replaced %s, %s to the hashtable \n", bck->key_value.key, bck->key_value.value);
-	
+		
 	return 0;
 }
 
@@ -172,7 +166,6 @@ pps_value_t get_value_from_bucket(struct bucket* bck, pps_key_t key){
 	if (key_value.key == NULL || key_value.value == NULL)
 		return NULL;
 	else if (strcmp(key_value.key, key) == 0){
-		printf("We are looking for key = %s and found stored value = %s\n", key, key_value.value);
 		return key_value.value;
 	} else if (bck->next == NULL){
 		return NULL;
@@ -192,7 +185,6 @@ pps_value_t get_Htable_value(Htable_t htable, pps_key_t key)
 
 	size_t index = hash_function(key, htable.size);
 	struct bucket* row = &htable.buckets[index];
-	printf("We are looking for key = %s", key);
 	return get_value_from_bucket(row, key);
 }
 
@@ -204,7 +196,6 @@ pps_value_t get_Htable_value(Htable_t htable, pps_key_t key)
  */
 size_t hash_function(pps_key_t key, size_t size)
 {
-	return 1;
     M_REQUIRE(size != 0, SIZE_MAX, "size == %d", 0);
     M_REQUIRE_NON_NULL_CUSTOM_ERR(key, SIZE_MAX);
 
