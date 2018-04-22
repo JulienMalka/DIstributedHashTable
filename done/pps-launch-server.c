@@ -99,7 +99,9 @@ int main(void)
             char* request = in_msg;
             printf("%s\n", request);
 
-            pps_value_t get = get_Htable_value(h_table, request);
+            pps_value_t get = malloc(MAX_MSG_ELEM_SIZE);
+            get = get_Htable_value(h_table, request);
+            if(get!=NULL){
 
             printf("read request = %s ... sending response = %s\n", request, get);
 
@@ -107,6 +109,7 @@ int main(void)
 
             sendto(s, get, MAX_MSG_ELEM_SIZE, 0,
                    (struct sockaddr *) &cli_addr, sizeof(cli_addr));
+                 }
         }
     }
 
