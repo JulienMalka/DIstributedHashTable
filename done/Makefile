@@ -19,7 +19,10 @@ node_list.o: node_list.c
 
 network.o: network.c
 
-week05: pps-launch-server pps-client-get pps-client-put
+week05: pps-launch-server pps-client-get pps-client-put test-hashtable
+
+test-hashtable : test-hashtable.c
+	gcc -o test-hashtable test-hashtable.c node_list.c error.c node.c system.c -lcheck -lm -lrt -pthread -lsubunit
 
 pps-launch-server: pps-launch-server.o system.o network.o hashtable.o
 
