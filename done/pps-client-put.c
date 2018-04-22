@@ -33,8 +33,6 @@ int main(void){
 			}
 		}
 
-
-		printf("Sending put request key : %s value : %s\n", key, value);
 		error_code error = network_put(*client_i.client, key, value);
 		free(key);
 		free(value);

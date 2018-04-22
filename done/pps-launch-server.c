@@ -42,14 +42,12 @@ int main(void)
         socklen_t addr_len = sizeof(cli_addr);
         memset(&cli_addr, 0, addr_len);
         char* in_msg = malloc(MAX_MSG_SIZE);
-        printf("preparing to receive something\n");
         ssize_t in_msg_len = recvfrom(s, in_msg, MAX_MSG_SIZE, 0, (struct sockaddr *) &cli_addr, &addr_len);
         if (in_msg_len>MAX_MSG_SIZE) { // Wrong message size.
-            printf("Received invalid message\n");
+            printf("FAIL\n");
             continue;
         }
 
-        printf("Received something\n");
 
 
         // Write Request
@@ -59,7 +57,6 @@ int main(void)
               char* value = calloc(size_value, sizeof(char));
               parse_put_request(in_msg, in_msg_len, key, value);
               add_Htable_value(h_table, key, value);
-              printf("write request = (%s, %s)... sending response\n", key, value);
               sendto(s, 0, 0, 0,
                    (struct sockaddr *) &cli_addr, sizeof(cli_addr));
         }
@@ -67,10 +64,8 @@ int main(void)
         // Read Request
         if (memchr(in_msg, 0, in_msg_len)==NULL) {
             char* request = in_msg;
-            printf("%s\n", request);
             pps_value_t get = malloc(MAX_MSG_ELEM_SIZE);
             get = get_Htable_value(h_table, request);
-            printf("read request = %s ... sending response = %s\n", request, get);
             if(get!=NULL){
 
             sendto(s, get, MAX_MSG_ELEM_SIZE, 0,

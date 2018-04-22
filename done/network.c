@@ -22,6 +22,7 @@
 error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 {
     M_EXIT_IF_TOO_LONG(key, MAX_MSG_ELEM_SIZE, key.name);
+    int error_not_found = 0;
     for(int i=0; i<client.server.size; i++) {
         int size_to_send = strlen(key);
         error_code error = send_packet(client.socket, key, size_to_send, client.server.nodes[i]);
@@ -33,17 +34,15 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 
         if (in_msg_len != -1) {
             if (in_msg_len==1 && in_msg[0]=='\0'){
-              printf("Not found\n");
-              free(in_msg);
-              return ERR_NOT_FOUND;
-            }
-            printf("response is %s\n", in_msg);
+              error_not_found++;
+            }else{
+
             *value = in_msg;
             return ERR_NONE;
+          }
         }
     }
-    printf("Not connection to servers\n");
-    return ERR_NETWORK;
+    if(error_not_found==0) return ERR_NETWORK; else return ERR_NOT_FOUND;
 }
 
 
@@ -140,7 +139,7 @@ error_code parse_put_request(char* in_msg, size_t length, char* key, char* value
    size_t size_value = length - size_key;
 
  for(int i=0; i<size_value; i++){
-   printf("index %d of value = %c\n", i, ret[i+1]);
+
    value[i] = ret[i+1];
 }
 
