@@ -8,6 +8,7 @@
 #include "network.h"
 #include <arpa/inet.h>
 #include <stdlib.h>
+#include <string.h>
 
 error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 {
@@ -73,7 +74,27 @@ if(message==NULL || size<0) return ERR_BAD_PARAMETER;
       for(int i=strlen(key)+1; i<strlen(key)+1+strlen(value); i++){
       result[i] = value[i-strlen(key)-1];
       }
-      
+
       return result;
 
   }
+
+
+error_code parse_put_request(char* in_msg, size_t length, char* key, char* value){
+    char* ret = memchr(in_msg, '\0', length);
+    size_t size_key = strlen(in_msg);
+    for(int i =0; i<size_key;i++){
+     key[i] = in_msg[i];
+   }
+   key[size_key] = '\0';
+   size_t size_value = length - size_key;
+
+ for(int i=0; i<size_value; i++){
+   printf("index %d of value = %c\n", i, ret[i+1]);
+   value[i] = ret[i+1];
+}
+
+ value[size_value] = '\0';
+return ERR_NONE;
+
+}
