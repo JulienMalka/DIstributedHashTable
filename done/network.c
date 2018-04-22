@@ -10,6 +10,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+
+/**
+ * @brief get a value from the network
+ * @param client client to use
+ * @param key key of what we want to find value
+ * @param value value to write to, of size MAX_MSG_ELEM_SIZE + 1
+ * @return an error code
+ */
 error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 {
     M_EXIT_IF_TOO_LONG(key, MAX_MSG_ELEM_SIZE, key.name);
@@ -37,6 +46,14 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
     return ERR_NETWORK;
 }
 
+
+/**
+ * @brief put a value in the network
+ * @param client client to use
+ * @param key key to retrieve value later
+ * @param value value to add
+ * @return an error code
+ */
 error_code network_put(client_t client, pps_key_t key, pps_value_t value)
 {
 
@@ -62,6 +79,14 @@ if(key==NULL||value==NULL)return ERR_BAD_PARAMETER;
 }
 
 
+/**
+ * @brief send a packet to a node
+ * @param message the packet to send
+ * @param socket socket to use
+ * @param size size of the packet
+ * @param node the node we want to send the packet to
+ * @return an error code
+ */
 error_code send_packet(int socket, const char* message, size_t size, node_t node){
 
 if(message==NULL || size<0) return ERR_BAD_PARAMETER;
@@ -76,6 +101,13 @@ if(message==NULL || size<0) return ERR_BAD_PARAMETER;
   }
 
 
+
+  /**
+   * @brief format a put request with the caracter \0 correctly placed
+   * @param value value to format
+   * @param key key to format
+   * @return the request correctly formated
+   */
   char* format_put_request(pps_key_t key, pps_value_t value){
     char *result = calloc(strlen(key)+strlen(value)+1, sizeof(char));
     for(int i=0; i<strlen(key); i++){
@@ -90,7 +122,14 @@ if(message==NULL || size<0) return ERR_BAD_PARAMETER;
 
   }
 
-
+  /**
+   * @brief parse a put request
+   * @param in_msg the packet to parse
+   * @param length length of request
+   * @param key pointer to the key
+   * @param value pointer to the value
+   * @return an error code
+   */
 error_code parse_put_request(char* in_msg, size_t length, char* key, char* value){
     char* ret = memchr(in_msg, '\0', length);
     size_t size_key = strlen(in_msg);

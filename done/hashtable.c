@@ -91,9 +91,10 @@ void delete_bucket(struct bucket* bck){
 	}
 }
 
-/* @TODO
- * @brief Delete an htable and its content (every bucket)
- * @param table to delete
+/**
+ * @brief delete the given hash-table
+ *    Note: does NOTHING until week 07.
+ * @param table the hash-table to free (passed by reference)
  */
 void delete_Htable_and_content(Htable_t* table){
 	for(int i = 0; i < table->size; i++){
@@ -122,7 +123,7 @@ error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t va
 		bck->key_value = copy_kv_pair(key, value);
 
 	} else if (strcmp(key, key_value.key) == 0){
-		
+
 		kv_pair_free(&bck->key_value);
 
 		bck->key_value = copy_kv_pair(key, value);
@@ -134,7 +135,7 @@ error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t va
 		bck->next = bucket_new;
 
 	} else add_value_to_bucket(bck->next, key, value);
-		
+
 	return 0;
 }
 

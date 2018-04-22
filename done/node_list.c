@@ -4,6 +4,12 @@
 #include "node_list.h"
 #include <ctype.h>
 
+
+
+/**
+ * @brief creates a new, empty, node_list_t
+ * @return (a pointer to) the new list of nodes
+ */
 node_list_t *node_list_new()
 {
     node_list_t* new = malloc(sizeof(node_list_t));
@@ -13,7 +19,10 @@ node_list_t *node_list_new()
     return new;
 }
 
-
+/**
+ * @brief parse the PPS_SERVERS_LIST_FILENAME file and return the corresponding list of nodes
+ * @return the list of nodes initialized from the server file (PPS_SERVERS_LIST_FILENAME)
+ */
 node_list_t *get_nodes()
 {
 
@@ -34,7 +43,7 @@ node_list_t *get_nodes()
     while(!feof(file)) {
 
         if (isspace(current_char)) {
-            if (fscanf(file, "%hu", &port) != 1) 
+            if (fscanf(file, "%hu", &port) != 1)
 				return NULL;
             current_char = fgetc(file);
 
@@ -46,7 +55,7 @@ node_list_t *get_nodes()
             }
 
             node_t node;
-            if (node_init(&node, real_ip, port, 0) != ERR_NONE) 
+            if (node_init(&node, real_ip, port, 0) != ERR_NONE)
 				return NULL;
             node_list_add(nodes, node);
 			free(real_ip);
@@ -65,10 +74,15 @@ node_list_t *get_nodes()
 
     return nodes;
 }
-
+/**
+ * @brief add a node to a list of nodes
+ * @param list list of nodes where to add to (modified)
+ * @param node the node to be added
+ * @return some error code indicating whether addition fails or not
+ */
 error_code node_list_add(node_list_t *list, node_t node)
 {
-	
+
 	if (list == NULL)
 		return ERR_BAD_PARAMETER;
 
@@ -88,7 +102,10 @@ error_code node_list_add(node_list_t *list, node_t node)
 }
 
 
-
+/**
+ * @brief free the given list of nodes
+ * @param list list of nodes to clean
+ */
 void node_list_free(node_list_t *list)
 {
     for(int i=0; i<list->size; i++) {

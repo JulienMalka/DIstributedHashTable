@@ -16,10 +16,10 @@
 /**
  * @brief node data structure
  */
- 
+
  typedef struct sockaddr_in node_t;
- 
- 
+
+
 /**
  * @brief node initialization function
  * @param node node to be initalized (modified)
