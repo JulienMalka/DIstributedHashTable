@@ -26,18 +26,15 @@ int main(void)
     while(ok) {
         printf("IP port? ");
         int error = scanf(" %s %d", ip, &port);
-        if (error != 1) ok = 0;
+        error_code error_bind =  bind_server(s, ip, port);
+        if (error != 1 &&error_bind==ERR_NONE) ok = 0;
         else {
             printf("FAIL\n");
         }
     }
 
     //Bind server to the address:port
-  error_code error_bind =  bind_server(s, ip, port);
 
-  if(error_bind!=ERR_NONE){
-    printf("FAILED TO BIND IP"); //TO CHANGE
-  }
 
     //Receive messages forever
     while(1) {

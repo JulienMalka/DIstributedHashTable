@@ -10,6 +10,7 @@
 #include "error.h"
 #include "client.h"
 #include "stdlib.h"
+#include "util.h"
 
 int main(void)
 {
@@ -35,9 +36,10 @@ int main(void)
 
 
         error_code error = network_get(*client_i.client, key, &get_value);
+        free(key);
         if(error == ERR_NONE) {
             printf("OK %s\n", get_value);
-
+            free_const_ptr(get_value);
         } else {
 
             printf("FAIL\n");
