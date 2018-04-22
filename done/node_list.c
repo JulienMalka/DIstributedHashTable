@@ -22,7 +22,7 @@ node_list_t *get_nodes()
     FILE* file = fopen(PPS_SERVERS_LIST_FILENAME, "r");
 
     if(file == NULL) {
-        //gestion de l'erreur
+        return NULL;
     }
 
     int current_char = fgetc(file);
@@ -32,11 +32,10 @@ node_list_t *get_nodes()
     uint16_t port = 0;
 
     while(!feof(file)) {
-      //  printf("current char = %c\n", current_char);
 
         if (isspace(current_char)) {
-          //  printf("Found space and index = %d\n", index);
-            fscanf(file, "%hu", &port);
+            if (fscanf(file, "%hu", &port) != 1) 
+				return NULL;
             current_char = fgetc(file);
 
             //take the n first chars, discard else
@@ -47,15 +46,15 @@ node_list_t *get_nodes()
             }
 
             node_t node;
-          //  printf("current ip = %s and port = %hu\n", real_ip, port);
-            node_init(&node, real_ip, port, 0);
+            if (node_init(&node, real_ip, port, 0) != ERR_NONE) 
+				return NULL;
             node_list_add(nodes, node);
-						free(real_ip);
+			free(real_ip);
             while(current_char != '\n') {
                 current_char = fgetc(file);
             }
             index = 0;
-            	current_char = fgetc(file);
+            current_char = fgetc(file);
         }
 
         ip[index] = current_char;
@@ -69,6 +68,9 @@ node_list_t *get_nodes()
 
 error_code node_list_add(node_list_t *list, node_t node)
 {
+	
+	if (list == NULL)
+		return ERR_BAD_PARAMETER;
 
     list->size++;
     if(list->size > list->allocated_size) {
@@ -83,17 +85,16 @@ error_code node_list_add(node_list_t *list, node_t node)
 
     list->nodes[list->size-1] = node;
     return ERR_NONE;
-
 }
 
 
 
 void node_list_free(node_list_t *list)
 {
-
     for(int i=0; i<list->size; i++) {
         node_end(&list->nodes[i]);
     }
 
+	free(list->nodes);
     free(list);
 }
