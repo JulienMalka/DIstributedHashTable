@@ -30,30 +30,42 @@ START_TEST(week04)
     const pps_value_t value1 = "crettenand";
     const pps_key_t key2 = "julien";
     const pps_value_t value2 = "malka";
+    const pps_key_t key3 = "forgot_in_table";
+    
+    const pps_value_t value3 = "theboss";
 
     add_Htable_value(table, key1, value1);
     add_Htable_value(table, key2, value2);
     
-    print_htable(&table);
-    
     const pps_value_t value_read1 = get_Htable_value(table, key1);
     const pps_value_t value_read2 = get_Htable_value(table, key2);
+        
+    add_Htable_value(table, key1, value3);
     
-    printf("\nvalue_read1 = %s, value_read2 = %s\n", value_read1, value_read2);
+    const pps_value_t value_read3 = get_Htable_value(table, key1);
+    const pps_value_t value_read4 = get_Htable_value(table, key3);
+
+	print_htable(&table);
 
     // tests for input value = read value from get method
     ck_assert_str_eq(value1, value_read1);
     ck_assert_str_eq(value2, value_read2);
-	/*
-    const size_t hashed = hash_function(key1, 0);
-    ck_assert_int_eq(0, hashed);
-
-    const size_t maxSize = SIZE_MAX;
-    ck_assert_int_eq(0, hash_function(key1, maxSize));*/
+    ck_assert_str_eq(value3, value_read3);
+    ck_assert_ptr_null(value_read4);
+    ck_assert_ptr_null(get_Htable_value(table, NULL));
     
     delete_Htable_and_content(&table);
 }
 END_TEST
+
+void print_bucket(struct bucket* bck){
+	if (bck == NULL){
+		printf("(null), ");
+	} else {
+		printf("kv(%s, %s), ", bck->key_value.key, bck->key_value.value);
+		print_bucket(bck->next);
+	}	
+}
 
 void print_htable(Htable_t* htable){
 	printf("PRINTING CONTENT OF HTABLE\n");
