@@ -46,7 +46,7 @@ int main(void)
         socklen_t addr_len = sizeof(cli_addr);
         memset(&cli_addr, 0, addr_len);
 
-         char* in_msg = malloc(MAX_MSG_SIZE);
+        char* in_msg = malloc(MAX_MSG_SIZE);
         printf("preparing to receive something\n");
         ssize_t in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
         if (in_msg_len>MAX_MSG_SIZE) { // Wrong message size.
