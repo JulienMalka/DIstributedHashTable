@@ -33,11 +33,11 @@ int main(void)
         } while (number==-1);
 
 
-        printf("Sent read request : %s\n", key);
+
         error_code error = network_get(*client_i.client, key, &get_value);
         if(error == ERR_NONE) {
             printf("OK %s\n", get_value);
-            fflush(stdout);
+
         } else {
 
             printf("FAIL\n");
