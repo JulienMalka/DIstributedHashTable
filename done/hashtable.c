@@ -196,7 +196,6 @@ pps_value_t get_Htable_value(Htable_t htable, pps_key_t key)
  */
 size_t hash_function(pps_key_t key, size_t size)
 {
-	return 1;
     M_REQUIRE(size != 0, SIZE_MAX, "size == %d", 0);
     M_REQUIRE_NON_NULL_CUSTOM_ERR(key, SIZE_MAX);
 
