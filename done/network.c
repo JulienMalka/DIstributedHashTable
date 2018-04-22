@@ -12,7 +12,7 @@
 
 error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 {
-
+    M_EXIT_IF_TOO_LONG(key, MAX_MSG_ELEM_SIZE, key.name);
     for(int i=0; i<client.server.size; i++) {
         int size_to_send = strlen(key);
         error_code error = send_packet(client.socket, key, size_to_send, client.server.nodes[i]);
@@ -20,20 +20,27 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 
         char* in_msg = malloc(MAX_MSG_ELEM_SIZE);
         ssize_t in_msg_len = recv(client.socket, in_msg, MAX_MSG_ELEM_SIZE, 0);
-        printf("obtained %ld with error %d, wanted %lu, val %s",in_msg_len, errno, sizeof(in_msg), in_msg);
+
 
         if (in_msg_len != -1) {
-
+            if (in_msg_len==1 && in_msg[0]=='\0'){
+              printf("Not found\n");
+              return ERR_NOT_FOUND;
+            }
             printf("response is %s\n", in_msg);
             *value = in_msg;
             return ERR_NONE;
         }
     }
-    return ERR_NOT_FOUND;
+    printf("Not connection to servers\n");
+    return ERR_NETWORK;
 }
 
 error_code network_put(client_t client, pps_key_t key, pps_value_t value)
 {
+
+M_EXIT_IF_TOO_LONG(key, MAX_MSG_ELEM_SIZE, key.name);
+M_EXIT_IF_TOO_LONG(value, MAX_MSG_ELEM_SIZE, value.name);
 if(key==NULL||value==NULL)return ERR_BAD_PARAMETER;
 
     int errors = 0;

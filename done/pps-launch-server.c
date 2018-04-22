@@ -78,6 +78,13 @@ int main(void)
 
             sendto(s, get, MAX_MSG_ELEM_SIZE, 0,
                    (struct sockaddr *) &cli_addr, sizeof(cli_addr));
+                 }else{
+                   char* msg = calloc(1, sizeof(char));
+                   msg[0] = '\0';
+                   sendto(s, msg, 1, 0,
+                          (struct sockaddr *) &cli_addr, sizeof(cli_addr));
+
+
                  }
         }
     }
