@@ -150,6 +150,8 @@ START_TEST(get_hashtable_content)
     add_Htable_value(table, "2", "b");
     add_Htable_value(table, "3", "c");
     add_Htable_value(table, "4", "d");
+    add_Htable_value(table, "5", "e");
+    add_Htable_value(table, "6", "f");
     
     kv_list_t* list_of_kv = get_Htable_content(table);
     
