@@ -246,14 +246,13 @@ size_t get_Htable_size(Htable_t table){
 	return total;
 }
 
-/*@TODO MAKE A DEEP COPY OF KEY VALUE GIVEN TO KV_LIST*/
 size_t get_bucket_content(struct bucket* bck, kv_list_t* list, size_t from){
 	
 	if (bck->key_value.key == NULL || bck->key_value.value == NULL){
 		return 0;
 	} else if (bck->next == NULL){
 //		printf("index %lu => (%s, %s)\n", from, bck->key_value.key, bck->key_value.value);
-		list->list[from] = bck->key_value;
+		list->list[from] = copy_kv_pair(bck->key_value.key, bck->key_value.value);
 		return 1;
 	} else {
 		list->list[from] = bck->key_value;
