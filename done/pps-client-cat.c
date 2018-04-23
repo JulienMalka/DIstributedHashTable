@@ -46,8 +46,10 @@ int main(void){
 		
 		if (error_put != ERR_NONE){
 			printf("FAIL\n");
+			continue;
 		}
-		
+				
+		printf("OK\n");
 	}
 	
 	
