@@ -16,6 +16,8 @@
 
 #include "node_list.h"
 
+#include "config.h"
+
 #include <arpa/inet.h>
 
 void print_htable(Htable_t* table);
@@ -162,6 +164,60 @@ START_TEST(get_hashtable_content)
 }
 END_TEST
 
+/*TEMPORARY FUNCITON TO TEST IN PPS DUMP NODE*/
+void parse_response(char* in_msg, size_t length){
+	
+	printf("\nSTARTING TESTS FOR PARSING RESPONSE\n");
+	
+	char key[MAX_MSG_SIZE];
+	int key_index = 0;
+	char value[MAX_MSG_SIZE];
+	int value_index = 0;
+	
+	int parsing_key = 1;
+	
+	char iterator;
+	
+	for (int i = 0; i < length; i++){
+		iterator = in_msg[i];
+		
+		if (parsing_key && iterator != '\0'){			
+			key[key_index] = iterator;		
+			printf("key[%d] = %c\n", key_index, iterator);
+			key_index++;
+		} else if (parsing_key && iterator == '\0'){		
+			parsing_key = 0;
+			printf("key = %s\n", key);
+			key_index = 0;	
+		} else if (!parsing_key && iterator != '\0'){
+			value[value_index] = iterator;
+			printf("value[%d] = %c\n", value_index, iterator);
+			value_index++;
+		} else if (!parsing_key && iterator == '\0'){
+			printf("REAL PRINT => %s %s\n", key, value);
+			parsing_key = 1;
+			value_index = 0;
+		}
+							
+	}
+	
+	printf("REAL PRINT => %s %s\n", key, value);
+	
+	
+}
+
+START_TEST(parsing_response_correctly){
+	
+	char* input = "key1\0value1\0key2\0value2";
+	
+	parse_response(input, 23);
+	
+}
+END_TEST
+
+
+
+
 Suite *hashtable_suite()
 {
 
@@ -174,6 +230,7 @@ Suite *hashtable_suite()
     tcase_add_test(tc_ht, add_get_hashtable);
     tcase_add_test(tc_ht, get_hashtable_size);
     tcase_add_test(tc_ht, get_hashtable_content);
+    tcase_add_test(tc_ht, parsing_response_correctly);
 
     return s;
 }
