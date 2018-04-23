@@ -6,6 +6,8 @@ pps-client-get
 pps-launch-server
 pps-client-put
 pps-dump-node
+pps-client-cat
+pps-list-nodes
 week04
 tests
 
