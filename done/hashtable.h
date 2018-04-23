@@ -56,7 +56,10 @@ typedef struct {
 /* TODO WEEK 08:
  * Définir ici le type kv_list_t (et...).
  */
-typedef void kv_list_t;
+typedef struct{
+	size_t size;
+	kv_pair_t* list;
+	} kv_list_t;
 
 /**
  * @brief construct a hash-table of the given size.
