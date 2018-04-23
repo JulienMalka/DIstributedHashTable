@@ -10,6 +10,7 @@ pps-client-cat
 pps-list-nodes
 week04
 tests
+test-hashtable
 
 #ignore the .orig
 *.orig
