@@ -19,7 +19,7 @@ int main(void){
 	while(1){
 		
 		int ok = 1;
-		char ip[15]; //max 15 characters in an ip adress
+		char ip[15]; /* max 15 characters in an ip adress */
 		int port;
 		
 		node_t node;
@@ -34,15 +34,14 @@ int main(void){
 			}
 		}
 			
-		/*Send packet to node*/
+		/* Send packet to node */
 		if (send_packet(s, "\0", 1, node) != ERR_NONE){			
 			//error handling
-			printf("error in sending the packet");
+			printf("FAIL\n");
 			continue;
 		}
 		
-		/*Wait to receive the response*/
-		
+		/*Wait to receive the response*/	
 		node_t response_server;
 		char in_msg[MAX_MSG_SIZE];
 		socklen_t addr_len = sizeof(response_server);
