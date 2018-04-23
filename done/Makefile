@@ -13,13 +13,15 @@ client.o: client.c
 
 node.o: node.c
 
+pps-list-nodes.o : pps-list-nodes.c
+
 util.o : util.c
 
 node_list.o: node_list.c
 
 network.o: network.c
 
-week05: pps-launch-server pps-client-get pps-client-put test-hashtable
+week05: pps-launch-server pps-client-get pps-client-put test-hashtable pps-list-nodes
 
 test-hashtable : test-hashtable.c
 	gcc -o test-hashtable test-hashtable.c node_list.c error.c node.c system.c -lcheck -lm -lrt -pthread -lsubunit
@@ -29,6 +31,8 @@ pps-launch-server: pps-launch-server.o system.o network.o hashtable.o
 pps-client-get: pps-client-get.o client.o node.o network.o system.o node_list.o util.o
 
 pps-client-put: pps-client-put.o client.o node.o network.o system.o node_list.o
+
+pps-list-nodes : pps-list-nodes.o system.o network.o client.o node_list.o node.o
 
 pps-launch-server.o: pps-launch-server.c system.h network.h hashtable.h
 
