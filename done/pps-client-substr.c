@@ -36,9 +36,38 @@ int main(void){
 		if (error_get != ERR_NONE){
 			printf("FAIL/n");
 			continue;
-		}		
-
+		}
 		
+		/*COMPUTE THE SUBSTRING*/
+		if (position < 0){
+			position = strlen(value_from) + position;
+		} else {
+			position = position;			
+		}
+		
+		/*ERROR HANDLING*/
+		if (length < 0 || length + position > strlen(value_from)){
+			printf("FAIL\n");
+			continue;
+		}
+		
+		char substring[strlen(value_from)];
+		
+		for(int i = position; i < position + length; i++){
+			substring[i - position] = value_from[i];
+		}
+		
+		if (position == 0)
+			memset(substring, '\0', strlen(substring)); 
+		
+		error_code error_put = network_put(client, key_to, substring);
+		
+		if (error_put != ERR_NONE){
+			printf("FAIL\n");
+			continue;
+		}
+		
+		printf("OK\n");	
 	}
 	
 } 

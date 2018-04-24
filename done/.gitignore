@@ -8,6 +8,7 @@ pps-client-put
 pps-dump-node
 pps-client-cat
 pps-list-nodes
+pps-client-substr
 week04
 tests
 test-hashtable
