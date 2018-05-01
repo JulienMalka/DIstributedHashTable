@@ -164,53 +164,74 @@ START_TEST(get_hashtable_content)
 }
 END_TEST
 
-/*TEMPORARY FUNCITON TO TEST IN PPS DUMP NODE*/
-void parse_response(char* in_msg, size_t length){
+void print_kv_pair_list(kv_pair_t* kv_pair_list, size_t length){
 	
-	printf("\nSTARTING TESTS FOR PARSING RESPONSE\n");
+	for (int i = 0; i < length; i++){
+		printf("%s %s", kv_pair_list[i].key, kv_pair_list[i].value);
+	}
+
+}
+
+kv_pair_t* parse_and_print_response(char* in_msg, size_t length){
 	
+	printf("STARTING TEST FOR DUMP NODE\n");
+	
+	size_t expected_nbr_kv_pair = (in_msg[3]) & (in_msg[2] << 8) & (in_msg[1] << 16) & (in_msg[0] << 24);
+	printf("%lu\n", expected_nbr_kv_pair);
+	
+	kv_pair_t* kv_pair_list = calloc(expected_nbr_kv_pair, sizeof(kv_pair_t));
+		
 	char key[MAX_MSG_SIZE];
 	int key_index = 0;
 	char value[MAX_MSG_SIZE];
 	int value_index = 0;
 	
+	size_t list_index = 0;
+	
 	int parsing_key = 1;
 	
 	char iterator;
 	
-	for (int i = 0; i < length; i++){
+	for (int i = 4; i < length; i++){
 		iterator = in_msg[i];
 		
 		if (parsing_key && iterator != '\0'){			
 			key[key_index] = iterator;		
-			printf("key[%d] = %c\n", key_index, iterator);
 			key_index++;
 		} else if (parsing_key && iterator == '\0'){		
 			parsing_key = 0;
-			printf("key = %s\n", key);
 			key_index = 0;	
 		} else if (!parsing_key && iterator != '\0'){
 			value[value_index] = iterator;
-			printf("value[%d] = %c\n", value_index, iterator);
 			value_index++;
 		} else if (!parsing_key && iterator == '\0'){
-			printf("REAL PRINT => %s %s\n", key, value);
+			printf("%s %s\n", key, value);
+						
+			kv_pair_list[list_index] = create_kv_pair(key, value);
+			list_index++;
+									
 			parsing_key = 1;
 			value_index = 0;
 		}
 							
 	}
+		kv_pair_list[list_index] = create_kv_pair(key, value);
+		list_index++;
 	
-	printf("REAL PRINT => %s %s\n", key, value);
+	if (list_index != expected_nbr_kv_pair)
+		return NULL;
 	
+	printf("%s %s\n", key, value);
 	
+	return kv_pair_list;
 }
 
 START_TEST(parsing_response_correctly){
 	
-	char* input = "key1\0value1\0key2\0value2";
+	char* input = "2key1\0value1\0key2\0value2";
 	
-	parse_response(input, 23);
+	print_kv_pair_list(parse_and_print_response(input, 24), 2);
+	
 	
 }
 END_TEST

@@ -40,7 +40,7 @@ pps-client-put: pps-client-put.o client.o node.o network.o system.o node_list.o
 
 pps-list-nodes : pps-list-nodes.o system.o network.o client.o node_list.o node.o
 
-pps-dump-node: pps-dump-node.o network.o system.o node.o
+pps-dump-node: pps-dump-node.o network.o system.o node.o hashtable.o
 
 pps-client-find : pps-client-find.o client.o node.o network.o system.o node_list.o util.o	
 

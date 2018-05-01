@@ -55,7 +55,7 @@ void kv_pair_free(kv_pair_t *kv){
  * @param value
  * @return new kv_pair with copies of key and value
  */
-kv_pair_t copy_kv_pair(pps_key_t key, pps_value_t value){
+kv_pair_t create_kv_pair(pps_key_t key, pps_value_t value){
 
 	char* key_new = calloc(strlen(key), sizeof(char));
 	char* value_new = calloc(strlen(value), sizeof(char));
@@ -120,16 +120,16 @@ error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t va
 
 	if (key_value.key == NULL && key_value.value == NULL){
 
-		bck->key_value = copy_kv_pair(key, value);
+		bck->key_value = create_kv_pair(key, value);
 
 	} else if (strcmp(key, key_value.key) == 0){
 
 		kv_pair_free(&bck->key_value);
 
-		bck->key_value = copy_kv_pair(key, value);
+		bck->key_value = create_kv_pair(key, value);
 
 	} else if (bck->next == NULL){
-		kv_pair_t pair_new = copy_kv_pair(key, value);
+		kv_pair_t pair_new = create_kv_pair(key, value);
 
 		struct bucket* bucket_new = create_bucket(pair_new, NULL);
 		bck->next = bucket_new;
@@ -252,7 +252,7 @@ size_t get_bucket_content(struct bucket* bck, kv_list_t* list, size_t from){
 		return 0;
 	} else if (bck->next == NULL){
 //		printf("index %lu => (%s, %s)\n", from, bck->key_value.key, bck->key_value.value);
-		list->list[from] = copy_kv_pair(bck->key_value.key, bck->key_value.value);
+		list->list[from] = create_kv_pair(bck->key_value.key, bck->key_value.value);
 		return 1;
 	} else {
 		list->list[from] = bck->key_value;
