@@ -33,6 +33,8 @@ typedef const char* pps_value_t;
 	 pps_value_t value;	 
 	 } kv_pair_t; 
 	 
+kv_pair_t create_kv_pair(pps_key_t key, pps_value_t value);
+	 
 /*
  * Definition of type for local hash-tables buckets
  */

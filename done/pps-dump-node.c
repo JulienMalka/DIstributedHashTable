@@ -8,8 +8,11 @@
 #include "system.h"
 #include "network.h"
 #include "config.h"
+#include "hashtable.h"
 
-void parse_and_print_response(char* in_msg, size_t length);
+kv_pair_t* parse_and_print_response(char* in_msg, size_t length);
+
+void print_kv_pair_list(kv_pair_t* kv_pair_list, size_t length);
 
 int main(void){
 	
@@ -34,6 +37,7 @@ int main(void){
 			}
 		}
 			
+		printf("SENDING PACKET TO %s %d\n", ip, port);	
 		/* Send packet to node */
 		if (send_packet(s, "\0", 1, node) != ERR_NONE){			
 			//error handling
@@ -46,24 +50,49 @@ int main(void){
 		char in_msg[MAX_MSG_SIZE];
 		socklen_t addr_len = sizeof(response_server);
 		ssize_t in_msg_len = recvfrom(s, in_msg, MAX_MSG_SIZE, 0, (struct sockaddr *) &response_server, &addr_len);
-		parse_and_print_response(in_msg, in_msg_len);
 		
+		printf("RECEIVED RESPONSE FROM SERVER\n");
+		
+		kv_pair_t* kv_pair_list = parse_and_print_response(in_msg, in_msg_len);
+		
+		if (kv_pair_list == NULL){
+			printf("FAIL\n");
+			continue;
+		}
+		
+		print_kv_pair_list(kv_pair_list, sizeof(kv_pair_list));
+		
+			
 	}
 	
 }
 
-void parse_and_print_response(char* in_msg, size_t length){
+void print_kv_pair_list(kv_pair_t* kv_pair_list, size_t size){
 	
+	for (int i = 0; i < size; i++){
+		printf("%s %s", kv_pair_list[i].key, kv_pair_list[i].value);
+	}
+
+}
+
+kv_pair_t* parse_and_print_response(char* in_msg, size_t length){
+	
+	size_t expected_nbr_kv_pair = (in_msg[3]) & (in_msg[2] << 8) & (in_msg[1] << 16) & (in_msg[0] << 24);
+	
+	kv_pair_t* kv_pair_list = calloc(expected_nbr_kv_pair, sizeof(kv_pair_t));
+		
 	char key[MAX_MSG_SIZE];
 	int key_index = 0;
 	char value[MAX_MSG_SIZE];
 	int value_index = 0;
 	
+	size_t list_index = 0;
+	
 	int parsing_key = 1;
 	
 	char iterator;
 	
-	for (int i = 0; i < length; i++){
+	for (int i = 4; i < length; i++){
 		iterator = in_msg[i];
 		
 		if (parsing_key && iterator != '\0'){			
@@ -76,14 +105,23 @@ void parse_and_print_response(char* in_msg, size_t length){
 			value[value_index] = iterator;
 			value_index++;
 		} else if (!parsing_key && iterator == '\0'){
-			printf("%s %s\n", key, value);
+//			printf("%s %s\n", key, value);
+						
+			kv_pair_list[list_index] = create_kv_pair(key, value);
+			list_index++;
+									
 			parsing_key = 1;
 			value_index = 0;
 		}
 							
 	}
+		kv_pair_list[list_index] = create_kv_pair(key, value);
+		list_index++;
 	
-	printf("%s %s\n", key, value);
+	if (list_index != expected_nbr_kv_pair)
+		return NULL;
 	
+//	printf("%s %s\n", key, value);
 	
+	return kv_pair_list;
 }
