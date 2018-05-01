@@ -50,11 +50,52 @@ int main(void)
 
 
         if(in_msg_len==0){
-          
+
           sendto(s, NULL, 0, 0, (struct sockaddr *) &cli_addr, sizeof(cli_addr));
         }
         // Write Request
         else if (memchr(in_msg, '\0', in_msg_len)!=NULL) {
+
+              if(in_msg_len==1){
+
+kv_list_t* node_dump = get_Htable_content(h_table);
+
+int counter =0;
+size_t size_packet = 0;
+char* packet = calloc(65507, sizeof(char));
+packet[0] = node_dump->size >> 24;
+packet[1] = node_dump->size >> 16;
+packet[2] = node_dump->size >> 8;
+packet[3] = node_dump->size;
+while(counter < node_dump->size){
+
+size_t size_kv = strlen(node_dump->list[counter].key) +1 + strlen(node_dump->list[counter].value);
+if(size_packet+size_kv<65507){
+
+char* kv_request = format_put_request(node_dump->list[counter].key, node_dump->list[counter].value);
+packet = format_put_request(packet, kv_request);
+
+counter++;
+size_packet+=size_kv;
+
+}else{
+
+  sendto(s, packet, size_packet, 0,
+             (struct sockaddr *) &cli_addr, sizeof(cli_addr));
+
+
+
+size_packet = 0;
+
+
+
+}
+
+}
+
+              }else{
+
+
               size_t size_value = in_msg_len - strlen(in_msg);
               char* key = calloc(strlen(in_msg)+1, sizeof(char));
               char* value = calloc(size_value, sizeof(char));
@@ -63,6 +104,7 @@ int main(void)
               sendto(s, 0, 0, 0,
                    (struct sockaddr *) &cli_addr, sizeof(cli_addr));
         }
+      }
 
         // Read Request
         else if (memchr(in_msg, 0, in_msg_len)==NULL) {
