@@ -92,6 +92,9 @@ size_packet = 0;
 }
 
 }
+sendto(s, packet, size_packet, 0,
+           (struct sockaddr *) &cli_addr, sizeof(cli_addr));
+
 
               }else{
 
