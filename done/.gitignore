@@ -9,6 +9,7 @@ pps-dump-node
 pps-client-cat
 pps-list-nodes
 pps-client-substr
+pps-client-find
 week04
 tests
 test-hashtable
@@ -18,5 +19,3 @@ test-hashtable
 
 #ignore the .gch
 *.gch
-
-
