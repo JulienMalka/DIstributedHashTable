@@ -10,7 +10,7 @@
 #include "config.h"
 #include "hashtable.h"
 
-kv_pair_t* parse_and_print_response(char* in_msg, size_t length);
+void parse_and_print_response(char* in_msg, size_t length);
 
 void print_kv_pair_list(kv_pair_t* kv_pair_list, size_t length);
 
@@ -53,16 +53,7 @@ int main(void){
 		
 		printf("RECEIVED RESPONSE FROM SERVER\n");
 		
-		kv_pair_t* kv_pair_list = parse_and_print_response(in_msg, in_msg_len);
-		
-		if (kv_pair_list == NULL){
-			printf("FAIL\n");
-			continue;
-		}
-		
-		print_kv_pair_list(kv_pair_list, sizeof(kv_pair_list));
-		
-			
+		parse_and_print_response(in_msg, in_msg_len);	
 	}
 	
 }
@@ -70,16 +61,29 @@ int main(void){
 void print_kv_pair_list(kv_pair_t* kv_pair_list, size_t size){
 	
 	for (int i = 0; i < size; i++){
-		printf("%s %s", kv_pair_list[i].key, kv_pair_list[i].value);
+		printf("%s %s\n", kv_pair_list[i].key, kv_pair_list[i].value);
 	}
 
 }
 
-kv_pair_t* parse_and_print_response(char* in_msg, size_t length){
+void kv_pair_list_free(kv_pair_t* list, size_t length){
+	for (int i = 0; i < length; i++){
+		kv_pair_free(&list[i]);
+	}
+}
+
+/*
+ * @brief Parse an incoming message to a list of key_value pairs
+ * @param in_msg message to parse
+ * @param length of the message
+ * @return a list of kv_pair_t or NULL if the expected amount of key_value paris did not match
+ */ 
+void parse_and_print_response(char* in_msg, size_t length){
 	
+	/*The first four octets represent an unsigned value = number of expected pairs*/
 	size_t expected_nbr_kv_pair = (in_msg[3]) & (in_msg[2] << 8) & (in_msg[1] << 16) & (in_msg[0] << 24);
 	
-	kv_pair_t* kv_pair_list = calloc(expected_nbr_kv_pair, sizeof(kv_pair_t));
+	kv_pair_t kv_pair_list[expected_nbr_kv_pair];
 		
 	char key[MAX_MSG_SIZE];
 	int key_index = 0;
@@ -109,19 +113,37 @@ kv_pair_t* parse_and_print_response(char* in_msg, size_t length){
 						
 			kv_pair_list[list_index] = create_kv_pair(key, value);
 			list_index++;
+			
+			/*If the number of key_value pairs exceeds, it fails*/
+			if (list_index >= expected_nbr_kv_pair){
+				printf("FAIL\n");
+				
+				/*Free the memory allocated by create_kv_pair*/
+				kv_pair_list_free(kv_pair_list, expected_nbr_kv_pair);
+				
+				return;
+			}
 									
 			parsing_key = 1;
 			value_index = 0;
-		}
-							
+		}						
 	}
 		kv_pair_list[list_index] = create_kv_pair(key, value);
 		list_index++;
 	
-	if (list_index != expected_nbr_kv_pair)
-		return NULL;
+	/*If the number of key_value pairs does not match i.e. is below expected amount, it fails*/
+	if (list_index != expected_nbr_kv_pair){
+		printf("FAIL\n");
+		
+		kv_pair_list_free(kv_pair_list, list_index);		
+		return;
+	}
+	
+	print_kv_pair_list(kv_pair_list, expected_nbr_kv_pair);
+	
+	/*Free the memory allocated by create_kv_pair*/
+	kv_pair_list_free(kv_pair_list, expected_nbr_kv_pair);
+	
 	
 //	printf("%s %s\n", key, value);
-	
-	return kv_pair_list;
 }
