@@ -63,16 +63,21 @@ kv_list_t* node_dump = get_Htable_content(h_table);
 int counter =0;
 size_t size_packet = 4;
 char* packet = calloc(65507, sizeof(char));
-packet[0] = node_dump->size >> 24;
-packet[1] = node_dump->size >> 16;
-packet[2] = node_dump->size >> 8;
-packet[3] = node_dump->size;
+char header[4];
+header[0] = node_dump->size >> 24;
+header[1] = node_dump->size >> 16;
+header[2] = node_dump->size >> 8;
+header[3] = node_dump->size;
 while(counter < node_dump->size){
 
 size_t size_kv = strlen(node_dump->list[counter].key) +1 + strlen(node_dump->list[counter].value);
 if(size_packet+size_kv<65507){
-
-char* kv_request = format_put_request(node_dump->list[counter].key, node_dump->list[counter].value, -1, -1);
+  char* kv_request;
+if(counter==0){
+ kv_request = format_put_request(strcat(header,node_dump->list[counter].key), node_dump->list[counter].value, -1, -1);
+}else{
+ kv_request = format_put_request(node_dump->list[counter].key, node_dump->list[counter].value, -1, -1);
+}
 packet = format_put_request(packet, kv_request, size_packet, strlen(node_dump->list[counter].key)+1 + strlen(node_dump->list[counter].value));
 
 counter++;
