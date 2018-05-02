@@ -99,7 +99,7 @@ void parse_and_print_response(char in_msg[], size_t length){
 	
 	char iterator;
 	
-	for (int i = 5; i < length; i++){
+	for (int i = 4; i < length; i++){
 		iterator = in_msg[i];
 		printf("iterator i = %c\n", iterator);
 		
@@ -119,7 +119,7 @@ void parse_and_print_response(char in_msg[], size_t length){
 			list_index++;
 			
 			/*If the number of key_value pairs exceeds, it fails*/
-			if (list_index >= expected_nbr_kv_pair){
+			if (list_index > expected_nbr_kv_pair){
 				printf("FAIL\n");
 				
 				/*Free the memory allocated by create_kv_pair*/
@@ -132,7 +132,6 @@ void parse_and_print_response(char in_msg[], size_t length){
 		}						
 	}
 		kv_pair_list[list_index] = create_kv_pair(key, value);
-		list_index++;
 	
 	/*If the number of key_value pairs does not match i.e. is below expected amount, it fails*/
 	if (list_index != expected_nbr_kv_pair){
