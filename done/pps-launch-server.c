@@ -61,7 +61,7 @@ int main(void)
 kv_list_t* node_dump = get_Htable_content(h_table);
 
 int counter =0;
-size_t size_packet = 0;
+size_t size_packet = 4;
 char* packet = calloc(65507, sizeof(char));
 packet[0] = node_dump->size >> 24;
 packet[1] = node_dump->size >> 16;
