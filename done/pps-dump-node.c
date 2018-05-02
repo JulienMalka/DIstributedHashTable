@@ -49,7 +49,7 @@ int main(void){
 		char in_msg[MAX_MSG_SIZE];
 		ssize_t in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
 		
-		printf("RECEIVED RESPONSE FROM SERVER\n");
+		printf("RECEIVED RESPONSE FROM SERVER, in_msg = %c and length = %lu\n", in_msg[3], in_msg_len);
 		
 		parse_and_print_response(in_msg, in_msg_len);	
 	}
@@ -70,7 +70,7 @@ void print_kv_pair_list(kv_list_t kv_pair_list){
  * @param length of the message
  * @return a list of kv_pair_t or NULL if the expected amount of key_value paris did not match
  */ 
-void parse_and_print_response(char* in_msg, size_t length){
+void parse_and_print_response(char in_msg[], size_t length){
 	
 	if (length < 4){
 		printf("length is under 4 FAIL\n");
@@ -78,7 +78,7 @@ void parse_and_print_response(char* in_msg, size_t length){
 	}
 	
 	/*The first four octets represent an unsigned value = number of expected pairs*/
-	size_t expected_nbr_kv_pair = (in_msg[3]) & (in_msg[2] << 8) & (in_msg[1] << 16) & (in_msg[0] << 24);
+	size_t expected_nbr_kv_pair = (in_msg[3]) | (in_msg[2] << 8) | (in_msg[1] << 16) | (in_msg[0] << 24);
 	
 	printf("expected number of kv pair = %lu\n", expected_nbr_kv_pair);
 	
@@ -99,8 +99,9 @@ void parse_and_print_response(char* in_msg, size_t length){
 	
 	char iterator;
 	
-	for (int i = 4; i < length; i++){
+	for (int i = 5; i < length; i++){
 		iterator = in_msg[i];
+		printf("iterator i = %c\n", iterator);
 		
 		if (parsing_key && iterator != '\0'){			
 			key[key_index] = iterator;		
@@ -112,7 +113,7 @@ void parse_and_print_response(char* in_msg, size_t length){
 			value[value_index] = iterator;
 			value_index++;
 		} else if (!parsing_key && iterator == '\0'){
-//			printf("%s %s\n", key, value);
+			printf("key = %s && value = %s\n", key, value);
 						
 			kv_pair_list[list_index] = create_kv_pair(key, value);
 			list_index++;
