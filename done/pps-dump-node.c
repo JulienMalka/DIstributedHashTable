@@ -53,6 +53,11 @@ int main(void){
 		char in_msg[MAX_MSG_SIZE];
 		ssize_t in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
 		
+		if (in_msg_len == -1){
+			printf("FAIL\n");
+			continue;
+		}
+		
 		printf("RECEIVED RESPONSE FROM SERVER, in_msg = %c and length = %lu\n", in_msg[3], in_msg_len);
 		
 		
@@ -112,11 +117,14 @@ size_t parse_kv_pairs(char* in_msg, size_t length, kv_list_t* kv_list){
 			key_index++;
 		} else if (parsing_key && iterator == '\0'){		
 			parsing_key = 0;
+			key[key_index] = '\0';
 			key_index = 0;	
 		} else if (!parsing_key && iterator != '\0'){
 			value[value_index] = iterator;
 			value_index++;
 		} else if (!parsing_key && iterator == '\0'){
+			
+			value[value_index+1] = '\0';
 						
 			kv_list->list[list_index] = create_kv_pair(key, value);
 			list_index++;
@@ -127,6 +135,6 @@ size_t parse_kv_pairs(char* in_msg, size_t length, kv_list_t* kv_list){
 	}
 		kv_list->list[list_index] = create_kv_pair(key, value);
 	
-	return list_index;
+	return list_index + 1;
 	
 }
