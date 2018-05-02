@@ -22,7 +22,7 @@ size_t parse_nbr_kv_pair(char* in_msg)
 int main(void)
 {
 
-    //Set up socket
+    /* Set up socket */
     int s = get_socket(1);
 
     while(1) {
@@ -50,7 +50,7 @@ int main(void)
             continue;
         }
 
-        /*Wait to receive the response*/
+        /* Wait to receive the response */
         char in_msg[MAX_MSG_SIZE];
         ssize_t in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
 
@@ -63,6 +63,7 @@ int main(void)
         kv_list->list = calloc(MAX_MSG_SIZE, sizeof(kv_pair_t));
         kv_list->size = parse_nbr_kv_pair(in_msg);
 
+		/* 4 is the size (in bytes) of a 32-bit unsigned integer */
         size_t parsed_kv_pairs = parse_kv_pairs(&in_msg[4], in_msg_len - 4, 0, kv_list);
 
 		if (parsed_kv_pairs == -1){
@@ -71,7 +72,8 @@ int main(void)
 		}
 
         if (parsed_kv_pairs < kv_list->size) {
-            /*More packets handling*/
+            /* More packets handling */
+            
         }
         
         print_kv_pair_list(*kv_list);
@@ -83,18 +85,16 @@ int main(void)
 
 void print_kv_pair_list(kv_list_t kv_pair_list)
 {
-
     for (int i = 0; i < kv_pair_list.size; i++) {
         printf("%s %s\n", kv_pair_list.list[i].key, kv_pair_list.list[i].value);
     }
-
 }
 
 /*
  * @brief Parse an incoming message to a list of key_value pairs
  * @param in_msg message to parse
  * @param length of the message
- * @return the number of key_value pairs matched
+ * @return the number of key_value pairs matched, -1 (unsigned) if parsing failed
  */
 size_t parse_kv_pairs(char* in_msg, size_t length, size_t starting_index, kv_list_t* kv_list)
 {
@@ -146,5 +146,4 @@ size_t parse_kv_pairs(char* in_msg, size_t length, size_t starting_index, kv_lis
     kv_list->list[list_index] = create_kv_pair(key, value);
 
     return list_index + 1;
-
 }
