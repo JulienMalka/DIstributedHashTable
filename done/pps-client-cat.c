@@ -16,9 +16,9 @@ int main(void)
 
     while(1) {
 
-        char key_from1[MAX_MSG_ELEM_SIZE];
-        char key_from2[MAX_MSG_ELEM_SIZE];
-        char key_to[MAX_MSG_ELEM_SIZE];
+        char key_from1[MAX_MSG_SIZE];
+        char key_from2[MAX_MSG_SIZE];
+        char key_to[MAX_MSG_SIZE];
         int ok = 1;
 
         while (ok) {
@@ -41,11 +41,11 @@ int main(void)
             continue;
         }
 
-        /*concat the two values*/
-        char concat[MAX_MSG_ELEM_SIZE];
+        /* concat the two values */
+        char concat[MAX_MSG_SIZE];
         snprintf(concat, strlen(value_from1) + strlen(value_from2) + 1, "%s%s", value_from1, value_from2);
 
-        /*re-send the concatenation*/
+        /* re-send the concatenation */
         error_code error_put = network_put(client, key_to, concat);
 
         if (error_put != ERR_NONE) {

@@ -14,6 +14,11 @@ size_t parse_kv_pairs(char* in_msg, size_t length, size_t starting_index, kv_lis
 
 void print_kv_pair_list(kv_list_t kv_pair_list);
 
+/**
+ * @brief Takes the four first bytes of a char array and converts them into a 32-bit unsigned char
+ * @param in_msg to parse
+ * @return 32-bit unsigned int
+ */
 size_t parse_nbr_kv_pair(char* in_msg)
 {
     return (in_msg[3]) | (in_msg[2] << 8) | (in_msg[1] << 16) | (in_msg[0] << 24);
@@ -83,6 +88,10 @@ int main(void)
 
 }
 
+/**
+ * @brief Iterate over a list of key_value and prints its content
+ * @param kv_pair_list to print
+ */
 void print_kv_pair_list(kv_list_t kv_pair_list)
 {
     for (int i = 0; i < kv_pair_list.size; i++) {
@@ -90,11 +99,13 @@ void print_kv_pair_list(kv_list_t kv_pair_list)
     }
 }
 
-/*
+/**
  * @brief Parse an incoming message to a list of key_value pairs
  * @param in_msg message to parse
  * @param length of the message
- * @return the number of key_value pairs matched, -1 (unsigned) if parsing failed
+ * @param starting_index to insert elements in @param kv_list
+ * @param kv_list pointer to a kv_list
+ * @return the number of key_value pairs parsed, -1 (unsigned) if parsing failed
  */
 size_t parse_kv_pairs(char* in_msg, size_t length, size_t starting_index, kv_list_t* kv_list)
 {
