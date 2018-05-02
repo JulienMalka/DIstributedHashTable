@@ -64,12 +64,6 @@ void print_kv_pair_list(kv_list_t kv_pair_list){
 
 }
 
-void kv_pair_list_free(kv_pair_t* list, size_t length){
-	for (int i = 0; i < length; i++){
-		kv_pair_free(&list[i]);
-	}
-}
-
 /*
  * @brief Parse an incoming message to a list of key_value pairs
  * @param in_msg message to parse
@@ -128,8 +122,7 @@ void parse_and_print_response(char* in_msg, size_t length){
 				printf("FAIL\n");
 				
 				/*Free the memory allocated by create_kv_pair*/
-				kv_list_free(&kv_list);
-				
+//				kv_list_free(&kv_list);				
 				return;
 			}
 									
@@ -145,14 +138,14 @@ void parse_and_print_response(char* in_msg, size_t length){
 		printf("FAIL\n");
 		
 		kv_list.size = list_index;
-		kv_list_free(&kv_list);		
+//		kv_list_free(&kv_list);		
 		return;
 	}
 	
 	print_kv_pair_list(kv_list);
 	
 	/*Free the memory allocated by create_kv_pair*/
-	kv_list_free(&kv_list);
+//	kv_list_free(&kv_list);
 	
 	
 //	printf("%s %s\n", key, value);
