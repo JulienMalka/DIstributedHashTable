@@ -12,12 +12,12 @@
 
 void parse_and_print_response(char* in_msg, size_t length);
 
-void print_kv_pair_list(kv_pair_t* kv_pair_list, size_t length);
+void print_kv_pair_list(kv_list_t kv_pair_list);
 
 int main(void){
 	
 	//Set up socket
-    int s = get_socket(0);
+    int s = get_socket(1);
 	
 	while(1){
 		
@@ -46,10 +46,8 @@ int main(void){
 		}
 		
 		/*Wait to receive the response*/	
-		node_t response_server;
 		char in_msg[MAX_MSG_SIZE];
-		socklen_t addr_len = sizeof(response_server);
-		ssize_t in_msg_len = recvfrom(s, in_msg, MAX_MSG_SIZE, 0, (struct sockaddr *) &response_server, &addr_len);
+		ssize_t in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
 		
 		printf("RECEIVED RESPONSE FROM SERVER\n");
 		
@@ -58,10 +56,10 @@ int main(void){
 	
 }
 
-void print_kv_pair_list(kv_pair_t* kv_pair_list, size_t size){
+void print_kv_pair_list(kv_list_t kv_pair_list){
 	
-	for (int i = 0; i < size; i++){
-		printf("%s %s\n", kv_pair_list[i].key, kv_pair_list[i].value);
+	for (int i = 0; i < kv_pair_list.size; i++){
+		printf("%s %s\n", kv_pair_list.list[i].key, kv_pair_list.list[i].value);
 	}
 
 }
@@ -80,10 +78,21 @@ void kv_pair_list_free(kv_pair_t* list, size_t length){
  */ 
 void parse_and_print_response(char* in_msg, size_t length){
 	
+	if (length < 4){
+		printf("length is under 4 FAIL\n");
+		return;
+	}
+	
 	/*The first four octets represent an unsigned value = number of expected pairs*/
 	size_t expected_nbr_kv_pair = (in_msg[3]) & (in_msg[2] << 8) & (in_msg[1] << 16) & (in_msg[0] << 24);
 	
+	printf("expected number of kv pair = %lu\n", expected_nbr_kv_pair);
+	
 	kv_pair_t kv_pair_list[expected_nbr_kv_pair];
+	
+	kv_list_t kv_list;
+	kv_list.list = kv_pair_list;
+	kv_list.size = expected_nbr_kv_pair;
 		
 	char key[MAX_MSG_SIZE];
 	int key_index = 0;
@@ -119,7 +128,7 @@ void parse_and_print_response(char* in_msg, size_t length){
 				printf("FAIL\n");
 				
 				/*Free the memory allocated by create_kv_pair*/
-				kv_pair_list_free(kv_pair_list, expected_nbr_kv_pair);
+				kv_list_free(&kv_list);
 				
 				return;
 			}
@@ -135,14 +144,15 @@ void parse_and_print_response(char* in_msg, size_t length){
 	if (list_index != expected_nbr_kv_pair){
 		printf("FAIL\n");
 		
-		kv_pair_list_free(kv_pair_list, list_index);		
+		kv_list.size = list_index;
+		kv_list_free(&kv_list);		
 		return;
 	}
 	
-	print_kv_pair_list(kv_pair_list, expected_nbr_kv_pair);
+	print_kv_pair_list(kv_list);
 	
 	/*Free the memory allocated by create_kv_pair*/
-	kv_pair_list_free(kv_pair_list, expected_nbr_kv_pair);
+	kv_list_free(&kv_list);
 	
 	
 //	printf("%s %s\n", key, value);
