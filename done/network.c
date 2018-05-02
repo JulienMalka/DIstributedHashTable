@@ -63,7 +63,7 @@ if(key==NULL||value==NULL)return ERR_BAD_PARAMETER;
     int errors = 0;
     for(int i= 0; i<client.server.size; i++) {
 
-      char* request = format_put_request(key, value);
+      char* request = format_put_request(key, value, -1, -1);
       size_t request_len = strlen(key)+strlen(value)+1;
       error_code error_send = send_packet(client.socket, request, request_len, client.server.nodes[i]);
       free(request);
@@ -107,14 +107,18 @@ if(message==NULL || size<0) return ERR_BAD_PARAMETER;
    * @param key key to format
    * @return the request correctly formated
    */
-  char* format_put_request(pps_key_t key, pps_value_t value){
-    char *result = calloc(strlen(key)+strlen(value)+1, sizeof(char));
-    for(int i=0; i<strlen(key); i++){
+  char* format_put_request(pps_value_t key, pps_value_t value, size_t size_key, size_t size_value){
+    char *result = calloc(size_key+size_value+1, sizeof(char));
+
+    if(size_key==-1){size_key = strlen(key);}
+    if(size_value==-1){size_value = strlen(value);}
+
+    for(int i=0; i<size_key; i++){
         result[i] = key[i];
       }
-      result[strlen(key)]='\0';
-      for(int i=strlen(key)+1; i<strlen(key)+1+strlen(value); i++){
-      result[i] = value[i-strlen(key)-1];
+      result[size_key]='\0';
+      for(int i=size_key+1; i<size_key+1+size_value; i++){
+      result[i] = value[i-size_key-1];
       }
 
       return result;
