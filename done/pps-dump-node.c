@@ -10,7 +10,7 @@
 #include "config.h"
 #include "hashtable.h"
 
-size_t parse_kv_pairs(char* in_msg, size_t length, kv_list_t* kv_list);
+size_t parse_kv_pairs(char* in_msg, size_t length, size_t starting_index, kv_list_t* kv_list);
 
 void print_kv_pair_list(kv_list_t kv_pair_list);
 
@@ -43,7 +43,6 @@ int main(void)
             }
         }
 
-        printf("SENDING PACKET TO %s %d\n", ip, port);
         /* Send packet to node */
         if (send_packet(s, "\0", 1, node) != ERR_NONE) {
             //error handling
@@ -60,24 +59,22 @@ int main(void)
             continue;
         }
 
-        printf("RECEIVED RESPONSE FROM SERVER, in_msg = %c and length = %lu\n", in_msg[3], in_msg_len);
-
-
         kv_list_t* kv_list = malloc(sizeof(kv_list_t));
         kv_list->list = calloc(MAX_MSG_SIZE, sizeof(kv_pair_t));
         kv_list->size = parse_nbr_kv_pair(in_msg);
 
-        size_t parsed_kv_pairs = parse_kv_pairs(&in_msg[4], in_msg_len - 4, kv_list);
+        size_t parsed_kv_pairs = parse_kv_pairs(&in_msg[4], in_msg_len - 4, 0, kv_list);
+
+		if (parsed_kv_pairs == -1){
+			printf("FAIL\n");
+			continue;
+		}
 
         if (parsed_kv_pairs < kv_list->size) {
             /*More packets handling*/
         }
-
-        printf("parsed_kv pairs = %lu\n", parsed_kv_pairs);
-
+        
         print_kv_pair_list(*kv_list);
-
-        printf("printed\n");
 
         kv_list_free(kv_list);
     }
@@ -99,11 +96,10 @@ void print_kv_pair_list(kv_list_t kv_pair_list)
  * @param length of the message
  * @return the number of key_value pairs matched
  */
-size_t parse_kv_pairs(char* in_msg, size_t length, kv_list_t* kv_list)
+size_t parse_kv_pairs(char* in_msg, size_t length, size_t starting_index, kv_list_t* kv_list)
 {
 
     if (length < 4) {
-        printf("length is under 4 FAIL\n");
         return -1;
     }
 
@@ -112,7 +108,7 @@ size_t parse_kv_pairs(char* in_msg, size_t length, kv_list_t* kv_list)
     char value[MAX_MSG_SIZE];
     int value_index = 0;
 
-    size_t list_index = 0;
+    size_t list_index = starting_index;
 
     int parsing_key = 1;
 
@@ -120,7 +116,6 @@ size_t parse_kv_pairs(char* in_msg, size_t length, kv_list_t* kv_list)
 
     for (int i = 0; i < length; i++) {
         iterator = in_msg[i];
-        printf("iterator i = %c\n", iterator);
 
         if (parsing_key && iterator != '\0') {
             key[key_index] = iterator;
@@ -138,6 +133,10 @@ size_t parse_kv_pairs(char* in_msg, size_t length, kv_list_t* kv_list)
 
             kv_list->list[list_index] = create_kv_pair(key, value);
             list_index++;
+            
+            if (list_index >= kv_list->size){
+				return -1;
+			}
 
             parsing_key = 1;
             value_index = 0;

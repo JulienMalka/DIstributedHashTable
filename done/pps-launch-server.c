@@ -69,8 +69,6 @@ int main(void)
                 header[2] = node_dump->size >> 8;
                 header[3] = node_dump->size;
 
-
-
                 while(counter < node_dump->size) {
 
                     size_t size_kv = strlen(node_dump->list[counter].key) +1 + strlen(node_dump->list[counter].value);
