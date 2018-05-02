@@ -53,6 +53,11 @@ int main(void){
 		char in_msg[MAX_MSG_SIZE];
 		ssize_t in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
 		
+		if (in_msg_len == -1){
+			printf("FAIL\n");
+			continue;
+		}
+		
 		printf("RECEIVED RESPONSE FROM SERVER, in_msg = %c and length = %lu\n", in_msg[3], in_msg_len);
 		
 		
