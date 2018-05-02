@@ -72,8 +72,8 @@ while(counter < node_dump->size){
 size_t size_kv = strlen(node_dump->list[counter].key) +1 + strlen(node_dump->list[counter].value);
 if(size_packet+size_kv<65507){
 
-char* kv_request = format_put_request(node_dump->list[counter].key, node_dump->list[counter].value);
-packet = format_put_request(packet, kv_request);
+char* kv_request = format_put_request(node_dump->list[counter].key, node_dump->list[counter].value, -1, -1);
+packet = format_put_request(packet, kv_request, size_packet, strlen(node_dump->list[counter].key)+1 + strlen(node_dump->list[counter].value));
 
 counter++;
 size_packet+=size_kv;

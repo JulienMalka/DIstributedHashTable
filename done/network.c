@@ -107,12 +107,13 @@ if(message==NULL || size<0) return ERR_BAD_PARAMETER;
    * @param key key to format
    * @return the request correctly formated
    */
-  char* format_put_request(pps_value_t key, pps_value_t value, size_t size_key, size_t size_value){
+  char* format_put_request(pps_value_t key, pps_value_t value, int skey, int svalue){
+
+    int size_key;
+    int size_value;
+    if(skey==-1){size_key = strlen(key);}else{size_key = skey;}
+    if(svalue==-1){size_value = strlen(value);}else {size_value=svalue;}
     char *result = calloc(size_key+size_value+1, sizeof(char));
-
-    if(size_key==-1){size_key = strlen(key);}
-    if(size_value==-1){size_value = strlen(value);}
-
     for(int i=0; i<size_key; i++){
         result[i] = key[i];
       }
