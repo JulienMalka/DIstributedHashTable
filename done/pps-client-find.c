@@ -46,11 +46,11 @@ int main(void)
         if(error_1 == ERR_NONE && error_2==ERR_NONE) {
             char* firstocc = strstr(get_value_1, get_value_2);
             int place;
-            if(firstocc==NULL){
-              place = -1;
-            }else{
+            if(firstocc==NULL) {
+                place = -1;
+            } else {
 
-              place = firstocc - get_value_1;
+                place = firstocc - get_value_1;
             }
             printf("OK %d\n", place);
             free_const_ptr(get_value_1);

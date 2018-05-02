@@ -23,22 +23,22 @@ int main(void)
     client_init(client_i);
 
 
-    for(int i=0; i<client.server.size;i++){
+    for(int i=0; i<client.server.size; i++) {
         char* buffer_send = malloc(0);
         send_packet(client.socket, buffer_send, 0, client.server.nodes[i]);
 
-      int error_receive = recv(client.socket, NULL,0,0);
-		    char* status;
-      if(error_receive==-1){
-        status = "FAIL";
+        int error_receive = recv(client.socket, NULL,0,0);
+        char* status;
+        if(error_receive==-1) {
+            status = "FAIL";
 
-      }else{
+        } else {
 
-           status = "OK";
+            status = "OK";
 
-      }
-		char buffer[20];
-      printf("%s %hu %s\n", inet_ntop(AF_INET, &client.server.nodes[i].sin_addr, buffer, 20), ntohs(client.server.nodes[i].sin_port), status);
+        }
+        char buffer[20];
+        printf("%s %hu %s\n", inet_ntop(AF_INET, &client.server.nodes[i].sin_addr, buffer, 20), ntohs(client.server.nodes[i].sin_port), status);
 
 
     }
@@ -46,4 +46,4 @@ int main(void)
 
 
 
-  }
+}

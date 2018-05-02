@@ -44,7 +44,7 @@ node_list_t *get_nodes()
 
         if (isspace(current_char)) {
             if (fscanf(file, "%hu", &port) != 1)
-				return NULL;
+                return NULL;
             current_char = fgetc(file);
 
             //take the n first chars, discard else
@@ -56,9 +56,9 @@ node_list_t *get_nodes()
 
             node_t node;
             if (node_init(&node, real_ip, port, 0) != ERR_NONE)
-				return NULL;
+                return NULL;
             node_list_add(nodes, node);
-			free(real_ip);
+            free(real_ip);
             while(current_char != '\n') {
                 current_char = fgetc(file);
             }
@@ -83,8 +83,8 @@ node_list_t *get_nodes()
 error_code node_list_add(node_list_t *list, node_t node)
 {
 
-	if (list == NULL)
-		return ERR_BAD_PARAMETER;
+    if (list == NULL)
+        return ERR_BAD_PARAMETER;
 
     list->size++;
     if(list->size > list->allocated_size) {
@@ -112,6 +112,6 @@ void node_list_free(node_list_t *list)
         node_end(&list->nodes[i]);
     }
 
-	free(list->nodes);
+    free(list->nodes);
     free(list);
 }
