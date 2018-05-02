@@ -61,7 +61,7 @@ int main(void)
 kv_list_t* node_dump = get_Htable_content(h_table);
 
 int counter =0;
-size_t size_packet = 4;
+size_t size_packet =0;
 char* packet = calloc(65507, sizeof(char));
 char header[4];
 header[0] = node_dump->size >> 24;
@@ -74,11 +74,34 @@ size_t size_kv = strlen(node_dump->list[counter].key) +1 + strlen(node_dump->lis
 if(size_packet+size_kv<65507){
   char* kv_request;
 if(counter==0){
- kv_request = format_put_request(strcat(header,node_dump->list[counter].key), node_dump->list[counter].value, -1, -1);
+char* key_new = calloc(4+strlen(node_dump->list[counter].key), sizeof(char));
+ for(int i=0; i<4; i++){
+   key_new[i] = header[i];
+
+ }
+for(int i=0; i<strlen(node_dump->list[counter].key);i++){
+
+  key_new[4+i] = node_dump->list[counter].key[i];
+}
+
+kv_request = format_put_request(key_new, node_dump->list[counter].value, 4+strlen(node_dump->list[counter].key) , -1);
+for(int i = 0; i< 5 + strlen(node_dump->list[counter].key)+ strlen(node_dump->list[counter].value); i++){
+
+packet[i] =  kv_request[i];
+
+
+}
+
+
+size_packet+= 5 + strlen(node_dump->list[counter].key)+ strlen(node_dump->list[counter].value);
+counter++;
+continue;
+
+
 }else{
  kv_request = format_put_request(node_dump->list[counter].key, node_dump->list[counter].value, -1, -1);
 }
-packet = format_put_request(packet, kv_request, size_packet, strlen(node_dump->list[counter].key)+1 + strlen(node_dump->list[counter].value));
+packet = format_put_request(packet, kv_request, size_packet, 4+strlen(node_dump->list[counter].key)+1 + strlen(node_dump->list[counter].value));
 
 counter++;
 size_packet+=size_kv;
