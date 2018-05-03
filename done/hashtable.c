@@ -229,8 +229,8 @@ void kv_list_free(kv_list_t *list)
         kv_pair_free(&list->list[i]);
     }
     list->size = 0;
-    list->list = NULL;
     free(list);
+    list->list = NULL;
 }
 
 size_t get_bucket_size(struct bucket* bck)
