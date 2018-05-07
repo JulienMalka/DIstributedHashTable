@@ -1,4 +1,4 @@
-Using master branch for submission. (sha: 3f8fafb13b2732d88c573c89b461d6e0e83cfb2b)
+Using master branch for submission. (sha: 903ada3790769cf1a542be6ce7b1c1abca31f2da)
 --------
 Checking for expected files
 Found expected file done/tests.h on master
@@ -200,43 +200,143 @@ Unable to run test-hashtable. Executable couldn't build
 Running test scripts
 
 
-Unable to run command '05.basic.sh' in submission directory. Timed out after 10 seconds.
-stdout: None
----
-stderr: None
+Test 05.basic.sh returned code 1
+stdout:
+>> running 05.basic.sh
+Test 1 (server launch): PASS
+Test 2 (client put): FAIL
+Expected:
+$ ./pps-client-put -n 1 -w 1 -- 'a' '1'
+OK
+Actual:
+$ ./pps-client-put -n 1 -w 1 -- 'a' '1'
+
+
+------
+stderr:
+
 -----------
-Unable to run command '06.basic.sh' in submission directory. Timed out after 10 seconds.
-stdout: None
----
-stderr: None
+Test 06.basic.sh returned code 1
+stdout:
+>> running 06.basic.sh
+Test 1 (launch 1st server): PASS
+Test 2 (launch 2nd server): PASS
+Test 3 (put, 2 servers): FAIL
+Expected:
+$ ./pps-client-put -n 2 -w 2 -- 'a' '1'
+OK
+Actual:
+$ ./pps-client-put -n 2 -w 2 -- 'a' '1'
+
+
+------
+stderr:
+
 -----------
-Unable to run command '07.basic.sh' in submission directory. Timed out after 10 seconds.
-stdout: None
----
-stderr: None
+Test 07.basic.sh returned code 1
+stdout:
+>> running 07.basic.sh
+Test 1 (launch 1st server): PASS
+Test 2 (launch 2nd server): PASS
+Test 3 (put, 2 servers): FAIL
+Expected:
+$ ./pps-client-put -n 2 -w 2 -- 'alpha' 'one'
+OK
+Actual:
+$ ./pps-client-put -n 2 -w 2 -- 'alpha' 'one'
+
+
+------
+stderr:
+
 -----------
-Unable to run command '08.basic.sh' in submission directory. Timed out after 10 seconds.
-stdout: None
----
-stderr: None
+Test 08.basic.sh returned code 1
+stdout:
+>> running 08.basic.sh
+Test 1 (launch server): PASS
+Test 2 (list server): PASS
+Test 3 (list failed servers): PASS
+Test 4 (dump server): FAIL
+Expected:
+$ ./pps-client-put -n 1 -w 1 -- 'a' '1'
+OK
+Actual:
+$ ./pps-client-put -n 1 -w 1 -- 'a' '1'
+
+
+------
+stderr:
+
 -----------
-Unable to run command '09.basic-find.sh' in submission directory. Timed out after 10 seconds.
-stdout: None
----
-stderr: None
+Test 09.basic-find.sh returned code 1
+stdout:
+>> running 09.basic-find.sh
+Test 1 (launch server): PASS
+PASS
+PASS
+Test 2 (put a): FAIL
+Expected:
+$ ./pps-client-put -n 3 -w 3 -- 'a' '123456'
+OK
+Actual:
+$ ./pps-client-put -n 3 -w 3 -- 'a' '123456'
+
+
+------
+stderr:
+
 -----------
-Unable to run command '10.basic-quorum.sh' in submission directory. Timed out after 10 seconds.
-stdout: None
----
-stderr: None
+Test 10.basic-quorum.sh returned code 1
+stdout:
+>> running 10.basic-quorum.sh
+Test 1 (launch server): PASS
+PASS
+PASS
+Test 2 (put s servers 1,2): FAIL
+Expected:
+$ ./pps-client-put -n 2 -w 2 -- 's' 'alpha'
+OK
+Actual:
+$ ./pps-client-put -n 2 -w 2 -- 's' 'alpha'
+
+
+------
+stderr:
+
 -----------
-Unable to run command '09.basic-substr.sh' in submission directory. Timed out after 10 seconds.
-stdout: None
----
-stderr: None
+Test 09.basic-substr.sh returned code 1
+stdout:
+>> running 09.basic-substr.sh
+Test 1 (launch server): PASS
+PASS
+PASS
+Test 2 (put a): FAIL
+Expected:
+$ ./pps-client-put -n 3 -w 3 -- 'a' '123456'
+OK
+Actual:
+$ ./pps-client-put -n 3 -w 3 -- 'a' '123456'
+
+
+------
+stderr:
+
 -----------
-Unable to run command '09.basic-cat.sh' in submission directory. Timed out after 10 seconds.
-stdout: None
----
-stderr: None
+Test 09.basic-cat.sh returned code 1
+stdout:
+>> running 09.basic-cat.sh
+Test 1 (launch server): PASS
+PASS
+PASS
+Test 2 (put a): FAIL
+Expected:
+$ ./pps-client-put -n 3 -w 3 -- 'a' 'alpha'
+OK
+Actual:
+$ ./pps-client-put -n 3 -w 3 -- 'a' 'alpha'
+
+
+------
+stderr:
+
 
