@@ -9,6 +9,7 @@
 #include "network.h"
 #include "config.h"
 #include "hashtable.h"
+#include "network-utils.h"
 
 size_t parse_kv_pairs(char* in_msg, size_t length, size_t starting_index, kv_list_t* kv_list);
 
@@ -78,9 +79,9 @@ int main(void)
 
         if (parsed_kv_pairs < kv_list->size) {
             /* More packets handling */
-            
+
         }
-        
+
         print_kv_pair_list(*kv_list);
 
         kv_list_free(kv_list);
@@ -144,7 +145,7 @@ size_t parse_kv_pairs(char* in_msg, size_t length, size_t starting_index, kv_lis
 
             kv_list->list[list_index] = create_kv_pair(key, value);
             list_index++;
-            
+
             if (list_index >= kv_list->size){
 				return -1;
 			}

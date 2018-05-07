@@ -7,6 +7,7 @@
 
 #include "system.h"
 #include "network.h"
+#include "network-utils.h"
 #include "config.h"
 #include "error.h"
 #include <string.h>

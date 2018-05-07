@@ -10,6 +10,7 @@
 #include "error.h"
 #include "client.h"
 #include "stdlib.h"
+#include "network-utils.h"
 #include "util.h"
 #include <arpa/inet.h>
 
