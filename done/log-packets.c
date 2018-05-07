@@ -19,9 +19,10 @@ ssize_t sendto(int socket, const void *message, size_t length, int flags,
                const struct sockaddr *dest_addr, socklen_t dest_len)
 {
     const char *delay_str = getenv("SEND_DELAY");
-    if (delay_str) {
-        usleep(atoi(delay_str) * 1000);
-    }
+    if (delay_str)
+        {
+            usleep(atoi(delay_str) * 1000);
+        }
 
     FILE *log = fopen(LOG_FILE, "a");
     assert(log && "Unable to open packet log file.");
@@ -43,9 +44,10 @@ ssize_t sendto(int socket, const void *message, size_t length, int flags,
             inet_ntop(AF_INET, &(((struct sockaddr_in *)dest_addr)->sin_addr),
                       str, INET_ADDRSTRLEN),
             ntohs(((struct sockaddr_in *)dest_addr)->sin_port));
-    for (int i = 0; i < length; i++) {
-        fprintf(log, " %02X", ((uint8_t *)message)[i]);
-    }
+    for (int i = 0; i < length; i++)
+        {
+            fprintf(log, " %02X", ((uint8_t *)message)[i]);
+        }
     fprintf(log, "\n");
     fflush(log);
 

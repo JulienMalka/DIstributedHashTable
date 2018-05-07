@@ -3,7 +3,8 @@
  * @brief PPS-DHT error messages
  */
 
-const char * const ERR_MESSAGES[] = {
+const char * const ERR_MESSAGES[] =
+{
     "", // no error
     "Not enough memory",
     "IO error",

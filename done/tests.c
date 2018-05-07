@@ -63,22 +63,26 @@ END_TEST
 /*UTILITARY FUNCTION TO PRINT THE CONTENT OF A BUCKET*/
 void print_bucket(struct bucket* bck)
 {
-    if (bck == NULL) {
-        printf("(null), ");
-    } else {
-        printf("kv(%s, %s), ", bck->key_value.key, bck->key_value.value);
-        print_bucket(bck->next);
-    }
+    if (bck == NULL)
+        {
+            printf("(null), ");
+        }
+    else
+        {
+            printf("kv(%s, %s), ", bck->key_value.key, bck->key_value.value);
+            print_bucket(bck->next);
+        }
 }
 
 /*UTILITARY FUNCITON TO PRINT THE CONTENT OF AN HTABLE*/
 void print_htable(Htable_t* htable)
 {
     printf("PRINTING CONTENT OF HTABLE\n");
-    for (int i = 0; i < htable->size; i++) {
-        printf("\nindex %d ", i);
-        print_bucket(&htable->buckets[i]);
-    }
+    for (int i = 0; i < htable->size; i++)
+        {
+            printf("\nindex %d ", i);
+            print_bucket(&htable->buckets[i]);
+        }
 }
 
 
@@ -87,9 +91,10 @@ void print_nodes(node_t* nodes, size_t size)
 {
     char buffer[20];
 
-    for (int i = 0; i < size; i++) {
-        printf("node %d address = %s port = %hu\n", i, inet_ntop(AF_INET, &nodes[i].sin_addr, buffer, 20), ntohs(nodes[i].sin_port));
-    }
+    for (int i = 0; i < size; i++)
+        {
+            printf("node %d address = %s port = %hu\n", i, inet_ntop(AF_INET, &nodes[i].sin_addr, buffer, 20), ntohs(nodes[i].sin_port));
+        }
 
 }
 
@@ -139,9 +144,10 @@ END_TEST
 void print_kv_list(kv_list_t* list)
 {
     printf("\n");
-    for (int i = 0; i < list->size; i++) {
-        printf("index %d => (%s, %s)\n", i, list->list[i].key, list->list[i].value);
-    }
+    for (int i = 0; i < list->size; i++)
+        {
+            printf("index %d => (%s, %s)\n", i, list->list[i].key, list->list[i].value);
+        }
 }
 
 START_TEST(get_hashtable_content)
@@ -170,9 +176,10 @@ END_TEST
 void print_kv_pair_list(kv_pair_t* kv_pair_list, size_t length)
 {
 
-    for (int i = 0; i < length; i++) {
-        printf("%s %s", kv_pair_list[i].key, kv_pair_list[i].value);
-    }
+    for (int i = 0; i < length; i++)
+        {
+            printf("%s %s", kv_pair_list[i].key, kv_pair_list[i].value);
+        }
 
 }
 
@@ -197,29 +204,37 @@ kv_pair_t* parse_and_print_response(char* in_msg, size_t length)
 
     char iterator;
 
-    for (int i = 4; i < length; i++) {
-        iterator = in_msg[i];
+    for (int i = 4; i < length; i++)
+        {
+            iterator = in_msg[i];
 
-        if (parsing_key && iterator != '\0') {
-            key[key_index] = iterator;
-            key_index++;
-        } else if (parsing_key && iterator == '\0') {
-            parsing_key = 0;
-            key_index = 0;
-        } else if (!parsing_key && iterator != '\0') {
-            value[value_index] = iterator;
-            value_index++;
-        } else if (!parsing_key && iterator == '\0') {
-            printf("%s %s\n", key, value);
+            if (parsing_key && iterator != '\0')
+                {
+                    key[key_index] = iterator;
+                    key_index++;
+                }
+            else if (parsing_key && iterator == '\0')
+                {
+                    parsing_key = 0;
+                    key_index = 0;
+                }
+            else if (!parsing_key && iterator != '\0')
+                {
+                    value[value_index] = iterator;
+                    value_index++;
+                }
+            else if (!parsing_key && iterator == '\0')
+                {
+                    printf("%s %s\n", key, value);
 
-            kv_pair_list[list_index] = create_kv_pair(key, value);
-            list_index++;
+                    kv_pair_list[list_index] = create_kv_pair(key, value);
+                    list_index++;
 
-            parsing_key = 1;
-            value_index = 0;
+                    parsing_key = 1;
+                    value_index = 0;
+                }
+
         }
-
-    }
     kv_pair_list[list_index] = create_kv_pair(key, value);
     list_index++;
 

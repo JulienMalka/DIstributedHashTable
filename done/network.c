@@ -24,25 +24,30 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 {
     M_EXIT_IF_TOO_LONG(key, MAX_MSG_ELEM_SIZE, key.name);
     int error_not_found = 0;
-    for(int i=0; i<client.server.size; i++) {
-        int size_to_send = strlen(key);
-        error_code error = send_packet(client.socket, key, size_to_send, client.server.nodes[i]);
-        if(error!=ERR_NONE) return error;
+    for(int i=0; i<client.server.size; i++)
+        {
+            int size_to_send = strlen(key);
+            error_code error = send_packet(client.socket, key, size_to_send, client.server.nodes[i]);
+            if(error!=ERR_NONE) return error;
 
-        char* in_msg = malloc(MAX_MSG_ELEM_SIZE);
-        ssize_t in_msg_len = recv(client.socket, in_msg, MAX_MSG_ELEM_SIZE, 0);
+            char* in_msg = malloc(MAX_MSG_ELEM_SIZE);
+            ssize_t in_msg_len = recv(client.socket, in_msg, MAX_MSG_ELEM_SIZE, 0);
 
 
-        if (in_msg_len != -1) {
-            if (in_msg_len==1 && in_msg[0]=='\0') {
-                error_not_found++;
-            } else {
+            if (in_msg_len != -1)
+                {
+                    if (in_msg_len==1 && in_msg[0]=='\0')
+                        {
+                            error_not_found++;
+                        }
+                    else
+                        {
 
-                *value = in_msg;
-                return ERR_NONE;
-            }
+                            *value = in_msg;
+                            return ERR_NONE;
+                        }
+                }
         }
-    }
     if(error_not_found==0) return ERR_NETWORK;
     else return ERR_NOT_FOUND;
 }
@@ -63,18 +68,22 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value)
     if(key==NULL||value==NULL)return ERR_BAD_PARAMETER;
 
     int errors = 0;
-    for(int i= 0; i<client.server.size; i++) {
+    for(int i= 0; i<client.server.size; i++)
+        {
 
-        char* request = format_put_request(key, value, -1, -1);
-        size_t request_len = strlen(key)+strlen(value)+1;
-        error_code error_send = send_packet(client.socket, request, request_len, client.server.nodes[i]);
-        free(request);
-        int error_receive = recv(client.socket, NULL,0,0);
-        if(error_send!=ERR_NONE ||error_receive==-1) errors++;
-    }
-    if(errors>=1) {
-        return ERR_NETWORK;
-    } else {
-        return ERR_NONE;
-    }
+            char* request = format_put_request(key, value, -1, -1);
+            size_t request_len = strlen(key)+strlen(value)+1;
+            error_code error_send = send_packet(client.socket, request, request_len, client.server.nodes[i]);
+            free(request);
+            int error_receive = recv(client.socket, NULL,0,0);
+            if(error_send!=ERR_NONE ||error_receive==-1) errors++;
+        }
+    if(errors>=1)
+        {
+            return ERR_NETWORK;
+        }
+    else
+        {
+            return ERR_NONE;
+        }
 }

@@ -30,9 +30,10 @@ node_list_t *get_nodes()
 
     FILE* file = fopen(PPS_SERVERS_LIST_FILENAME, "r");
 
-    if(file == NULL) {
-        return NULL;
-    }
+    if(file == NULL)
+        {
+            return NULL;
+        }
 
     int current_char = fgetc(file);
 
@@ -40,37 +41,41 @@ node_list_t *get_nodes()
     int index = 0;
     uint16_t port = 0;
 
-    while(!feof(file)) {
+    while(!feof(file))
+        {
 
-        if (isspace(current_char)) {
-            if (fscanf(file, "%hu", &port) != 1)
-                return NULL;
-            current_char = fgetc(file);
+            if (isspace(current_char))
+                {
+                    if (fscanf(file, "%hu", &port) != 1)
+                        return NULL;
+                    current_char = fgetc(file);
 
-            //take the n first chars, discard else
-            char* real_ip = calloc(index, sizeof(char));
+                    //take the n first chars, discard else
+                    char* real_ip = calloc(index, sizeof(char));
 
-            for (int i = 0; i < index; i++) {
-                real_ip[i] = ip[i];
-            }
+                    for (int i = 0; i < index; i++)
+                        {
+                            real_ip[i] = ip[i];
+                        }
 
-            node_t node;
-            if (node_init(&node, real_ip, port, 0) != ERR_NONE)
-                return NULL;
-            node_list_add(nodes, node);
-            free(real_ip);
-            while(current_char != '\n') {
-                current_char = fgetc(file);
-            }
-            index = 0;
+                    node_t node;
+                    if (node_init(&node, real_ip, port, 0) != ERR_NONE)
+                        return NULL;
+                    node_list_add(nodes, node);
+                    free(real_ip);
+                    while(current_char != '\n')
+                        {
+                            current_char = fgetc(file);
+                        }
+                    index = 0;
+                    current_char = fgetc(file);
+                }
+
+            ip[index] = current_char;
+
+            index += 1;
             current_char = fgetc(file);
         }
-
-        ip[index] = current_char;
-
-        index += 1;
-        current_char = fgetc(file);
-    }
 
     return nodes;
 }
@@ -87,15 +92,19 @@ error_code node_list_add(node_list_t *list, node_t node)
         return ERR_BAD_PARAMETER;
 
     list->size++;
-    if(list->size > list->allocated_size) {
+    if(list->size > list->allocated_size)
+        {
 
-        node_t* nodes = realloc(list->nodes, list->allocated_size+32);
-        if(nodes==NULL) {
-            return ERR_NOMEM;
-        } else {
-            list->allocated_size+=32;
+            node_t* nodes = realloc(list->nodes, list->allocated_size+32);
+            if(nodes==NULL)
+                {
+                    return ERR_NOMEM;
+                }
+            else
+                {
+                    list->allocated_size+=32;
+                }
         }
-    }
 
     list->nodes[list->size-1] = node;
     return ERR_NONE;
@@ -108,9 +117,10 @@ error_code node_list_add(node_list_t *list, node_t node)
  */
 void node_list_free(node_list_t *list)
 {
-    for(int i=0; i<list->size; i++) {
-        node_end(&list->nodes[i]);
-    }
+    for(int i=0; i<list->size; i++)
+        {
+            node_end(&list->nodes[i]);
+        }
 
     free(list->nodes);
     free(list);

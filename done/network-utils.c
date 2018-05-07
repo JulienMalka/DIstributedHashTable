@@ -47,24 +47,32 @@ char* format_put_request(pps_value_t key, pps_value_t value, int skey, int svalu
 
     int size_key;
     int size_value;
-    if(skey==-1) {
-        size_key = strlen(key);
-    } else {
-        size_key = skey;
-    }
-    if(svalue==-1) {
-        size_value = strlen(value);
-    } else {
-        size_value=svalue;
-    }
+    if(skey==-1)
+        {
+            size_key = strlen(key);
+        }
+    else
+        {
+            size_key = skey;
+        }
+    if(svalue==-1)
+        {
+            size_value = strlen(value);
+        }
+    else
+        {
+            size_value=svalue;
+        }
     char *result = calloc(size_key+size_value+1, sizeof(char));
-    for(int i=0; i<size_key; i++) {
-        result[i] = key[i];
-    }
+    for(int i=0; i<size_key; i++)
+        {
+            result[i] = key[i];
+        }
     result[size_key]='\0';
-    for(int i=size_key+1; i<size_key+1+size_value; i++) {
-        result[i] = value[i-size_key-1];
-    }
+    for(int i=size_key+1; i<size_key+1+size_value; i++)
+        {
+            result[i] = value[i-size_key-1];
+        }
 
     return result;
 
@@ -82,16 +90,18 @@ error_code parse_put_request(char* in_msg, size_t length, char* key, char* value
 {
     char* ret = memchr(in_msg, '\0', length);
     size_t size_key = strlen(in_msg);
-    for(int i =0; i<size_key; i++) {
-        key[i] = in_msg[i];
-    }
+    for(int i =0; i<size_key; i++)
+        {
+            key[i] = in_msg[i];
+        }
     key[size_key] = '\0';
     size_t size_value = length - size_key;
 
-    for(int i=0; i<size_value; i++) {
+    for(int i=0; i<size_value; i++)
+        {
 
-        value[i] = ret[i+1];
-    }
+            value[i] = ret[i+1];
+        }
 
     value[size_value] = '\0';
     return ERR_NONE;
