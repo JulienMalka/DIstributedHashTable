@@ -43,11 +43,11 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
             } else {
                 char* count = get_Htable_value(local_h_table, in_msg);
                 if(count == NULL){
-                  count = malloc(sizeof(char));
-                  count[0] = 0;
+                  char count_c = 0;
+                  count = &count_c;
                 }
                 count[0]++;
-                printf("count at this point : %d", count[0]);
+                
                 if(count[0]>=R){
                   *value = in_msg;
                   return ERR_NONE;
