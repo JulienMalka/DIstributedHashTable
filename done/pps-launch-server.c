@@ -39,6 +39,7 @@ int main(void)
 
     //Receive messages forever
     while(1) {
+      
         node_t cli_addr;
         socklen_t addr_len = sizeof(cli_addr);
         memset(&cli_addr, 0, addr_len);

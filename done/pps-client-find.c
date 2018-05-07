@@ -35,6 +35,7 @@ int main(void)
 
         do {
             number = scanf("%s %s", key_1, key_2);
+            if(feof(stdin)){return 0;}
         } while (number==-1);
 
 

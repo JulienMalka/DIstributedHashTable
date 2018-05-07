@@ -41,6 +41,7 @@ int main(void)
 
         while(ok) {
             int error = scanf(" %s %d", ip, &port);
+            if(feof(stdin)){return 0;}
             error_code error_init = node_init(&node, ip, port, 0);
             if (error != 1 && error_init == ERR_NONE)
                 ok = 0;

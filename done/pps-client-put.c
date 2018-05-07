@@ -28,6 +28,7 @@ int main(void)
 
         while (ok) {
             int error = scanf("%s %s", key, value);
+            if(feof(stdin)){return 0;}
             if (error != 1) ok = 0;
             else {
                 printf("FAIL\n");

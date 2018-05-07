@@ -29,9 +29,11 @@ int main(void)
         char* key = malloc(MAX_MSG_ELEM_SIZE);
         int number=-1;
 
-        do {
+        while(number==-1) {
             number = scanf("%s", key);
-        } while (number==-1);
+            if(feof(stdin)){return 0;}
+        }
+
 
 
 

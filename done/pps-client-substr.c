@@ -24,6 +24,7 @@ int main(void)
         int ok = 1;
         while (ok) {
             int error = scanf("%s %d %d %s", key_from, &position, &length, key_to);
+            if(feof(stdin)){return 0;}
             if (error != 1) ok = 0;
             else {
                 printf("FAIL\n");
