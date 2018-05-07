@@ -62,35 +62,30 @@ END_TEST
 
 void print_bucket(struct bucket* bck)
 {
-    if (bck == NULL)
-        {
-            printf("(null), ");
-        }
-    else
-        {
-            printf("kv(%s, %s), ", bck->key_value.key, bck->key_value.value);
-            print_bucket(bck->next);
-        }
+    if (bck == NULL) {
+        printf("(null), ");
+    } else {
+        printf("kv(%s, %s), ", bck->key_value.key, bck->key_value.value);
+        print_bucket(bck->next);
+    }
 }
 
 void print_htable(Htable_t* htable)
 {
     printf("PRINTING CONTENT OF HTABLE\n");
-    for (int i = 0; i < htable->size; i++)
-        {
-            printf("\nindex %d ", i);
-            print_bucket(&htable->buckets[i]);
-        }
+    for (int i = 0; i < htable->size; i++) {
+        printf("\nindex %d ", i);
+        print_bucket(&htable->buckets[i]);
+    }
 }
 
 void print_nodes(node_t* nodes, size_t size)
 {
     char buffer[20];
 
-    for (int i = 0; i < size; i++)
-        {
-            printf("node %d address = %s port = %hu\n", i, inet_ntop(AF_INET, &nodes[i].sin_addr, buffer, 20), ntohs(nodes[i].sin_port));
-        }
+    for (int i = 0; i < size; i++) {
+        printf("node %d address = %s port = %hu\n", i, inet_ntop(AF_INET, &nodes[i].sin_addr, buffer, 20), ntohs(nodes[i].sin_port));
+    }
 
 }
 

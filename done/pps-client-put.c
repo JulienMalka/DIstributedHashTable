@@ -20,35 +20,29 @@ int main(void)
     client_init(client_i);
 
 
-    while(1)
-        {
+    while(1) {
 
-            char* value = malloc(MAX_MSG_ELEM_SIZE);
-            char* key = malloc(MAX_MSG_ELEM_SIZE);
-            int ok = 1;
+        char* value = malloc(MAX_MSG_ELEM_SIZE);
+        char* key = malloc(MAX_MSG_ELEM_SIZE);
+        int ok = 1;
 
-            while (ok)
-                {
-                    int error = scanf("%s %s", key, value);
-                    if (error != 1) ok = 0;
-                    else
-                        {
-                            printf("FAIL\n");
-                        }
-                }
-
-            error_code error = network_put(*client_i.client, key, value);
-            free(key);
-            free(value);
-            if (error == ERR_NONE)
-                {
-                    printf("OK\n");
-                }
-            else
-                {
-                    printf("FAIL\n");
-                }
+        while (ok) {
+            int error = scanf("%s %s", key, value);
+            if (error != 1) ok = 0;
+            else {
+                printf("FAIL\n");
+            }
         }
+
+        error_code error = network_put(*client_i.client, key, value);
+        free(key);
+        free(value);
+        if (error == ERR_NONE) {
+            printf("OK\n");
+        } else {
+            printf("FAIL\n");
+        }
+    }
 
     return 0;
 }

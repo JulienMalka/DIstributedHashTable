@@ -21,16 +21,15 @@ int get_socket(time_t t)
     if (fd == -1) return fd;
     debug_print("get_socket(): fd=%d", fd);
 
-    if (t > 0)
-        {
-            // Set receive timeout.
-            struct timeval timeout;
-            memset(&timeout, 0, sizeof(timeout));
-            timeout.tv_sec = t;
-            int error = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO,
-                                   &timeout, sizeof(timeout));
-            if (error == -1) fd = -1;
-        }
+    if (t > 0) {
+        // Set receive timeout.
+        struct timeval timeout;
+        memset(&timeout, 0, sizeof(timeout));
+        timeout.tv_sec = t;
+        int error = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO,
+                               &timeout, sizeof(timeout));
+        if (error == -1) fd = -1;
+    }
 
     return fd;
 }
