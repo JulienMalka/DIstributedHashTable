@@ -11,8 +11,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
+#define R 2
+#define W 2
+#define S 3
 /**
  * @brief get a value from the network
  * @param client client to use
@@ -23,6 +24,9 @@
 error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 {
     M_EXIT_IF_TOO_LONG(key, MAX_MSG_ELEM_SIZE, key.name);
+    Htable_t local_h_table = construct_Htable(HTABLE_SIZE);
+
+
     int error_not_found = 0;
     for(int i=0; i<client.server.size; i++) {
         int size_to_send = strlen(key);
@@ -37,11 +41,22 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
             if (in_msg_len==1 && in_msg[0]=='\0') {
                 error_not_found++;
             } else {
+                char* count = get_Htable_value(local_h_table, in_msg);
+                if(count == NULL){
+                  count = malloc(sizeof(char));
+                  count[0] = 0;
+                }
+                count[0]++;
+                printf("count at this point : %d", count[0]);
+                if(count[0]>=R){
+                  *value = in_msg;
+                  return ERR_NONE;
+                }
+                add_Htable_value(local_h_table, in_msg, count);
 
-                *value = in_msg;
-                return ERR_NONE;
             }
         }
+
     }
     if(error_not_found==0) return ERR_NETWORK;
     else return ERR_NOT_FOUND;
@@ -72,7 +87,7 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value)
         int error_receive = recv(client.socket, NULL,0,0);
         if(error_send!=ERR_NONE ||error_receive==-1) errors++;
     }
-    if(errors>=1) {
+    if(errors>S-W) {
         return ERR_NETWORK;
     } else {
         return ERR_NONE;

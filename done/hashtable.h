@@ -27,14 +27,14 @@ typedef const char* pps_value_t;
 /*
  * key-value pair
  */
- 
+
  typedef struct{
 	 pps_key_t key;
-	 pps_value_t value;	 
-	 } kv_pair_t; 
-	 
+	 pps_value_t value;
+	 } kv_pair_t;
+
 kv_pair_t create_kv_pair(pps_key_t key, pps_value_t value);
-	 
+
 /*
  * Definition of type for local hash-tables buckets
  */
@@ -45,8 +45,8 @@ typedef struct bucket bucket_t;
  * Definition of local hash-table type
  */
 #define HTABLE_SIZE 256
- 
-typedef struct { 
+
+typedef struct {
 	struct bucket* buckets;
 	size_t size;
 	  } Htable_t;
@@ -80,7 +80,7 @@ Htable_t construct_Htable(size_t size);
 void delete_Htable_and_content(Htable_t* table);
 
 /**
- * @brief add a key:value pair to hash-table
+ * @brief add a key:value pair to hash-table or replace it if already existed
  * @param table the table where to add
  * @param key the key to which the value shall be associated
  * @param value the value to be added
@@ -92,7 +92,7 @@ error_code add_Htable_value(Htable_t table, pps_key_t key, pps_value_t value);
  * @brief get a value for a given in the given hash-table
  * @param table the table where to get
  * @param key the key associated to the wanted value
- * @return the associated value
+ * @return the associated value or NULL is not found
  */
 pps_value_t get_Htable_value(Htable_t table, pps_key_t key);
 
