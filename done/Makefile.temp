@@ -31,7 +31,7 @@ week05: pps-launch-server pps-client-get pps-client-put test-hashtable
 
 week08: pps-dump-node pps-list-nodes
 
-week09: pps-client-get
+week09: pps-client-get pps-client-put
 
 test-hashtable : test-hashtable.c
 	gcc -o test-hashtable test-hashtable.c node_list.c error.c node.c system.c -lcheck -lm -lrt -pthread -lsubunit
@@ -40,7 +40,7 @@ pps-launch-server: pps-launch-server.o system.o network.o hashtable.o network-ut
 
 pps-client-get: pps-client-get.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o args.o
 
-pps-client-put: pps-client-put.o client.o node.o network.o system.o node_list.o network-utils.o hashtable.o
+pps-client-put: pps-client-put.o client.o node.o network.o system.o node_list.o network-utils.o hashtable.o args.o
 
 pps-list-nodes : pps-list-nodes.o system.o network.o client.o node_list.o node.o network-utils.o hashtable.o
 

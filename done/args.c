@@ -33,23 +33,28 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv){
 	args_t* parsed = malloc(sizeof(args_t));
 
 //	printf("segfault happens after 1\n");
-
+ int parsed_n = 0;
 	while(**rem_argv != NULL){
 
 		/* Check for -n option*/
 		if (!strcmp(**rem_argv, "-n")){
 			parse_option(supported_args, rem_argv, &parsed->N);
+			parsed_n++;
 		/* Check for -r option */
 		} else if (!strcmp(**rem_argv, "-r")) {
 			parse_option(supported_args, rem_argv, &parsed->R);
+			parsed_n++;
 		/* Check for -w option */
 		} else if (!strcmp(**rem_argv, "-w")) {
 			parse_option(supported_args, rem_argv, &parsed->W);
+			parsed_n++;
 		} else if (!strcmp(**rem_argv, "--")) {
 			++*rem_argv;
 			return parsed;
 		}else{
+      if(parsed_n==0){
 			return NULL;
+		}else{return parsed;}
 		}
 
 		printf("current string = %s\n", **rem_argv);
