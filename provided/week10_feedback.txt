@@ -1,0 +1,312 @@
+Using master branch for submission. (sha: 55ddf8321de11702530c3a80cdaff6c0b0ccedbb)
+--------
+Checking for expected files
+Found expected file done/tests.h on master
+Found expected file done/args.c on master
+Found expected file done/node.c on master
+Found expected file done/system.h on master
+Found expected file done/config.h on master
+Found expected file done/network.h on master
+Found expected file done/network.c on master
+Found expected file done/hashtable.c on master
+Found expected file done/pps-client-find.c on master
+Found expected file done/Makefile on master
+Found expected file done/client.h on master
+Found expected file done/pps-client-put.c on master
+Found expected file done/util.c on master
+Found expected file done/pps-client-substr.c on master
+Found expected file done/log-packets.c on master
+Found expected file done/pps-client-cat.c on master
+Found expected file done/util.h on master
+Found expected file done/node_list.h on master
+Found expected file done/pps-dump-node.c on master
+Found expected file done/ring.h on master
+Found expected file done/pps-launch-server.c on master
+Found expected file done/test-hashtable.c on master
+Found expected file done/pps-list-nodes.c on master
+Found expected file done/hashtable.h on master
+Found expected file done/pps-client-get.c on master
+Found expected file done/client.c on master
+Found expected file done/node.h on master
+Found expected file done/args.h on master
+Found expected file done/node_list.c on master
+Found expected file done/error.c on master
+Found expected file done/system.c on master
+Found expected file done/error.h on master
+--------
+Force copying (overwriting) provided file: tests.h
+Force copying (overwriting) provided file: system.h
+Force copying (overwriting) provided file: config.h
+Force copying (overwriting) provided file: network.h
+Force copying (overwriting) provided file: util.c
+Force copying (overwriting) provided file: log-packets.c
+Force copying (overwriting) provided file: util.h
+Force copying (overwriting) provided file: ring.h
+Force copying (overwriting) provided file: system.c
+Got error code 2 when running trying to build target 'test-hashtable' with command 'make test-hashtable'
+stdout: gcc -o test-hashtable test-hashtable.c node_list.c error.c node.c system.c -lcheck -lm -lrt -pthread -lsubunit
+Makefile:35: recipe for target 'test-hashtable' failed
+
+---
+stderr: test-hashtable.c: In function 'construct_and_delete':
+test-hashtable.c:131:9: error: incompatible types when initializing type 'const void *' using type 'Htable_t {aka struct <anonymous>}'
+         ck_assert_ptr_nonnull(table);
+         ^
+test-hashtable.c: In function 'bad_construct':
+test-hashtable.c:142:5: error: conversion to non-scalar type requested
+     Htable_t ret = NO_HTABLE;
+     ^
+test-hashtable.c:143:5: error: incompatible types when initializing type 'const void *' using type 'Htable_t {aka struct <anonymous>}'
+     ck_assert_ptr_null(ret = construct_Htable(0));
+     ^
+test-hashtable.c:144:13: error: invalid operands to binary != (have 'Htable_t {aka struct <anonymous>}' and 'void *')
+     if (ret != NULL) free(ret);
+             ^
+test-hashtable.c:144:27: error: incompatible type for argument 1 of 'free'
+     if (ret != NULL) free(ret);
+                           ^
+In file included from test-hashtable.c:17:0:
+/usr/include/stdlib.h:483:13: note: expected 'void *' but argument is of type 'Htable_t {aka struct <anonymous>}'
+ extern void free (void *__ptr) __THROW;
+             ^
+In file included from test-hashtable.c:20:0:
+test-hashtable.c:148:58: error: invalid type argument of unary '*' (have 'Htable_t {aka struct <anonymous>}')
+                                  1 + ((SIZE_MAX - sizeof(*ret)) / sizeof(*ret->map))
+                                                          ^
+test-hashtable.c:147:5: note: in expansion of macro 'ck_assert_ptr_null'
+     ck_assert_ptr_null(ret = construct_Htable(
+     ^
+test-hashtable.c:148:78: error: invalid type argument of '->' (have 'Htable_t {aka struct <anonymous>}')
+                                  1 + ((SIZE_MAX - sizeof(*ret)) / sizeof(*ret->map))
+                                                                              ^
+test-hashtable.c:147:5: note: in expansion of macro 'ck_assert_ptr_null'
+     ck_assert_ptr_null(ret = construct_Htable(
+     ^
+test-hashtable.c:150:13: error: invalid operands to binary != (have 'Htable_t {aka struct <anonymous>}' and 'void *')
+     if (ret != NULL) free(ret);
+             ^
+test-hashtable.c:150:27: error: incompatible type for argument 1 of 'free'
+     if (ret != NULL) free(ret);
+                           ^
+In file included from test-hashtable.c:17:0:
+/usr/include/stdlib.h:483:13: note: expected 'void *' but argument is of type 'Htable_t {aka struct <anonymous>}'
+ extern void free (void *__ptr) __THROW;
+             ^
+test-hashtable.c: In function 'add_with_NULL_table_return_ERR_BAD_PARAMETER':
+test-hashtable.c:177:1: error: incompatible type for argument 1 of 'add_Htable_value'
+ hashtable_with_NULL_return(add, int, ERR_BAD_PARAMETER, table, NULL, key, value)
+ ^
+In file included from test-hashtable.c:23:0:
+hashtable.h:89:12: note: expected 'Htable_t {aka struct <anonymous>}' but argument is of type 'void *'
+ error_code add_Htable_value(Htable_t table, pps_key_t key, pps_value_t value);
+            ^
+test-hashtable.c: In function 'get_with_NULL_table_return_NULL':
+test-hashtable.c:180:1: error: incompatible type for argument 1 of 'get_Htable_value'
+ hashtable_with_NULL_return(get, pps_value_t, NULL, table, NULL, key)
+ ^
+In file included from test-hashtable.c:23:0:
+hashtable.h:97:13: note: expected 'Htable_t {aka struct <anonymous>}' but argument is of type 'void *'
+ pps_value_t get_Htable_value(Htable_t table, pps_key_t key);
+             ^
+make: *** [test-hashtable] Error 1
+
+Got error code 2 when running trying to build target 'test-hashtable' with command 'make'
+stdout: cc -g -std=c99   -c -o pps-launch-server.o pps-launch-server.c
+cc -g -std=c99   -c -o system.o system.c
+cc -g -std=c99   -c -o network-utils.o network-utils.c
+cc -g -std=c99   -c -o network.o network.c
+cc -g -std=c99   -c -o hashtable.o hashtable.c
+cc   pps-launch-server.o system.o network.o hashtable.o network-utils.o   -o pps-launch-server
+cc -g -std=c99   -c -o pps-client-get.o pps-client-get.c
+cc -g -std=c99   -c -o client.o client.c
+cc -g -std=c99   -c -o node.o node.c
+cc -g -std=c99   -c -o node_list.o node_list.c
+cc -g -std=c99   -c -o util.o util.c
+cc   pps-client-get.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o   -o pps-client-get
+<builtin>: recipe for target 'pps-client-get' failed
+
+---
+stderr: network.c: In function 'network_get':
+network.c:42:31: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+                 char* count = get_Htable_value(local_h_table, in_msg);
+                               ^
+client.c: In function 'client_init':
+client.c:28:24: warning: initialization makes integer from pointer without a cast [-Wint-conversion]
+     int adress_start = *client_init_args.argv;
+                        ^
+client.c:40:18: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     nb_parsed = ((int)*client_init_args.argv - adress_start)/sizeof(char**);
+                  ^
+client.o: In function `client_init':
+/test/done/client.c:29: undefined reference to `parse_opt_args'
+collect2: error: ld returned 1 exit status
+make: *** [pps-client-get] Error 1
+
+Got error code 2 when running trying to build target 'test-hashtable' with command '[staff makefile]'
+Got error code 2 when running trying to build target 'test-hashtable' with command '[staff makefile]'
+Unable to build target 'test-hashtable'
+Got error code 2 when running trying to build target 'pps-client-get' with command 'make pps-client-get'
+stdout: cc   pps-client-get.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o   -o pps-client-get
+<builtin>: recipe for target 'pps-client-get' failed
+
+---
+stderr: client.o: In function `client_init':
+/test/done/client.c:29: undefined reference to `parse_opt_args'
+collect2: error: ld returned 1 exit status
+make: *** [pps-client-get] Error 1
+
+Got error code 2 when running trying to build target 'pps-client-get' with command 'make'
+stdout: cc   pps-client-get.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o   -o pps-client-get
+<builtin>: recipe for target 'pps-client-get' failed
+
+---
+stderr: client.o: In function `client_init':
+/test/done/client.c:29: undefined reference to `parse_opt_args'
+collect2: error: ld returned 1 exit status
+make: *** [pps-client-get] Error 1
+
+Got error code 2 when running trying to build target 'pps-client-get' with command '[staff makefile]'
+Got error code 2 when running trying to build target 'pps-client-get' with command '[staff makefile]'
+Unable to build target 'pps-client-get'
+Got error code 2 when running trying to build target 'pps-client-put' with command 'make pps-client-put'
+stdout: cc -g -std=c99   -c -o pps-client-put.o pps-client-put.c
+cc   pps-client-put.o client.o node.o network.o system.o node_list.o network-utils.o hashtable.o   -o pps-client-put
+<builtin>: recipe for target 'pps-client-put' failed
+
+---
+stderr: client.o: In function `client_init':
+/test/done/client.c:29: undefined reference to `parse_opt_args'
+collect2: error: ld returned 1 exit status
+make: *** [pps-client-put] Error 1
+
+Got error code 2 when running trying to build target 'pps-client-put' with command 'make'
+stdout: cc   pps-client-get.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o   -o pps-client-get
+<builtin>: recipe for target 'pps-client-get' failed
+
+---
+stderr: client.o: In function `client_init':
+/test/done/client.c:29: undefined reference to `parse_opt_args'
+collect2: error: ld returned 1 exit status
+make: *** [pps-client-get] Error 1
+
+Got error code 2 when running trying to build target 'pps-client-put' with command '[staff makefile]'
+Got error code 2 when running trying to build target 'pps-client-put' with command '[staff makefile]'
+Unable to build target 'pps-client-put'
+Got error code 2 when running trying to build target 'pps-list-nodes' with command 'make pps-list-nodes'
+stdout: cc -g -std=c99   -c -o pps-list-nodes.o pps-list-nodes.c
+<builtin>: recipe for target 'pps-list-nodes.o' failed
+
+---
+stderr: pps-list-nodes.c: In function 'main':
+pps-list-nodes.c:23:13: error: 'client_init_args_t {aka struct <anonymous>}' has no member named 'name'
+     client_i.name = "test";
+             ^
+make: *** [pps-list-nodes.o] Error 1
+
+Got error code 2 when running trying to build target 'pps-list-nodes' with command 'make'
+stdout: cc   pps-client-get.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o   -o pps-client-get
+<builtin>: recipe for target 'pps-client-get' failed
+
+---
+stderr: client.o: In function `client_init':
+/test/done/client.c:29: undefined reference to `parse_opt_args'
+collect2: error: ld returned 1 exit status
+make: *** [pps-client-get] Error 1
+
+Got error code 2 when running trying to build target 'pps-list-nodes' with command '[staff makefile]'
+Got error code 2 when running trying to build target 'pps-list-nodes' with command '[staff makefile]'
+Unable to build target 'pps-list-nodes'
+Got error code 2 when running trying to build target 'pps-client-cat' with command 'make pps-client-cat'
+stdout: cc -g -std=c99   -c -o pps-client-cat.o pps-client-cat.c
+<builtin>: recipe for target 'pps-client-cat.o' failed
+
+---
+stderr: pps-client-cat.c: In function 'main':
+pps-client-cat.c:14:13: error: 'client_init_args_t {aka struct <anonymous>}' has no member named 'name'
+     client_i.name = "test";
+             ^
+make: *** [pps-client-cat.o] Error 1
+
+Got error code 2 when running trying to build target 'pps-client-cat' with command 'make'
+stdout: cc   pps-client-get.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o   -o pps-client-get
+<builtin>: recipe for target 'pps-client-get' failed
+
+---
+stderr: client.o: In function `client_init':
+/test/done/client.c:29: undefined reference to `parse_opt_args'
+collect2: error: ld returned 1 exit status
+make: *** [pps-client-get] Error 1
+
+Got error code 2 when running trying to build target 'pps-client-cat' with command '[staff makefile]'
+Got error code 2 when running trying to build target 'pps-client-cat' with command '[staff makefile]'
+Unable to build target 'pps-client-cat'
+Got error code 2 when running trying to build target 'pps-client-find' with command 'make pps-client-find'
+stdout: cc -g -std=c99   -c -o pps-client-find.o pps-client-find.c
+<builtin>: recipe for target 'pps-client-find.o' failed
+
+---
+stderr: pps-client-find.c: In function 'main':
+pps-client-find.c:23:13: error: 'client_init_args_t {aka struct <anonymous>}' has no member named 'name'
+     client_i.name = "test";
+             ^
+make: *** [pps-client-find.o] Error 1
+
+Got error code 2 when running trying to build target 'pps-client-find' with command 'make'
+stdout: cc   pps-client-get.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o   -o pps-client-get
+<builtin>: recipe for target 'pps-client-get' failed
+
+---
+stderr: client.o: In function `client_init':
+/test/done/client.c:29: undefined reference to `parse_opt_args'
+collect2: error: ld returned 1 exit status
+make: *** [pps-client-get] Error 1
+
+Got error code 2 when running trying to build target 'pps-client-find' with command '[staff makefile]'
+Got error code 2 when running trying to build target 'pps-client-find' with command '[staff makefile]'
+Unable to build target 'pps-client-find'
+Got error code 2 when running trying to build target 'pps-client-substr' with command 'make pps-client-substr'
+stdout: cc -g -std=c99   -c -o pps-client-substr.o pps-client-substr.c
+<builtin>: recipe for target 'pps-client-substr.o' failed
+
+---
+stderr: pps-client-substr.c: In function 'main':
+pps-client-substr.c:14:13: error: 'client_init_args_t {aka struct <anonymous>}' has no member named 'name'
+     client_i.name = "test";
+             ^
+make: *** [pps-client-substr.o] Error 1
+
+Got error code 2 when running trying to build target 'pps-client-substr' with command 'make'
+stdout: cc   pps-client-get.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o   -o pps-client-get
+<builtin>: recipe for target 'pps-client-get' failed
+
+---
+stderr: client.o: In function `client_init':
+/test/done/client.c:29: undefined reference to `parse_opt_args'
+collect2: error: ld returned 1 exit status
+make: *** [pps-client-get] Error 1
+
+Got error code 2 when running trying to build target 'pps-client-substr' with command '[staff makefile]'
+Got error code 2 when running trying to build target 'pps-client-substr' with command '[staff makefile]'
+Unable to build target 'pps-client-substr'
+Unable to run test-hashtable. Executable couldn't build
+
+-------------------------
+Running test scripts
+
+
+Unable to run test '05.basic.sh' because the following executables weren't found: pps-client-put, pps-client-get
+-----------
+Unable to run test '06.basic.sh' because the following executables weren't found: pps-client-put, pps-client-get
+-----------
+Unable to run test '07.basic.sh' because the following executables weren't found: pps-client-put, pps-client-get
+-----------
+Unable to run test '08.basic.sh' because the following executables weren't found: pps-list-nodes, pps-client-put, pps-client-get
+-----------
+Unable to run test '09.basic-find.sh' because the following executables weren't found: pps-list-nodes, pps-client-put, pps-client-get
+-----------
+Unable to run test '10.basic-quorum.sh' because the following executables weren't found: pps-client-find, pps-client-substr, pps-list-nodes, pps-client-cat, pps-client-put, pps-client-get
+-----------
+Unable to run test '09.basic-substr.sh' because the following executables weren't found: pps-list-nodes, pps-client-put, pps-client-get
+-----------
+Unable to run test '09.basic-cat.sh' because the following executables weren't found: pps-list-nodes, pps-client-put, pps-client-get
+
