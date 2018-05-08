@@ -256,6 +256,8 @@ START_TEST(parsing_argv){
 	
 	args_t* args = parse_opt_args(TOTAL_SERVERS | PUT_NEEDED, &array_of_str);  	
 	
+	printf("mandatory arguments = %s\n", *array_of_str);
+	
 	printf("results are N = %lu and W = %lu\n", args->N, args->W);
 }
 END_TEST
