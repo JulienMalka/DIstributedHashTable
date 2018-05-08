@@ -20,6 +20,8 @@
 
 #include <arpa/inet.h>
 
+#include "args.h"
+
 void print_htable(Htable_t* table);
 
 START_TEST(add_get_hashtable)
@@ -231,19 +233,31 @@ kv_pair_t* parse_and_print_response(char* in_msg, size_t length)
     return kv_pair_list;
 }
 
-START_TEST(parsing_response_correctly)
-{
-
-    char* input = "2key1\0value1\0key2\0value2";
-
-    print_kv_pair_list(parse_and_print_response(input, 24), 2);
-
-
+START_TEST(parsing_argv){
+	
+	printf("STARTING TESTS FOR PARSING LINE COMMANDE ARGUMENTS\n");
+	
+	char* array_of_str[7];
+	array_of_str[0] = "-n";
+	array_of_str[1] = "2";
+	array_of_str[2] = "-w";	
+	array_of_str[3] = "3";	
+	array_of_str[4] = "--";
+	array_of_str[5] = "antoine";
+	array_of_str[6] = "crettenand";	
+	
+/*	for (int i = 0; i < 7; i++){
+		printf("%s ", array_of_str[i]);
+	}  
+	printf("\n");
+	
+	printf("LAUNCHING METHOD\n");*/
+	
+	args_t* args = parse_opt_args(TOTAL_SERVERS | PUT_NEEDED, (char***) &array_of_str);  	
+	
+	printf("results are -n = %lu and -w = %lu", args->N, args->W);
 }
 END_TEST
-
-
-
 
 Suite *hashtable_suite()
 {
@@ -257,7 +271,7 @@ Suite *hashtable_suite()
     tcase_add_test(tc_ht, add_get_hashtable);
     tcase_add_test(tc_ht, get_hashtable_size);
     tcase_add_test(tc_ht, get_hashtable_content);
-    tcase_add_test(tc_ht, parsing_response_correctly);
+    tcase_add_test(tc_ht, parsing_argv);
 
     return s;
 }

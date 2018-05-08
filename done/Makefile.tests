@@ -1,4 +1,4 @@
 all: 
-	gcc -o tests tests.c node_list.c error.c node.c system.c -lcheck -lm -lrt -pthread -lsubunit
+	gcc -o tests tests.c node_list.c error.c node.c system.c args.c -lcheck -lm -lrt -pthread -lsubunit
 
 
