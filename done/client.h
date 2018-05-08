@@ -27,6 +27,7 @@ typedef struct{
 	const char* name;
 	node_list_t server;
 	int socket;
+	args_t* args;
 	} client_t;
 
 /**
@@ -34,8 +35,11 @@ typedef struct{
  *        To be defined in week 05 and THEN UPDATED in week 10.
  */
 typedef struct{
-  const char* name;
   client_t* client;
+	char*** argv;
+	size_t required;
+	size_t accepted;
+	size_t size_args;
 } client_init_args_t;
 
 /**
