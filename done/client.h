@@ -38,7 +38,7 @@ typedef struct{
   client_t* client;
 	char*** argv;
 	size_t required;
-	size_t accepted;
+	size_t optionnal;
 	size_t size_args;
 } client_init_args_t;
 

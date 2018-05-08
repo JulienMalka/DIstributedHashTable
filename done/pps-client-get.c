@@ -12,33 +12,32 @@
 #include "stdlib.h"
 #include "util.h"
 
-int main(void)
+int main(int argc, char* argv[])
 {
-
+printf("nb args : %d\n", argc);
     client_t client;
     client_init_args_t client_i;
     client_i.client = &client;
-    client_i.name = "test";
-    client_init(client_i);
+    client_i.argv = &argv;
+    client_i.required = 1;
+    client_i.optionnal = (TOTAL_SERVERS | GET_NEEDED);
+    client_i.size_args = argc;
 
+    error_code error_init = client_init(client_i);
+
+
+if(error_init!=ERR_NONE){
+
+  printf("Bad command line argument\n");
+}
     pps_value_t get_value;
 
-    while(1) {
-
-
-        char* key = malloc(MAX_MSG_ELEM_SIZE);
-        int number=-1;
-
-        while(number==-1) {
-            number = scanf("%s", key);
-            if(feof(stdin)){return 0;}
-        }
-
-
+        printf("key : %s\n", argv[0]);
+        char* key = argv[0];
 
 
         error_code error = network_get(*client_i.client, key, &get_value);
-        free(key);
+
         if(error == ERR_NONE) {
             printf("OK %s\n", get_value);
             free_const_ptr(get_value);
@@ -46,7 +45,7 @@ int main(void)
 
             printf("FAIL\n");
         }
-    }
+
 
 
 
