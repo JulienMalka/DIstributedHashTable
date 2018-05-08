@@ -97,7 +97,7 @@ int main(void)
 void print_kv_pair_list(kv_list_t kv_pair_list)
 {
     for (int i = 0; i < kv_pair_list.size; i++) {
-        printf("%s %s\n", kv_pair_list.list[i].key, kv_pair_list.list[i].value);
+        printf("%s = %s\n", kv_pair_list.list[i].key, kv_pair_list.list[i].value);
     }
 }
 
