@@ -14,7 +14,7 @@
 
 int main(int argc, char* argv[])
 {
-printf("nb args : %d\n", argc);
+
     client_t client;
     client_init_args_t client_i;
     client_i.client = &client;
@@ -32,7 +32,7 @@ if(error_init!=ERR_NONE){
 }
     pps_value_t get_value;
 
-        printf("key : %s\n", argv[0]);
+        //printf("key : %s\n", argv[0]);
         char* key = argv[0];
 
 
