@@ -237,7 +237,7 @@ START_TEST(parsing_argv){
 	
 	printf("STARTING TESTS FOR PARSING LINE COMMANDE ARGUMENTS\n");
 	
-	char* array_of_str[7];
+	char** array_of_str = calloc(7, sizeof(char));
 	array_of_str[0] = "-n";
 	array_of_str[1] = "2";
 	array_of_str[2] = "-w";	
@@ -251,11 +251,12 @@ START_TEST(parsing_argv){
 	}  
 	printf("\n");
 	
-	printf("LAUNCHING METHOD\n");*/
+	printf("LAUNCHING METHOD\n");
+*/
 	
-	args_t* args = parse_opt_args(TOTAL_SERVERS | PUT_NEEDED, (char***) &array_of_str);  	
+	args_t* args = parse_opt_args(TOTAL_SERVERS | PUT_NEEDED, &array_of_str);  	
 	
-	printf("results are -n = %lu and -w = %lu", args->N, args->W);
+	printf("results are N = %lu and W = %lu\n", args->N, args->W);
 }
 END_TEST
 
