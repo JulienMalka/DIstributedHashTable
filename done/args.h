@@ -12,10 +12,7 @@
 /**
  * @brief containt parsed arguments
  */
-/* TODO WEEK 10:
- * Définir ici le type args_t
- * (remplacer void et ces 4 lignes de commentaire).
- */
+
 typedef struct {
 	size_t N;
 	size_t R;

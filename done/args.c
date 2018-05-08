@@ -31,6 +31,9 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv){
 
 	/* return structure */
 	args_t* parsed = malloc(sizeof(args_t));
+	parsed->N = 3;
+	parsed->R = 2;
+	parsed->W = 2;
 
 //	printf("segfault happens after 1\n");
  int parsed_n = 0;

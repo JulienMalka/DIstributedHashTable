@@ -11,9 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define R 2
-#define W 2
-#define S 3
+
 /**
  * @brief get a value from the network
  * @param client client to use
@@ -28,7 +26,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 
 
     int error_not_found = 0;
-    for(int i=0; i<client.server.size; i++) {
+    for(int i=0; i<client.args->N; i++) {
         int size_to_send = strlen(key);
         error_code error = send_packet(client.socket, key, size_to_send, client.server.nodes[i]);
         if(error!=ERR_NONE) return error;
@@ -47,8 +45,8 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
                   count = &count_c;
                 }
                 count[0]++;
-                
-                if(count[0]>=R){
+
+                if(count[0]>=client.args->R){
                   *value = in_msg;
                   return ERR_NONE;
                 }
@@ -78,7 +76,7 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value)
     if(key==NULL||value==NULL)return ERR_BAD_PARAMETER;
 
     int errors = 0;
-    for(int i= 0; i<client.server.size; i++) {
+    for(int i= 0; i<client.args->N; i++) {
 
         char* request = format_put_request(key, value, -1, -1);
         size_t request_len = strlen(key)+strlen(value)+1;
@@ -87,7 +85,7 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value)
         int error_receive = recv(client.socket, NULL,0,0);
         if(error_send!=ERR_NONE ||error_receive==-1) errors++;
     }
-    if(errors>S-W) {
+    if(errors>client.args->N-client.args->W) {
         return ERR_NETWORK;
     } else {
         return ERR_NONE;

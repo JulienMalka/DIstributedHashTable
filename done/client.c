@@ -4,6 +4,7 @@
 #include "system.h"
 #include "node.h"
 #include "network.h"
+#include <stdlib.h>
 /**
  * @brief does all the work to be done at the end of life of a client
  * @param client the client to end
@@ -30,6 +31,11 @@ error_code client_init(client_init_args_t client_init_args)
     int nb_parsed;
     if(args_opt==NULL){
     nb_parsed =0;
+    args_t* args_default = malloc(sizeof(args_t));
+    args_default->N = 3;
+    args_default->R = 2;
+    args_default->W = 2;
+    client_init_args.client->args = args_default;
     }else{
     nb_parsed = ((int)*client_init_args.argv - adress_start)/sizeof(char**);
     client_init_args.client->args = args_opt;
@@ -40,6 +46,9 @@ error_code client_init(client_init_args_t client_init_args)
     }
     node_list_t* nodes = node_list_new();
     nodes = get_nodes();
+    if(client_init_args.client->args->N>nodes->size){
+      return ERR_BAD_PARAMETER;
+    }
     client_init_args.client->server = *nodes;
     client_init_args.client->socket = get_socket(1);
     //printf("We've done that !\n");
