@@ -40,7 +40,7 @@ error_code client_init(client_init_args_t client_init_args)
     nb_parsed = ((int)*client_init_args.argv - adress_start)/sizeof(char**);
     client_init_args.client->args = args_opt;
   }
-    printf("NB OPT PARSED = %d\n", nb_parsed);
+    //printf("NB OPT PARSED = %d\n", nb_parsed);
     if(client_init_args.size_args-nb_parsed!=client_init_args.required){
       return ERR_BAD_PARAMETER;
     }

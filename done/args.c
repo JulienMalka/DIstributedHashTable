@@ -60,7 +60,7 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv){
 		}else{return parsed;}
 		}
 
-		printf("current string = %s\n", **rem_argv);
+		//printf("current string = %s\n", **rem_argv);
 
 		++*rem_argv;
 //		printf("increamting interator\n");
