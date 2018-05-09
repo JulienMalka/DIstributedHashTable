@@ -1,0 +1,46 @@
+#CFLAGS= -g -std=c99
+CFLAGS = -std=c99 -pedantic -Wall -Wextra
+# CORRECTEUR: Consider adding warning flags to fix some issues in your code
+# (the change above is just a minimimal suggestions, there are a lot more flags
+# that are useful, see `man gcc`)
+all:  week05
+	#Reformat code of every file in folder
+	#@astyle -A8 *.c
+
+error.o: error.c
+
+hashtable.o: hashtable.c
+
+system.o: system.c
+
+client.o: client.c
+
+node.o: node.c
+
+util.o : util.c
+
+node_list.o: node_list.c
+
+network.o: network.c
+
+week05: pps-launch-server pps-client-get pps-client-put test-hashtable
+
+test-hashtable : test-hashtable.c
+	gcc -o test-hashtable test-hashtable.c node_list.c error.c node.c system.c -lcheck -lm -lrt -pthread -lsubunit
+	# CORRECTEUR: Why not use the available object files for test-hashtable?
+	# [-0.5]
+	# Also, consider using $(shell pkg-config --cflags --libs check) instead of
+	# writing out all the flags by hand. This is more portable, as the flags may
+	# differ from distribution to distribution.
+
+pps-launch-server: pps-launch-server.o system.o network.o hashtable.o
+
+pps-client-get: pps-client-get.o client.o node.o network.o system.o node_list.o util.o
+
+pps-client-put: pps-client-put.o client.o node.o network.o system.o node_list.o
+
+pps-launch-server.o: pps-launch-server.c system.h network.h hashtable.h
+
+pps-client-get.o: pps-client-get.c
+
+pps-client-put.o: pps-client-put.c
