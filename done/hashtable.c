@@ -15,13 +15,13 @@ struct bucket {
 /*
  * @brief Create a new Htable of parameter size. An htable is an array of buckets.
  * @param number of buckets in the htable
- * @return new htable
+ * @return new htable or NULL if memory allocation fails
  */
 Htable_t construct_Htable(size_t size)
 {
 
     Htable_t htable_new;
-    htable_new.buckets = calloc(size, sizeof(struct bucket));
+    htable_new.buckets = calloc(size, sizeof(struct bucket));    
     htable_new.size = size;
 
     return htable_new;
@@ -30,14 +30,22 @@ Htable_t construct_Htable(size_t size)
  * @brief Create a new bucket.
  * @param key_value of the bucket
  * @param reference to the next bucket
- * @return reference to the new bucket
+ * @return reference to the new bucket or NULL if memory allocation fails
  */
 struct bucket* create_bucket(kv_pair_t key_value, struct bucket* next)
 {
     struct bucket* new = malloc(sizeof(struct bucket));
+    
+    if (new == NULL)
+		return NULL;
+    
     new->key_value = key_value;
 
     new->next = malloc(sizeof(struct bucket));
+    
+    if (new->next == NULL)
+		return NULL;
+			
     new->next = next;
     return new;
 }
@@ -61,8 +69,8 @@ void kv_pair_free(kv_pair_t *kv)
 kv_pair_t create_kv_pair(pps_key_t key, pps_value_t value)
 {
 
-    char* key_new = calloc(strlen(key), sizeof(char));
-    char* value_new = calloc(strlen(value), sizeof(char));
+    char* key_new = calloc(strlen(key) + 1, sizeof(char));
+    char* value_new = calloc(strlen(value) + 1, sizeof(char));
 
     for (int i = 0; i < strlen(key); i++) {
         key_new[i] = key[i];
@@ -86,7 +94,10 @@ kv_pair_t create_kv_pair(pps_key_t key, pps_value_t value)
 void delete_bucket(struct bucket* bck)
 {
     if (bck == NULL) {}
-    else if (bck->key_value.key == NULL || bck->key_value.value == NULL) {}
+    else if (bck->key_value.key == NULL || bck->key_value.value == NULL) {
+		if (bck->next != NULL)
+			delete_bucket(bck->next);
+		}
     else if (bck->next == NULL) {
         free(bck->next);
         kv_pair_free(&bck->key_value);
@@ -139,11 +150,16 @@ error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t va
         kv_pair_t pair_new = create_kv_pair(key, value);
 
         struct bucket* bucket_new = create_bucket(pair_new, NULL);
+        
+		/* on create_bucket error */
+        if (bucket_new == NULL)
+			return ERR_NOMEM;
+        
         bck->next = bucket_new;
 
     } else add_value_to_bucket(bck->next, key, value);
 
-    return 0;
+    return ERR_NONE;
 }
 
 /*
