@@ -26,7 +26,8 @@ int main(int argc, char* argv[])
 
   if(error_init!=ERR_NONE){
 
-    printf("Bad command line argument\n");
+    printf("FAIL\n");
+    return -1;
   }
 
 

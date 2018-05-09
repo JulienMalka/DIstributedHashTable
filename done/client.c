@@ -12,6 +12,7 @@
 
 void client_end(client_t *client)
 {
+    free(client.args);
     node_list_free(&(client->server));
 }
 
