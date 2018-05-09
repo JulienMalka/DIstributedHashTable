@@ -40,9 +40,9 @@ pps-client-get: pps-client-get.o client.o node.o network.o system.o node_list.o 
 
 pps-client-put: pps-client-put.o client.o node.o network.o system.o node_list.o network-utils.o hashtable.o
 
-pps-list-nodes : pps-list-nodes.o system.o network.o client.o node_list.o node.o network-utils.o hashtable.o
+pps-list-nodes : pps-list-nodes.o system.o network.o client.o node_list.o node.o network-utils.o hashtable.o args.o client.o
 
-pps-dump-node: pps-dump-node.o network.o system.o node.o hashtable.o network-utils.o
+pps-dump-node: pps-dump-node.o network.o system.o node.o hashtable.o network-utils.o args.o client.o node_list.o
 
 pps-client-find : pps-client-find.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o
 

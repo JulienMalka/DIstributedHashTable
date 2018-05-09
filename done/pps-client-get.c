@@ -26,26 +26,26 @@ int main(int argc, char* argv[])
     error_code error_init = client_init(client_i);
 
 
-if(error_init!=ERR_NONE){
+    if(error_init!=ERR_NONE) {
 
-  printf("FAIL\n");
-  return -1;
-}
+        printf("FAIL\n");
+        return -1;
+    }
     pps_value_t get_value;
 
-        //printf("key : %s\n", argv[0]);
-        char* key = argv[0];
+    //printf("key : %s\n", argv[0]);
+    char* key = argv[0];
 
 
-        error_code error = network_get(*client_i.client, key, &get_value);
+    error_code error = network_get(*client_i.client, key, &get_value);
 
-        if(error == ERR_NONE) {
-            printf("OK %s\n", get_value);
-            free_const_ptr(get_value);
-        } else {
+    if(error == ERR_NONE) {
+        printf("OK %s\n", get_value);
+        free_const_ptr(get_value);
+    } else {
 
-            printf("FAIL\n");
-        }
+        printf("FAIL\n");
+    }
 
 
 

@@ -40,15 +40,15 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
                 error_not_found++;
             } else {
                 char* count = get_Htable_value(local_h_table, in_msg);
-                if(count == NULL){
-                  char count_c = 0;
-                  count = &count_c;
+                if(count == NULL) {
+                    char count_c = 0;
+                    count = &count_c;
                 }
                 count[0]++;
 
-                if(count[0]>=client.args->R){
-                  *value = in_msg;
-                  return ERR_NONE;
+                if(count[0]>=client.args->R) {
+                    *value = in_msg;
+                    return ERR_NONE;
                 }
                 add_Htable_value(local_h_table, in_msg, count);
 

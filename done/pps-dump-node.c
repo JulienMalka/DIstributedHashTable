@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "ctype.h"
 
 // for basic socket communication
 #include <sys/socket.h>
@@ -25,68 +26,84 @@ size_t parse_nbr_kv_pair(char* in_msg)
     return (in_msg[3]) | (in_msg[2] << 8) | (in_msg[1] << 16) | (in_msg[0] << 24);
 }
 
-int main(void)
+int main(int argc, char* argv[])
 {
+
+    /* Set up client */
+    client_t client;
+    client_init_args_t client_i;
+    client_i.client = &client;
+    client_i.argv = &argv;
+    client_i.required = 2;
+    client_i.optionnal = 0;
+    client_i.size_args = argc;
+
+    error_code error_init = client_init(client_i);
+
+    if(error_init!=ERR_NONE) {
+        printf("FAIL\n");
+        return -1;
+    }
+
+    char* ip;
+    int port;
+
+//   printf("arguments 0 = %s and 1 = %s\n", argv[0], argv[1]);
+
+    /* parse ip and port */
+    if (argv[0] != NULL && argv[1] != NULL) {
+        ip = argv[0];
+        port = strtol(argv[1], NULL, 10);
+    } else {
+        printf("FAIL\n");
+        return -1;
+    }
 
     /* Set up socket */
     int s = get_socket(1);
 
-    while(1) {
+    node_t node;
+    node_init(&node, ip, port, 0);
 
-        int ok = 1;
-        char ip[15]; /* max 15 characters in an ip adress */
-        int port;
-
-        node_t node;
-
-        while(ok) {
-            int error = scanf(" %s %d", ip, &port);
-            if(feof(stdin)){return 0;}
-            error_code error_init = node_init(&node, ip, port, 0);
-            if (error != 1 && error_init == ERR_NONE)
-                ok = 0;
-            else {
-                printf("FAIL\n");
-            }
-        }
-
-        /* Send packet to node */
-        if (send_packet(s, "\0", 1, node) != ERR_NONE) {
-            //error handling
-            printf("FAIL\n");
-            continue;
-        }
-
-        /* Wait to receive the response */
-        char in_msg[MAX_MSG_SIZE];
-        ssize_t in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
-
-        if (in_msg_len == -1) {
-            printf("FAIL\n");
-            continue;
-        }
-
-        kv_list_t* kv_list = malloc(sizeof(kv_list_t));
-        kv_list->list = calloc(MAX_MSG_SIZE, sizeof(kv_pair_t));
-        kv_list->size = parse_nbr_kv_pair(in_msg);
-
-        /* 4 is the size (in bytes) of a 32-bit unsigned integer */
-        size_t parsed_kv_pairs = parse_kv_pairs(&in_msg[4], in_msg_len - 4, 0, kv_list);
-
-        if (parsed_kv_pairs == -1) {
-            printf("FAIL\n");
-            continue;
-        }
-
-        if (parsed_kv_pairs < kv_list->size) {
-            /* More packets handling */
-
-        }
-
-        print_kv_pair_list(*kv_list);
-
-        kv_list_free(kv_list);
+    /* Send packet to node */
+    if (send_packet(s, "\0", 1, node) != ERR_NONE) {
+        //error handling
+        printf("FAIL\n");
+        return -1;
     }
+
+    /* Wait to receive the response */
+    char in_msg[MAX_MSG_SIZE];
+    ssize_t in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
+
+    if (in_msg_len == -1) {
+        printf("FAIL\n");
+        return -1;
+    }
+
+    kv_list_t* kv_list = malloc(sizeof(kv_list_t));
+    kv_list->list = calloc(MAX_MSG_SIZE, sizeof(kv_pair_t));
+    kv_list->size = parse_nbr_kv_pair(in_msg);
+
+    /* 4 is the size (in bytes) of a 32-bit unsigned integer */
+    size_t parsed_kv_pairs = parse_kv_pairs(&in_msg[4], in_msg_len - 4, 0, kv_list);
+
+    if (parsed_kv_pairs == -1) {
+        printf("FAIL\n");
+        return -1;
+    }
+
+    if (parsed_kv_pairs < kv_list->size) {
+        /* More packets handling */
+
+    }
+
+    print_kv_pair_list(*kv_list);
+
+    kv_list_free(kv_list);
+
+
+    return 1;
 
 }
 

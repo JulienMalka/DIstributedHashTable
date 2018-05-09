@@ -233,32 +233,33 @@ kv_pair_t* parse_and_print_response(char* in_msg, size_t length)
     return kv_pair_list;
 }
 
-START_TEST(parsing_argv){
-	
-	printf("STARTING TESTS FOR PARSING LINE COMMANDE ARGUMENTS\n");
-	
-	char** array_of_str = calloc(7, sizeof(char));
-	array_of_str[0] = "-n";
-	array_of_str[1] = "2";
-	array_of_str[2] = "-w";	
-	array_of_str[3] = "3";	
-	array_of_str[4] = "--";
-	array_of_str[5] = "antoine";
-	array_of_str[6] = "crettenand";	
-	
-/*	for (int i = 0; i < 7; i++){
-		printf("%s ", array_of_str[i]);
-	}  
-	printf("\n");
-	
-	printf("LAUNCHING METHOD\n");
-*/
-	
-	args_t* args = parse_opt_args(TOTAL_SERVERS | PUT_NEEDED, &array_of_str);  	
-	
-	printf("mandatory arguments = %s\n", *array_of_str);
-	
-	printf("results are N = %lu and W = %lu\n", args->N, args->W);
+START_TEST(parsing_argv)
+{
+
+    printf("STARTING TESTS FOR PARSING LINE COMMANDE ARGUMENTS\n");
+
+    char** array_of_str = calloc(7, sizeof(char));
+    array_of_str[0] = "-n";
+    array_of_str[1] = "2";
+    array_of_str[2] = "-w";
+    array_of_str[3] = "3";
+    array_of_str[4] = "--";
+    array_of_str[5] = "antoine";
+    array_of_str[6] = "crettenand";
+
+    /*	for (int i = 0; i < 7; i++){
+    		printf("%s ", array_of_str[i]);
+    	}
+    	printf("\n");
+
+    	printf("LAUNCHING METHOD\n");
+    */
+
+    args_t* args = parse_opt_args(TOTAL_SERVERS | PUT_NEEDED, &array_of_str);
+
+    printf("mandatory arguments = %s\n", *array_of_str);
+
+    printf("results are N = %lu and W = %lu\n", args->N, args->W);
 }
 END_TEST
 
