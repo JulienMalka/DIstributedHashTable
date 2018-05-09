@@ -58,6 +58,7 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv){
 		}else{
 			
 		if(parsed_n == 0){
+			free(parsed);
 			return NULL;
 		} else {
 			return parsed;
