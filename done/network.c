@@ -26,7 +26,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 
 
     int error_not_found = 0;
-    for(int i=0; i<client.args->N; i++) {
+    for(size_t i=0; i<client.args->N; i++) {
         int size_to_send = strlen(key);
         error_code error = send_packet(client.socket, key, size_to_send, client.server.nodes[i]);
         if(error!=ERR_NONE) return error;
@@ -76,7 +76,7 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value)
     if(key==NULL||value==NULL)return ERR_BAD_PARAMETER;
 
     int errors = 0;
-    for(int i= 0; i<client.args->N; i++) {
+    for(size_t i= 0; i<client.args->N; i++) {
 
         char* request = format_put_request(key, value, -1, -1);
         size_t request_len = strlen(key)+strlen(value)+1;

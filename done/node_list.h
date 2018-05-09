@@ -23,6 +23,8 @@ struct node_list {
 };
 typedef struct node_list node_list_t;
 
+size_t ALLOCATED_MEMORY_LIST = 32;
+
 /**
  * @brief creates a new, empty, node_list_t
  * @return (a pointer to) the new list of nodes

@@ -11,11 +11,11 @@
  * @return (a pointer to) the new list of nodes
  */
 node_list_t *node_list_new()
-{
+{	
     node_list_t* new = malloc(sizeof(node_list_t));
     new->size = 0;
-    new->allocated_size = 32;
-    new->nodes = calloc(32, sizeof(node_t));
+    new->allocated_size = ALLOCATED_MEMORY_LIST;
+    new->nodes = calloc(ALLOCATED_MEMORY_LIST, sizeof(node_t));
     return new;
 }
 
@@ -36,8 +36,9 @@ node_list_t *get_nodes()
 
     int current_char = fgetc(file);
 
-    char ip[15];
-    int index = 0;
+	/*15 is the maximum size for an ip adress + terminating \0 */
+    char ip[16];
+    size_t index = 0;
     uint16_t port = 0;
 
     while(!feof(file)) {
@@ -47,10 +48,10 @@ node_list_t *get_nodes()
                 return NULL;
             current_char = fgetc(file);
 
-            //take the n first chars, discard else
-            char* real_ip = calloc(index, sizeof(char));
+            //take the n first chars + terminating \0, discard else
+            char* real_ip = calloc(index + 1, sizeof(char));
 
-            for (int i = 0; i < index; i++) {
+            for (size_t i = 0; i < index; i++) {
                 real_ip[i] = ip[i];
             }
 
@@ -86,7 +87,6 @@ error_code node_list_add(node_list_t *list, node_t node)
     if (list == NULL)
         return ERR_BAD_PARAMETER;
 
-    list->size++;
     if(list->size > list->allocated_size) {
 
         node_t* nodes = realloc(list->nodes, list->allocated_size + 32);
@@ -95,7 +95,11 @@ error_code node_list_add(node_list_t *list, node_t node)
         } else {
             list->allocated_size += 32;
         }
+        
+        list->nodes = nodes;
     }
+    
+    list->size++;
 
     list->nodes[list->size-1] = node;
     return ERR_NONE;
@@ -107,7 +111,7 @@ error_code node_list_add(node_list_t *list, node_t node)
  */
 void node_list_free(node_list_t *list)
 {
-    for(int i=0; i<list->size; i++) {
+    for(size_t i=0; i<list->size; i++) {
         node_end(&list->nodes[i]);
     }
 

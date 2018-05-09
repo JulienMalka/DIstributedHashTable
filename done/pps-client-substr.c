@@ -14,7 +14,7 @@
  * @return 1 if so, 0 otherwise
  */ 
 int isValidNumber(const char* str){
-	for (int i = 0; i < strlen(str); i++){
+	for (size_t i = 0; i < strlen(str); i++){
 		if (!isdigit(str[i]))
 			return 0;
 	}
@@ -104,5 +104,5 @@ int main(int argc, char* argv[])
     
     client_end(&client);
 
-    return 1;
+    return 0;
 }

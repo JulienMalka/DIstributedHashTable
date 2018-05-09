@@ -72,11 +72,11 @@ kv_pair_t create_kv_pair(pps_key_t key, pps_value_t value)
     char* key_new = calloc(strlen(key) + 1, sizeof(char));
     char* value_new = calloc(strlen(value) + 1, sizeof(char));
 
-    for (int i = 0; i < strlen(key); i++) {
+    for (size_t i = 0; i < strlen(key); i++) {
         key_new[i] = key[i];
     }
 
-    for (int i = 0; i < strlen(value); i++) {
+    for (size_t i = 0; i < strlen(value); i++) {
         value_new[i] = value[i];
     }
 
@@ -114,7 +114,7 @@ void delete_bucket(struct bucket* bck)
  */
 void delete_Htable_and_content(Htable_t* table)
 {
-    for(int i = 0; i < table->size; i++) {
+    for(size_t i = 0; i < table->size; i++) {
         delete_bucket(&table->buckets[i]);
     }
 
@@ -241,7 +241,7 @@ size_t hash_function(pps_key_t key, size_t size)
 
 void kv_list_free(kv_list_t *list)
 {
-    for (int i = 0; i < list->size; i++) {
+    for (size_t i = 0; i < list->size; i++) {
         kv_pair_free(&list->list[i]);
     }
     list->size = 0;
@@ -266,7 +266,7 @@ size_t get_Htable_size(Htable_t table)
 
     size_t total = 0;
 
-    for (int i = 0; i < table.size; i++) {
+    for (size_t i = 0; i < table.size; i++) {
         total += get_bucket_size(&table.buckets[i]);
     }
 
@@ -300,7 +300,7 @@ kv_list_t *get_Htable_content(Htable_t table)
     list_of_kv->size = htable_size;
     size_t used_until = 0;
 
-    for (int i = 0; i < table.size; i++) {
+    for (size_t i = 0; i < table.size; i++) {
         used_until += get_bucket_content(&table.buckets[i], list_of_kv, used_until);
     }
     return list_of_kv;
