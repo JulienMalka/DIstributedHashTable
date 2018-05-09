@@ -4,6 +4,12 @@
 #include "ctype.h"
 #include "args.h"
 
+/*
+ * @brief helper function for parse_opt_args()
+ * @param supported_arg checks if arg is supported
+ * @param rem_argv pointer on current string
+ * @param value pointer to a value of the struct
+ */ 
 void parse_option(size_t supported_arg, char ***rem_argv, size_t* value)
 {
 
@@ -13,32 +19,33 @@ void parse_option(size_t supported_arg, char ***rem_argv, size_t* value)
 
         /* If option value isn't defined, throw an error */
         if (*rem_argv == NULL || !strcmp(**rem_argv, "--") || !isdigit(***rem_argv)) {
-            fprintf(stderr, "ERREUR: pas d'argument pour l'option \n");
+//            fprintf(stderr, "ERREUR: pas d'argument pour l'option \n");
         } else {
             /* Convert char to int */
             *value = ***rem_argv - '0';
         }
 
     } else {
-        fprintf(stderr, "ERREUR: option non prise en compte \n");
+//        fprintf(stderr, "ERREUR: option non prise en compte \n");
     }
 }
 
 args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
 {
 
-    /* |*rem_argv| est le pointeur sur un élément du tableau de string */
+    /* |*rem_argv|  i the pointer on a string of the string array rem_argv */
 
 //	printf("segfault happens after 0\n");
 
-    /* return structure */
-    /* With default values */
+    /* Structure with default values */
     args_t* parsed = malloc(sizeof(args_t));
     parsed->N = 3;
     parsed->R = 2;
     parsed->W = 2;
 
 //	printf("segfault happens after 1\n");
+
+	/* Counts the number of parsed arguments*/
     int parsed_n = 0;
     while(**rem_argv != NULL) {
 
@@ -46,19 +53,20 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
         if (!strcmp(**rem_argv, "-n")) {
             parse_option(supported_args & TOTAL_SERVERS, rem_argv, &parsed->N);
             parsed_n++;
-            /* Check for -r option */
+        /* Check for -r option */
         } else if (!strcmp(**rem_argv, "-r")) {
             parse_option(supported_args & GET_NEEDED, rem_argv, &parsed->R);
             parsed_n++;
-            /* Check for -w option */
+        /* Check for -w option */
         } else if (!strcmp(**rem_argv, "-w")) {
             parse_option(supported_args & PUT_NEEDED, rem_argv, &parsed->W);
             parsed_n++;
+        /* Check for end of optionnal arguments */    
         } else if (!strcmp(**rem_argv, "--")) {
             ++*rem_argv;
             return parsed;
         } else {
-
+			/* if no arguments parsed, returns NULL, otherwise returns what was parsed until now */
             if(parsed_n == 0) {
                 free(parsed);
                 return NULL;

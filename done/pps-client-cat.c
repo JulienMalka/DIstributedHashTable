@@ -5,59 +5,74 @@
 #include "network.h"
 #include "error.h"
 
-int main(void)
+int main(int argc, char* argv[])
 {
 
+	/* Client initialization and parsing optionnal arguments */
     client_t client;
     client_init_args_t client_i;
     client_i.client = &client;
-    client_i.name = "test";
-    client_init(client_i);
+    client_i.argv = &argv;
+    client_i.required = 2;
+    client_i.optionnal = (TOTAL_SERVERS | PUT_NEEDED | GET_NEEDED);
+    client_i.size_args = argc;
 
-    while(1) {
+    error_code error_init = client_init(client_i);
 
-        char key_from1[MAX_MSG_SIZE];
-        char key_from2[MAX_MSG_SIZE];
-        char key_to[MAX_MSG_SIZE];
-        int ok = 1;
+    if (error_init != ERR_NONE) {
+		printf("it failed in iniatilization\n");
+        printf("FAIL\n");
+        return -1;
+    }
+    
+    /* Parse the key */
+    char* keys[300];
+    size_t nbr_arg = 0;
+    while(argv[nbr_arg] != NULL){
+		keys[nbr_arg] = argv[nbr_arg];
+		nbr_arg++;
+	}
+	
+	/* Compensate the last increment */
+	nbr_arg--;
+	
+	/* The last key is the output key */
+	char* output_key = keys[nbr_arg - 1];
+	
+	pps_value_t value_from;
+	error_code error_code = network_get(client, keys[0], &value_from);
+	
+	if (error_code != ERR_NONE){
+		printf("it failed in the first get\n");
+		printf("FAIL\n");
+		return -1;
+	}
+	
+	char* concat = value_from;
 
-        while (ok) {
-            int error = scanf("%s %s %s", key_from1, key_from2, key_to);
-            if(feof(stdin)) {
-                return 0;
-            }
-            if (error != 1) ok = 0;
-            else {
-                printf("FAIL\n");
-            }
-        }
-
-        /*get the values*/
-        pps_value_t value_from1;
-        pps_value_t value_from2;
-
-        error_code error_get1 = network_get(client, key_from1, &value_from1);
-        error_code error_get2 = network_get(client, key_from2, &value_from2);
-
-        if (error_get1 != ERR_NONE || error_get2 != ERR_NONE) {
-            printf("FAIL\n");
-            continue;
-        }
-
-        /* concat the two values */
-        char concat[MAX_MSG_SIZE];
-        snprintf(concat, strlen(value_from1) + strlen(value_from2) + 1, "%s%s", value_from1, value_from2);
-
-        /* re-send the concatenation */
-        error_code error_put = network_put(client, key_to, concat);
-
-        if (error_put != ERR_NONE) {
-            printf("FAIL\n");
-            continue;
-        }
+	/* Get the respective values and concatenate them */
+	for (int i = 1; i < nbr_arg; i++){
+		
+		error_code = network_get(client, keys[i], &value_from);
+		
+		if (error_code != ERR_NONE){
+			printf("it failed in one of the get\n");
+			printf("FAIL\n");
+			return -1;
+		}
+		
+		snprintf(concat, strlen(concat) + strlen(value_from) + 1, "%s%s", concat, value_from);
+	} 
+	
+	error_code = network_put(client, output_key, concat);
+	
+			if (error_code != ERR_NONE){
+			printf("FAIL\n");
+			return -1;
+		}
 
         printf("OK\n");
-    }
+    
 
-
+	return 0;
 }

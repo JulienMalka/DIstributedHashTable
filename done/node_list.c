@@ -89,18 +89,17 @@ error_code node_list_add(node_list_t *list, node_t node)
     list->size++;
     if(list->size > list->allocated_size) {
 
-        node_t* nodes = realloc(list->nodes, list->allocated_size+32);
-        if(nodes==NULL) {
+        node_t* nodes = realloc(list->nodes, list->allocated_size + 32);
+        if(nodes == NULL) {
             return ERR_NOMEM;
         } else {
-            list->allocated_size+=32;
+            list->allocated_size += 32;
         }
     }
 
     list->nodes[list->size-1] = node;
     return ERR_NONE;
 }
-
 
 /**
  * @brief free the given list of nodes
@@ -113,5 +112,5 @@ void node_list_free(node_list_t *list)
     }
 
     free(list->nodes);
-    free(list);
+	list = NULL;
 }

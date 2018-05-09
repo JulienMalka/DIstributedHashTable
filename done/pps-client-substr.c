@@ -1,9 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//for is digit
+#include "ctype.h"
+
 #include "client.h"
 #include "network.h"
 #include "config.h"
+
+/*
+ * @brief checks if string corresponds to a valid number
+ * @param str string
+ * @return 1 if so, 0 otherwise
+ */ 
+int isValidNumber(const char* str){
+	for (int i = 0; i < strlen(str); i++){
+		if (!isdigit(str[i]))
+			return 0;
+	}
+	return 1;
+}
 
 int main(int argc, char* argv[])
 {
@@ -31,10 +47,16 @@ int main(int argc, char* argv[])
     int length;
 
     if (argv[0] != NULL && argv[1] != NULL && argv[2] != NULL && argv[3] != NULL) {
-        key_from = argv[0];
-        position = strtol(argv[1], NULL, 10);
-        length = strtol(argv[2], NULL, 10);
-        key_to = argv[3];
+		/* Checks if second and third argument are valid numbers */
+		if (isValidNumber(argv[1]) && isValidNumber(argv[2])){
+			key_from = argv[0];
+			position = strtol(argv[1], NULL, 10);
+			length = strtol(argv[2], NULL, 10);
+			key_to = argv[3];
+		} else {
+			printf("FAIL\n");
+			return -1;
+		}
     } else {
         printf("FAIL\n");
         return -1;
@@ -79,6 +101,8 @@ int main(int argc, char* argv[])
     }
 
     printf("OK\n");
+    
+    client_end(&client);
 
     return 1;
 }

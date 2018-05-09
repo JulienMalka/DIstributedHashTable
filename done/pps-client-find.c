@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
         printf("FAIL\n");
     }
 
-
+    client_end(&client);
 
 
     return 0;

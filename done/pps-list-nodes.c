@@ -14,9 +14,15 @@
 #include "util.h"
 #include <arpa/inet.h>
 
+/*
+ * Utilitary executable which pings every server in servers.txt and returns their status
+ * Return 0 on normal exit and -1 on abnormal exit
+ */ 
 int main(int argc, char* argv[])
 {
+	size_t BUFFER_LENGTH = 20;
 
+	/* Client initialization and parsing optionnal arguments */
     client_t client;
     client_init_args_t client_i;
     client_i.client = &client;
@@ -32,8 +38,8 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-
-    for(int i=0; i<client.server.size; i++) {
+	/* Pings every server */
+    for(int i = 0; i<client.server.size; i++) {
         char* buffer_send = malloc(0);
         send_packet(client.socket, buffer_send, 0, client.server.nodes[i]);
 
@@ -47,13 +53,11 @@ int main(int argc, char* argv[])
             status = "OK";
 
         }
-        char buffer[20];
-        printf("%s %hu %s\n", inet_ntop(AF_INET, &client.server.nodes[i].sin_addr, buffer, 20), ntohs(client.server.nodes[i].sin_port), status);
-
-
+        char buffer[BUFFER_LENGTH];
+        printf("%s %hu %s\n", inet_ntop(AF_INET, &client.server.nodes[i].sin_addr, buffer, BUFFER_LENGTH), ntohs(client.server.nodes[i].sin_port), status);
     }
 
 
 
-
+	return 0;
 }

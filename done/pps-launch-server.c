@@ -13,6 +13,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+/*
+ * Main executable, launches a server on given ip and port
+ */
 
 int main(void)
 {
@@ -28,7 +31,9 @@ int main(void)
         printf("IP port? ");
         int error = scanf(" %s %d", ip, &port);
         error_code error_bind =  bind_server(s, ip, port);
-        if (error != 1 &&error_bind==ERR_NONE) ok = 0;
+        
+        if (error != 1 && error_bind == ERR_NONE) 
+			ok = 0;
         else {
             printf("FAIL\n");
         }

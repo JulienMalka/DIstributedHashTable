@@ -12,9 +12,14 @@
 #include "stdlib.h"
 #include "util.h"
 
+/*
+ * Main executable to retrieve value from a given key
+ * Returns 0 on normal exit, -1 otherwise
+ */ 
 int main(int argc, char* argv[])
 {
 
+	/* Client initialization and parsing optionnal arguments */
     client_t client;
     client_init_args_t client_i;
     client_i.client = &client;
@@ -25,17 +30,14 @@ int main(int argc, char* argv[])
 
     error_code error_init = client_init(client_i);
 
-
     if(error_init!=ERR_NONE) {
-
         printf("FAIL\n");
         return -1;
     }
+    
+    /* Parsing mandatory argument */
     pps_value_t get_value;
-
-    //printf("key : %s\n", argv[0]);
     char* key = argv[0];
-
 
     error_code error = network_get(*client_i.client, key, &get_value);
 
@@ -43,12 +45,11 @@ int main(int argc, char* argv[])
         printf("OK %s\n", get_value);
         free_const_ptr(get_value);
     } else {
-
         printf("FAIL\n");
+        return -1;
     }
 
-
-
+    client_end(&client);
 
     return 0;
 }

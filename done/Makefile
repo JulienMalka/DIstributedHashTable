@@ -36,19 +36,19 @@ test-hashtable : test-hashtable.c
 
 pps-launch-server: pps-launch-server.o system.o network.o hashtable.o network-utils.o
 
-pps-client-get: pps-client-get.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o
+pps-client-get: pps-client-get.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o args.o
 
-pps-client-put: pps-client-put.o client.o node.o network.o system.o node_list.o network-utils.o hashtable.o
+pps-client-put: pps-client-put.o client.o node.o network.o system.o node_list.o network-utils.o hashtable.o args.o
 
 pps-list-nodes : pps-list-nodes.o system.o network.o client.o node_list.o node.o network-utils.o hashtable.o args.o client.o
 
-pps-dump-node: pps-dump-node.o network.o system.o node.o hashtable.o network-utils.o args.o client.o node_list.o
+pps-dump-node: pps-dump-node.o network.o system.o node.o hashtable.o network-utils.o args.o client.o node_list.o args.o
 
-pps-client-find : pps-client-find.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o
+pps-client-find : pps-client-find.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o args.o
 
-pps-client-cat: pps-client-cat.o network.o client.o node_list.o system.o node.o network-utils.o hashtable.o
+pps-client-cat: pps-client-cat.o network.o client.o node_list.o system.o node.o network-utils.o hashtable.o args.o
 
-pps-client-substr: pps-client-substr.o network.o client.o node_list.o system.o node.o network-utils.o hashtable.o
+pps-client-substr: pps-client-substr.o network.o client.o node_list.o system.o node.o network-utils.o hashtable.o args.o
 
 pps-client-cat.o: pps-client-cat.c
 

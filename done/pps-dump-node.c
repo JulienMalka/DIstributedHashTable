@@ -18,7 +18,7 @@ void print_kv_pair_list(kv_list_t kv_pair_list);
 
 /**
  * @brief Takes the four first bytes of a char array and converts them into a 32-bit unsigned char
- * @param in_msg to parse
+ * @param in_msg to parse, in big-endian
  * @return 32-bit unsigned int
  */
 size_t parse_nbr_kv_pair(char* in_msg)
@@ -29,7 +29,7 @@ size_t parse_nbr_kv_pair(char* in_msg)
 int main(int argc, char* argv[])
 {
 
-    /* Set up client */
+	/* Client initialization and parsing optionnal arguments */
     client_t client;
     client_init_args_t client_i;
     client_i.client = &client;
@@ -101,6 +101,8 @@ int main(int argc, char* argv[])
     print_kv_pair_list(*kv_list);
 
     kv_list_free(kv_list);
+    
+    client_end(&client);
 
 
     return 1;
