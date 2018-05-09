@@ -4,9 +4,9 @@
 #include "ctype.h"
 #include "args.h"
 
-void parse_option(size_t supported_args, char ***rem_argv, size_t* value){
+void parse_option(size_t supported_arg, char ***rem_argv, size_t* value){
 
-			if (supported_args & TOTAL_SERVERS){
+			if (supported_arg){
 
 				++*rem_argv;
 
@@ -30,6 +30,7 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv){
 //	printf("segfault happens after 0\n");
 
 	/* return structure */
+	/* With default values */
 	args_t* parsed = malloc(sizeof(args_t));
 	parsed->N = 3;
 	parsed->R = 2;
@@ -41,23 +42,26 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv){
 
 		/* Check for -n option*/
 		if (!strcmp(**rem_argv, "-n")){
-			parse_option(supported_args, rem_argv, &parsed->N);
+			parse_option(supported_args & TOTAL_SERVERS, rem_argv, &parsed->N);
 			parsed_n++;
 		/* Check for -r option */
 		} else if (!strcmp(**rem_argv, "-r")) {
-			parse_option(supported_args, rem_argv, &parsed->R);
+			parse_option(supported_args & GET_NEEDED, rem_argv, &parsed->R);
 			parsed_n++;
 		/* Check for -w option */
 		} else if (!strcmp(**rem_argv, "-w")) {
-			parse_option(supported_args, rem_argv, &parsed->W);
+			parse_option(supported_args & PUT_NEEDED, rem_argv, &parsed->W);
 			parsed_n++;
 		} else if (!strcmp(**rem_argv, "--")) {
 			++*rem_argv;
 			return parsed;
 		}else{
-      if(parsed_n==0){
+			
+		if(parsed_n == 0){
 			return NULL;
-		}else{return parsed;}
+		} else {
+			return parsed;
+		  }
 		}
 
 		//printf("current string = %s\n", **rem_argv);
