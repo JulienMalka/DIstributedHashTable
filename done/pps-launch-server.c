@@ -67,7 +67,7 @@ int main(void)
 
                 kv_list_t* node_dump = get_Htable_content(h_table);
 
-                int counter =0;
+                size_t counter = 0;
                 size_t size_packet =0;
                 char* packet = calloc(65507, sizeof(char));
                 char header[4];
@@ -81,19 +81,19 @@ int main(void)
                     size_t size_kv = strlen(node_dump->list[counter].key) +1 + strlen(node_dump->list[counter].value);
                     if(size_packet+size_kv<65507) {
                         char* kv_request;
-                        if(counter==0) {
+                        if(counter == 0) {
                             char* key_new = calloc(4+strlen(node_dump->list[counter].key), sizeof(char));
                             for(int i=0; i<4; i++) {
                                 key_new[i] = header[i];
 
                             }
-                            for(int i=0; i<strlen(node_dump->list[counter].key); i++) {
+                            for(size_t i=0; i<strlen(node_dump->list[counter].key); i++) {
 
                                 key_new[4+i] = node_dump->list[counter].key[i];
                             }
 
                             kv_request = format_put_request(key_new, node_dump->list[counter].value, 4+strlen(node_dump->list[counter].key) , -1);
-                            for(int i = 0; i< 5 + strlen(node_dump->list[counter].key)+ strlen(node_dump->list[counter].value); i++) {
+                            for(size_t i = 0; i< 5 + strlen(node_dump->list[counter].key)+ strlen(node_dump->list[counter].value); i++) {
 
                                 packet[i] =  kv_request[i];
 

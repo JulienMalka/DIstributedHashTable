@@ -23,7 +23,7 @@
 error_code send_packet(int socket, const char* message, size_t size, node_t node)
 {
 
-    if(message==NULL || size<0) return ERR_BAD_PARAMETER;
+    if(message == NULL) return ERR_BAD_PARAMETER;
 
     int error = sendto(socket, message, size, 0,
                        (struct sockaddr *) &node, sizeof(node));
@@ -82,13 +82,13 @@ error_code parse_put_request(char* in_msg, size_t length, char* key, char* value
 {
     char* ret = memchr(in_msg, '\0', length);
     size_t size_key = strlen(in_msg);
-    for(int i =0; i<size_key; i++) {
+    for( size_t i =0; i<size_key; i++) {
         key[i] = in_msg[i];
     }
     key[size_key] = '\0';
     size_t size_value = length - size_key;
 
-    for(int i=0; i<size_value; i++) {
+    for(size_t i = 0 ; i < size_value; i++) {
 
         value[i] = ret[i+1];
     }

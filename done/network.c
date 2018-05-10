@@ -45,7 +45,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
                 }
                 count[0]++;
 
-                if(count[0]>=client.args->R) {
+                if(count[0] >= client.args->R) {
                     *value = in_msg;
            //        free(in_msg);
                     return ERR_NONE;
@@ -75,7 +75,7 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value)
     M_EXIT_IF_TOO_LONG(value, MAX_MSG_ELEM_SIZE, value.name);
     if(key==NULL||value==NULL)return ERR_BAD_PARAMETER;
 
-    int errors = 0;
+    size_t errors = 0;
     for(size_t i= 0; i<client.args->N; i++) {
 
         char* request = format_put_request(key, value, -1, -1);

@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
  */
 void print_kv_pair_list(kv_list_t kv_pair_list)
 {
-    for (int i = 0; i < kv_pair_list.size; i++) {
+    for (size_t i = 0; i < kv_pair_list.size; i++) {
         printf("%s = %s\n", kv_pair_list.list[i].key, kv_pair_list.list[i].value);
     }
 }
@@ -146,7 +146,7 @@ size_t parse_kv_pairs(char* in_msg, size_t length, size_t starting_index, kv_lis
 
     char iterator;
 
-    for (int i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++) {
         iterator = in_msg[i];
 
         if (parsing_key && iterator != '\0') {

@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
     char* concat = value_from;
 
     /* Get the respective values and concatenate them */
-    for (int i = 1; i < nbr_arg; i++) {
+    for (size_t i = 1; i < nbr_arg; i++) {
 
         error_code = network_get(client, keys[i], &value_from);
 
