@@ -12,13 +12,14 @@
  * @brief checks if string corresponds to a valid number
  * @param str string
  * @return 1 if so, 0 otherwise
- */ 
-int isValidNumber(const char* str){
-	for (size_t i = 0; i < strlen(str); i++){
-		if (!isdigit(str[i]))
-			return 0;
-	}
-	return 1;
+ */
+int isValidNumber(const char* str)
+{
+    for (size_t i = 0; i < strlen(str); i++) {
+        if (!isdigit(str[i]))
+            return 0;
+    }
+    return 1;
 }
 
 int main(int argc, char* argv[])
@@ -47,16 +48,16 @@ int main(int argc, char* argv[])
     int length;
 
     if (argv[0] != NULL && argv[1] != NULL && argv[2] != NULL && argv[3] != NULL) {
-		/* Checks if second and third argument are valid numbers */
-		if (isValidNumber(argv[1]) && isValidNumber(argv[2])){
-			key_from = argv[0];
-			position = strtol(argv[1], NULL, 10);
-			length = strtol(argv[2], NULL, 10);
-			key_to = argv[3];
-		} else {
-			printf("FAIL\n");
-			return -1;
-		}
+        /* Checks if second and third argument are valid numbers */
+        if (isValidNumber(argv[1]) && isValidNumber(argv[2])) {
+            key_from = argv[0];
+            position = strtol(argv[1], NULL, 10);
+            length = strtol(argv[2], NULL, 10);
+            key_to = argv[3];
+        } else {
+            printf("FAIL\n");
+            return -1;
+        }
     } else {
         printf("FAIL\n");
         return -1;
@@ -74,8 +75,6 @@ int main(int argc, char* argv[])
     /*COMPUTE THE SUBSTRING*/
     if (position < 0) {
         position = strlen(value_from) + position;
-    } else {
-        position = position;
     }
 
     /*ERROR HANDLING*/
@@ -84,14 +83,17 @@ int main(int argc, char* argv[])
         return -1;
     }
 
+    /* array */
     char substring[strlen(value_from)];
 
-    for(int i = position; i < position + length; i++) {
-        substring[i - position] = value_from[i];
-    }
-
-    if (position == 0)
+    if (length == 0)
         memset(substring, '\0', strlen(substring));
+    else {
+        for(int i = position; i < position + length; i++) {
+            substring[i - position] = value_from[i];
+        }
+        substring[length] = '\0';
+    }
 
     error_code error_put = network_put(client, key_to, substring);
 
@@ -101,7 +103,7 @@ int main(int argc, char* argv[])
     }
 
     printf("OK\n");
-    
+
     client_end(&client);
 
     return 0;

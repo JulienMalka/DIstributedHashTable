@@ -9,7 +9,7 @@
  * @param supported_arg checks if arg is supported
  * @param rem_argv pointer on current string
  * @param value pointer to a value of the struct
- */ 
+ */
 void parse_option(size_t supported_arg, char ***rem_argv, size_t* value)
 {
 
@@ -45,7 +45,7 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
 
 //	printf("segfault happens after 1\n");
 
-	/* Counts the number of parsed arguments*/
+    /* Counts the number of parsed arguments*/
     int parsed_n = 0;
     while(**rem_argv != NULL) {
 
@@ -53,20 +53,20 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
         if (!strcmp(**rem_argv, "-n")) {
             parse_option(supported_args & TOTAL_SERVERS, rem_argv, &parsed->N);
             parsed_n++;
-        /* Check for -r option */
+            /* Check for -r option */
         } else if (!strcmp(**rem_argv, "-r")) {
             parse_option(supported_args & GET_NEEDED, rem_argv, &parsed->R);
             parsed_n++;
-        /* Check for -w option */
+            /* Check for -w option */
         } else if (!strcmp(**rem_argv, "-w")) {
             parse_option(supported_args & PUT_NEEDED, rem_argv, &parsed->W);
             parsed_n++;
-        /* Check for end of optionnal arguments */    
+            /* Check for end of optionnal arguments */
         } else if (!strcmp(**rem_argv, "--")) {
             ++*rem_argv;
             return parsed;
         } else {
-			/* if no arguments parsed, returns NULL, otherwise returns what was parsed until now */
+            /* if no arguments parsed, returns NULL, otherwise returns what was parsed until now */
             if(parsed_n == 0) {
                 free(parsed);
                 return NULL;

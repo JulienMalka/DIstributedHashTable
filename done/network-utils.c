@@ -5,7 +5,7 @@
 #include "client.h"
 #include "config.h"
 #include "system.h"
-#include "network.h"
+//#include "network.h"
 #include <arpa/inet.h>
 #include <stdlib.h>
 #include <string.h>

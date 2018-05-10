@@ -28,7 +28,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
     int error_not_found = 0;
     for(size_t i=0; i<client.args->N; i++) {
         int size_to_send = strlen(key);
-       send_packet(client.socket, key, size_to_send, client.server.nodes[i]);
+        send_packet(client.socket, key, size_to_send, client.server.nodes[i]);
 
         char* in_msg = malloc(MAX_MSG_ELEM_SIZE);
         ssize_t in_msg_len = recv(client.socket, in_msg, MAX_MSG_ELEM_SIZE, 0);

@@ -23,7 +23,8 @@ util.o : util.c
 
 node_list.o: node_list.c
 
-network.o: network-utils.o network.c
+network.o: network.c
+#network-utils.o
 
 week05: pps-launch-server pps-client-get pps-client-put test-hashtable
 
@@ -56,7 +57,8 @@ pps-client-substr.o : pps-client-substr.c
 
 pps-dump-node.o: pps-dump-node.c
 
-pps-launch-server.o: pps-launch-server.c system.h network.h hashtable.h
+pps-launch-server.o: pps-launch-server.c 
+#system.h network.h hashtable.h
 
 pps-client-get.o: pps-client-get.c
 

@@ -15,11 +15,11 @@
 /*
  * Main executable to retrieve value from a given key
  * Returns 0 on normal exit, -1 otherwise
- */ 
+ */
 int main(int argc, char* argv[])
 {
 
-	/* Client initialization and parsing optionnal arguments */
+    /* Client initialization and parsing optionnal arguments */
     client_t client;
     client_init_args_t client_i;
     client_i.client = &client;
@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
         printf("FAIL\n");
         return -1;
     }
-    
+
     /* Parsing mandatory argument */
     pps_value_t get_value;
     char* key = argv[0];

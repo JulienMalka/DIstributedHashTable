@@ -17,12 +17,12 @@
 /*
  * Utilitary executable which pings every server in servers.txt and returns their status
  * Return 0 on normal exit and -1 on abnormal exit
- */ 
+ */
 int main(int argc, char* argv[])
 {
-	size_t BUFFER_LENGTH = 20;
+    size_t BUFFER_LENGTH = 20;
 
-	/* Client initialization and parsing optionnal arguments */
+    /* Client initialization and parsing optionnal arguments */
     client_t client;
     client_init_args_t client_i;
     client_i.client = &client;
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-	/* Pings every server */
+    /* Pings every server */
     for(int i = 0; i<client.server.size; i++) {
         char* buffer_send = malloc(0);
         send_packet(client.socket, buffer_send, 0, client.server.nodes[i]);
@@ -59,5 +59,5 @@ int main(int argc, char* argv[])
 
 
 
-	return 0;
+    return 0;
 }

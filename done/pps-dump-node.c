@@ -29,7 +29,7 @@ size_t parse_nbr_kv_pair(char* in_msg)
 int main(int argc, char* argv[])
 {
 
-	/* Client initialization and parsing optionnal arguments */
+    /* Client initialization and parsing optionnal arguments */
     client_t client;
     client_init_args_t client_i;
     client_i.client = &client;
@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
     print_kv_pair_list(*kv_list);
 
     kv_list_free(kv_list);
-    
+
     client_end(&client);
 
 

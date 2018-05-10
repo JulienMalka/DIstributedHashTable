@@ -21,7 +21,7 @@ Htable_t construct_Htable(size_t size)
 {
 
     Htable_t htable_new;
-    htable_new.buckets = calloc(size, sizeof(struct bucket));    
+    htable_new.buckets = calloc(size, sizeof(struct bucket));
     htable_new.size = size;
 
     return htable_new;
@@ -35,17 +35,17 @@ Htable_t construct_Htable(size_t size)
 struct bucket* create_bucket(kv_pair_t key_value, struct bucket* next)
 {
     struct bucket* new = malloc(sizeof(struct bucket));
-    
+
     if (new == NULL)
-		return NULL;
-    
+        return NULL;
+
     new->key_value = key_value;
 
     new->next = malloc(sizeof(struct bucket));
-    
+
     if (new->next == NULL)
-		return NULL;
-			
+        return NULL;
+
     new->next = next;
     return new;
 }
@@ -95,10 +95,9 @@ void delete_bucket(struct bucket* bck)
 {
     if (bck == NULL) {}
     else if (bck->key_value.key == NULL || bck->key_value.value == NULL) {
-		if (bck->next != NULL)
-			delete_bucket(bck->next);
-		}
-    else if (bck->next == NULL) {
+        if (bck->next != NULL)
+            delete_bucket(bck->next);
+    } else if (bck->next == NULL) {
         free(bck->next);
         kv_pair_free(&bck->key_value);
     } else {
@@ -150,11 +149,11 @@ error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t va
         kv_pair_t pair_new = create_kv_pair(key, value);
 
         struct bucket* bucket_new = create_bucket(pair_new, NULL);
-        
-		/* on create_bucket error */
+
+        /* on create_bucket error */
         if (bucket_new == NULL)
-			return ERR_NOMEM;
-        
+            return ERR_NOMEM;
+
         bck->next = bucket_new;
 
     } else add_value_to_bucket(bck->next, key, value);
