@@ -13,14 +13,14 @@ int main(int argc, char* argv[])
     client_init_args_t client_i;
     client_i.client = &client;
     client_i.argv = &argv;
-    client_i.required = 2;
+    client_i.required = SIZE_MAX;
     client_i.optionnal = (TOTAL_SERVERS | PUT_NEEDED | GET_NEEDED);
     client_i.size_args = argc;
 
     error_code error_init = client_init(client_i);
 
     if (error_init != ERR_NONE) {
-        printf("it failed in iniatilization\n");
+        printf("it failed in initialization\n");
         printf("FAIL\n");
         return -1;
     }

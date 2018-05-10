@@ -43,7 +43,7 @@ int main(void)
 
 
     //Receive messages forever
-    while(1) {
+    while(!feof(stdin)) {
 
         node_t cli_addr;
         socklen_t addr_len = sizeof(cli_addr);
@@ -63,12 +63,13 @@ int main(void)
         // Write Request
         else if (memchr(in_msg, '\0', in_msg_len)!=NULL) {
 
-            if(in_msg_len==1) {
+            if(in_msg_len == 1) {
 
                 kv_list_t* node_dump = get_Htable_content(h_table);
 
                 size_t counter = 0;
                 size_t size_packet =0;
+                /* 65507 max packet size */
                 char* packet = calloc(65507, sizeof(char));
                 char header[4];
                 header[0] = node_dump->size >> 24;
@@ -79,7 +80,7 @@ int main(void)
                 while(counter < node_dump->size) {
 
                     size_t size_kv = strlen(node_dump->list[counter].key) +1 + strlen(node_dump->list[counter].value);
-                    if(size_packet+size_kv<65507) {
+                    if(size_packet + size_kv < 65507) {
                         char* kv_request;
                         if(counter == 0) {
                             char* key_new = calloc(4+strlen(node_dump->list[counter].key), sizeof(char));
@@ -96,15 +97,10 @@ int main(void)
                             for(size_t i = 0; i< 5 + strlen(node_dump->list[counter].key)+ strlen(node_dump->list[counter].value); i++) {
 
                                 packet[i] =  kv_request[i];
-
-
                             }
-
-
                             size_packet+= 5 + strlen(node_dump->list[counter].key)+ strlen(node_dump->list[counter].value);
                             counter++;
                             continue;
-
 
                         } else {
                             kv_request = format_put_request(node_dump->list[counter].key, node_dump->list[counter].value, -1, -1);
@@ -118,13 +114,7 @@ int main(void)
 
                         sendto(s, packet, size_packet, 0,
                                (struct sockaddr *) &cli_addr, sizeof(cli_addr));
-
-
-
                         size_packet = 0;
-
-
-
                     }
 
                 }
@@ -133,7 +123,6 @@ int main(void)
 
 
             } else {
-
 
                 size_t size_value = in_msg_len - strlen(in_msg);
                 char* key = calloc(strlen(in_msg)+1, sizeof(char));
