@@ -28,12 +28,11 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
     int error_not_found = 0;
     for(size_t i=0; i<client.args->N; i++) {
         int size_to_send = strlen(key);
-        error_code error = send_packet(client.socket, key, size_to_send, client.server.nodes[i]);
-        if(error!=ERR_NONE) return error;
+       send_packet(client.socket, key, size_to_send, client.server.nodes[i]);
 
         char* in_msg = malloc(MAX_MSG_ELEM_SIZE);
         ssize_t in_msg_len = recv(client.socket, in_msg, MAX_MSG_ELEM_SIZE, 0);
-
+        in_msg[in_msg_len] = '\0';
 
         if (in_msg_len != -1) {
             if (in_msg_len==1 && in_msg[0]=='\0') {
@@ -48,6 +47,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 
                 if(count[0]>=client.args->R) {
                     *value = in_msg;
+                    free(in_msg);
                     return ERR_NONE;
                 }
                 add_Htable_value(local_h_table, in_msg, count);
