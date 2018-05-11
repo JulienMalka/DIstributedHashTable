@@ -26,10 +26,10 @@ int main(void)
 
     int ok = 1;
     char ip[15]; //max 15 characters in an ip adress
-    int port;
+    uint16_t port;
     while(ok) {
         printf("IP port? ");
-        int error = scanf(" %s %d", ip, &port);
+        int error = scanf(" %s %hu", ip, &port);
         error_code error_bind =  bind_server(s, ip, port);
 
         if (error != 1 && error_bind == ERR_NONE)
