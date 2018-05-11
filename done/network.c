@@ -38,6 +38,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
             if (in_msg_len==1 && in_msg[0]=='\0') {
                 error_not_found++;
             } else {
+			//	char* count = strcpy(
                 char* count = get_Htable_value(local_h_table, in_msg);
                 if(count == NULL) {
                     char count_c = 0;
@@ -56,6 +57,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
         }
 
     }
+    
     if(error_not_found==0) return ERR_NETWORK;
     else return ERR_NOT_FOUND;
 }
