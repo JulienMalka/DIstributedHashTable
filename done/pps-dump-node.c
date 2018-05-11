@@ -92,10 +92,19 @@ int main(int argc, char* argv[])
         printf("FAIL\n");
         return -1;
     }
-
-    if (parsed_kv_pairs < kv_list->size) {
+	
         /* More packets handling */
-
+    if (parsed_kv_pairs < kv_list->size) {
+		
+		size_t starting_index = parsed_kv_pairs;
+        in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
+        parsed_kv_pairs += parse_kv_pairs(in_msg, in_msg_len, starting_index, kv_list);
+        
+        if (parsed_kv_pairs != kv_list->size){
+			printf("FAIL\n");
+			return -1;
+        }   
+        
     }
 
     print_kv_pair_list(*kv_list);
@@ -104,8 +113,7 @@ int main(int argc, char* argv[])
 
     client_end(&client);
 
-
-    return 1;
+    return 0;
 
 }
 
