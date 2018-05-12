@@ -14,11 +14,11 @@
 /*
  * Main executable to insert key value pairs into the distributed hashtable
  * Return 0 on normal exit and -1 on abnormal exit
- */ 
+ */
 int main(int argc, char* argv[])
 {
 
-	/* Client initialization and parsing optionnal arguments */
+    /* Client initialization and parsing optionnal arguments */
     client_t client;
     client_init_args_t client_i;
     client_i.client = &client;
@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-	/* Parse mandatory argument 1 and 2 */
+    /* Parse mandatory argument 1 and 2 */
     char* value = argv[1];
     char* key = argv[0];
     //printf("key : %s\n", argv[0]);
@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
         printf("FAIL\n");
         return -1;
     }
-    
+
     client_end(client_i.client);
 
     return 0;

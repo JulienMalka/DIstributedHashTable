@@ -28,7 +28,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
     int error_not_found = 0;
     for(size_t i=0; i<client.args->N; i++) {
         int size_to_send = strlen(key);
-       send_packet(client.socket, key, size_to_send, client.server.nodes[i]);
+        send_packet(client.socket, key, size_to_send, client.server.nodes[i]);
 
         char* in_msg = malloc(MAX_MSG_ELEM_SIZE);
         ssize_t in_msg_len = recv(client.socket, in_msg, MAX_MSG_ELEM_SIZE, 0);
@@ -38,6 +38,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
             if (in_msg_len==1 && in_msg[0]=='\0') {
                 error_not_found++;
             } else {
+			//	char* count = strcpy(
                 char* count = get_Htable_value(local_h_table, in_msg);
                 if(count == NULL) {
                     char count_c = 0;
@@ -45,9 +46,9 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
                 }
                 count[0]++;
 
-                if(count[0]>=client.args->R) {
+                if(count[0] >= client.args->R) {
                     *value = in_msg;
-                    free(in_msg);
+           //        free(in_msg);
                     return ERR_NONE;
                 }
                 add_Htable_value(local_h_table, in_msg, count);
@@ -56,7 +57,11 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
         }
 
     }
+<<<<<<< HEAD
     free(in_msg);
+=======
+    
+>>>>>>> 3e0b10c7f0c007959925c60411c65f6e3e9d17f4
     if(error_not_found==0) return ERR_NETWORK;
     else return ERR_NOT_FOUND;
 }
@@ -76,7 +81,7 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value)
     M_EXIT_IF_TOO_LONG(value, MAX_MSG_ELEM_SIZE, value.name);
     if(key==NULL||value==NULL)return ERR_BAD_PARAMETER;
 
-    int errors = 0;
+    size_t errors = 0;
     for(size_t i= 0; i<client.args->N; i++) {
 
         char* request = format_put_request(key, value, -1, -1);

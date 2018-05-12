@@ -11,7 +11,7 @@
  * @return (a pointer to) the new list of nodes
  */
 node_list_t *node_list_new()
-{	
+{
     node_list_t* new = malloc(sizeof(node_list_t));
     new->size = 0;
     new->allocated_size = ALLOCATED_MEMORY_LIST;
@@ -36,7 +36,7 @@ node_list_t *get_nodes()
 
     int current_char = fgetc(file);
 
-	/*15 is the maximum size for an ip adress + terminating \0 */
+    /*15 is the maximum size for an ip adress + terminating \0 */
     char ip[16];
     size_t index = 0;
     uint16_t port = 0;
@@ -95,10 +95,10 @@ error_code node_list_add(node_list_t *list, node_t node)
         } else {
             list->allocated_size += 32;
         }
-        
+
         list->nodes = nodes;
     }
-    
+
     list->size++;
 
     list->nodes[list->size-1] = node;
@@ -116,5 +116,5 @@ void node_list_free(node_list_t *list)
     }
 
     free(list->nodes);
-	list = NULL;
+    list = NULL;
 }

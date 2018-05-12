@@ -29,7 +29,7 @@ size_t parse_nbr_kv_pair(char* in_msg)
 int main(int argc, char* argv[])
 {
 
-	/* Client initialization and parsing optionnal arguments */
+    /* Client initialization and parsing optionnal arguments */
     client_t client;
     client_init_args_t client_i;
     client_i.client = &client;
@@ -92,20 +92,28 @@ int main(int argc, char* argv[])
         printf("FAIL\n");
         return -1;
     }
-
-    if (parsed_kv_pairs < kv_list->size) {
+	
         /* More packets handling */
-
+    if (parsed_kv_pairs < kv_list->size) {
+		
+		size_t starting_index = parsed_kv_pairs;
+        in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
+        parsed_kv_pairs += parse_kv_pairs(in_msg, in_msg_len, starting_index, kv_list);
+        
+        if (parsed_kv_pairs != kv_list->size){
+			printf("FAIL\n");
+			return -1;
+        }   
+        
     }
 
     print_kv_pair_list(*kv_list);
 
     kv_list_free(kv_list);
-    
+
     client_end(&client);
 
-
-    return 1;
+    return 0;
 
 }
 
@@ -115,7 +123,7 @@ int main(int argc, char* argv[])
  */
 void print_kv_pair_list(kv_list_t kv_pair_list)
 {
-    for (int i = 0; i < kv_pair_list.size; i++) {
+    for (size_t i = 0; i < kv_pair_list.size; i++) {
         printf("%s = %s\n", kv_pair_list.list[i].key, kv_pair_list.list[i].value);
     }
 }
@@ -146,7 +154,7 @@ size_t parse_kv_pairs(char* in_msg, size_t length, size_t starting_index, kv_lis
 
     char iterator;
 
-    for (int i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++) {
         iterator = in_msg[i];
 
         if (parsing_key && iterator != '\0') {
