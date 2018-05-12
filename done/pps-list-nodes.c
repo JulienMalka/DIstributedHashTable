@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
     }
 
     /* Pings every server */
-    for(size_t i = 0; i < client.server.size; i++) {
+    for(size_t i = 0; i < client.args->N; i++) {
         char* buffer_send = malloc(0);
         send_packet(client.socket, buffer_send, 0, client.server.nodes[i]);
 
