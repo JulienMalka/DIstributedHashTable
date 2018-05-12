@@ -25,11 +25,14 @@ int main(void)
     Htable_t h_table = construct_Htable(HTABLE_SIZE);
 
     int ok = 1;
-    char ip[15]; //max 15 characters in an ip adress
-    uint16_t port;
+    char ip[16]; //max 15 characters in an ip adress
+    int port;
     while(ok) {
         printf("IP port? ");
-        int error = scanf(" %s %hu", ip, &port);
+        int error = scanf(" %s %d", ip, &port);
+        if(strlen(ip)>15){
+          printf("FAIL\n");
+        }
         error_code error_bind =  bind_server(s, ip, port);
 
         if (error != 1 && error_bind == ERR_NONE)
@@ -129,7 +132,7 @@ int main(void)
                 char* value = calloc(size_value, sizeof(char));
                 parse_put_request(in_msg, in_msg_len, key, value);
                 add_Htable_value(h_table, key, value);
-                sendto(s, 0, 0, 0,
+                sendto(s, NULL, 0, 0,
                        (struct sockaddr *) &cli_addr, sizeof(cli_addr));
             }
         }

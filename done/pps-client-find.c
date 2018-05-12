@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
     client_i.client = &client;
     client_i.argv = &argv;
     client_i.required = 2;
-    client_i.optionnal = (TOTAL_SERVERS | PUT_NEEDED | GET_NEEDED);
+    client_i.optionnal = (TOTAL_SERVERS | GET_NEEDED);
     client_i.size_args = argc;
 
     error_code error_init = client_init(client_i);
@@ -35,22 +35,16 @@ int main(int argc, char* argv[])
     pps_value_t get_value_1;
     pps_value_t get_value_2;
 
-    if (argv[0] != NULL && argv[1] != NULL) {
-        get_value_1 = argv[0];
-        get_value_2 = argv[1];
-    } else {
+    if (argv[0] == NULL || argv[1] == NULL) {
         printf("FAIL\n");
         return -1;
     }
 
-    char* key_1 = calloc(MAX_MSG_SIZE, sizeof(char));
-    char* key_2 = calloc(MAX_MSG_SIZE, sizeof(char));
 
 
-    error_code error_1 = network_get(*client_i.client, key_1, &get_value_1);
-    error_code error_2 = network_get(*client_i.client, key_2, &get_value_2);
-    free(key_1);
-    free(key_2);
+
+    error_code error_1 = network_get(*client_i.client, argv[0], &get_value_1);
+    error_code error_2 = network_get(*client_i.client, argv[1], &get_value_2);
 
     if(error_1 == ERR_NONE && error_2==ERR_NONE) {
         char* firstocc = strstr(get_value_1, get_value_2);
