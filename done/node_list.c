@@ -36,7 +36,7 @@ node_list_t *get_nodes()
 
     int current_char = fgetc(file);
 
-    /*15 is the maximum size for an ip adress + terminating \0 */
+    /* 15 is the maximum size for an ip adress + terminating \0 */
     char ip[16];
     size_t index = 0;
     uint16_t port = 0;

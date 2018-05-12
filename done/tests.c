@@ -98,9 +98,7 @@ void print_nodes(node_t* nodes, size_t size)
 START_TEST(get_nodes_test)
 {
     printf("\nSTARTING TESTS FOR GET_NODES\n\n");
-    node_list_t* nodes = node_list_new();
-
-    nodes = get_nodes();
+    node_list_t* nodes = get_nodes();
 
     print_nodes(nodes->nodes, nodes->size);
 }

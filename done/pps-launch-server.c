@@ -53,7 +53,7 @@ int main(void)
         memset(&cli_addr, 0, addr_len);
         char* in_msg = malloc(MAX_MSG_SIZE);
         ssize_t in_msg_len = recvfrom(s, in_msg, MAX_MSG_SIZE, 0, (struct sockaddr *) &cli_addr, &addr_len);
-        if (in_msg_len>MAX_MSG_SIZE) { // Wrong message size.
+        if (in_msg_len > MAX_MSG_SIZE) { // Wrong message size.
             printf("FAIL\n");
             continue;
         }
