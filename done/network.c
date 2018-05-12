@@ -56,6 +56,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
         }
 
     }
+    free(in_msg);
     if(error_not_found==0) return ERR_NETWORK;
     else return ERR_NOT_FOUND;
 }

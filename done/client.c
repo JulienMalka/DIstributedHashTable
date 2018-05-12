@@ -11,7 +11,7 @@
  */
 void client_end(client_t *client)
 {
-	client->socket = 0;
+		close(client->socket);
     free(client->args);
     node_list_free(&client->server);
 }
@@ -21,9 +21,9 @@ error_code client_init(client_init_args_t client_init_args)
 	/* name of the client is name of the executable */
     client_init_args.client->name = *client_init_args.argv[0];
     ++*client_init_args.argv;
-    
+
     client_init_args.size_args--;
-    
+
     /* check if there is enough arguments */
     if(client_init_args.size_args < client_init_args.required) {
         return ERR_BAD_PARAMETER;
@@ -48,6 +48,9 @@ error_code client_init(client_init_args_t client_init_args)
         return ERR_BAD_PARAMETER;
     }
     node_list_t* nodes = get_nodes();
+		if(nodes==NULL){
+			return ERR_BAD_PARAMETER;
+		}
     if(client_init_args.client->args->N > nodes->size) {
         return ERR_BAD_PARAMETER;
     }
