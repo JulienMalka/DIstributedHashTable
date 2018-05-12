@@ -48,7 +48,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 
                 if(count[0] >= client.args->R) {
                     *value = in_msg;
-           //        free(in_msg);
+           //        free(in_msg); (it's indeeed freed elsewhere)
                     return ERR_NONE;
                 }
                 add_Htable_value(local_h_table, in_msg, count);
