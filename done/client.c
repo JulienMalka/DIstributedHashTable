@@ -12,7 +12,7 @@
 void client_end(client_t *client)
 {
 
-	close(client->socket);
+    close(client->socket);
     free(client->args);
     node_list_free(&client->server);
 }
@@ -27,7 +27,7 @@ error_code client_init(client_init_args_t client_init_args)
 
     /* check if there is enough arguments - special case SIZE_MAX for pps-client-cat */
     if(!(client_init_args.required == SIZE_MAX) && client_init_args.size_args < client_init_args.required) {
-		printf("it failed there\n");
+        printf("it failed there\n");
         return ERR_BAD_PARAMETER;
     }
     int adress_start = argv_size(*client_init_args.argv);
@@ -52,10 +52,10 @@ error_code client_init(client_init_args_t client_init_args)
         return ERR_BAD_PARAMETER;
     }
     node_list_t* nodes = get_nodes();
-		if(nodes == NULL){
-			printf("get nodes returned NULL");
-			return ERR_BAD_PARAMETER;
-		}
+    if(nodes == NULL) {
+        printf("get nodes returned NULL");
+        return ERR_BAD_PARAMETER;
+    }
     if(client_init_args.client->args->N > nodes->size) {
         client_init_args.client->args->N = nodes->size;
     }

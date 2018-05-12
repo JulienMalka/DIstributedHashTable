@@ -16,10 +16,10 @@
 int isValidNumber(const char* str)
 {
     if (str == NULL || *str == '\0' || isspace(*str))
-		return 0;
-	char * p;
-	strtod(str, &p);
-	return *p == '\0';	
+        return 0;
+    char * p;
+    strtod(str, &p);
+    return *p == '\0';
 }
 
 int main(int argc, char* argv[])

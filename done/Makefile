@@ -2,7 +2,7 @@ CFLAGS= -g -std=c99 -pedantic -Wall -Wextra
 
 all:  week05 week08 week09
 	#Reformat code of every file in folder
-	#@astyle -A8 *.c
+	@astyle -A8 *.c
 
 #error.o: error.c
 
@@ -58,7 +58,7 @@ pps-client-substr: pps-client-substr.o network.o client.o node_list.o system.o n
 
 #pps-dump-node.o: pps-dump-node.c
 
-#pps-launch-server.o: pps-launch-server.c 
+#pps-launch-server.o: pps-launch-server.c
 #system.h network.h hashtable.h
 
 #pps-client-get.o: pps-client-get.c
