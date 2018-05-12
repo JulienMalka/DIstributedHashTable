@@ -30,8 +30,8 @@ int main(void)
     while(ok) {
         printf("IP port? ");
         int error = scanf(" %s %d", ip, &port);
-        if(strlen(ip)>15){
-          printf("FAIL\n");
+        if(strlen(ip)>15) {
+            printf("FAIL\n");
         }
         error_code error_bind =  bind_server(s, ip, port);
 

@@ -25,12 +25,12 @@ int main(int argc, char* argv[])
         printf("FAIL\n");
         return -1;
     }
-    
+
     /* Not enough mandatory arguments */
-    if (argv_size(argv) < 2){
-		printf("FAIL\n");
-		return -1;
-	}
+    if (argv_size(argv) < 2) {
+        printf("FAIL\n");
+        return -1;
+    }
 
     /* Parse the key */
     char* keys[300];
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
     }
 
     char* concat = value_from;
-    
+
 //    printf("nbr_arg = %lu\n", nbr_arg);
 
     /* Get the respective values and concatenate them */
@@ -73,8 +73,8 @@ int main(int argc, char* argv[])
 
         strcat(concat, value_from);
     }
-    
-//    printf("put the string %s at the key value %s\n", concat, output_key); 
+
+//    printf("put the string %s at the key value %s\n", concat, output_key);
 
     error_code = network_put(client, output_key, concat);
 
