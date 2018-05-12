@@ -58,7 +58,7 @@ error_code client_init(client_init_args_t client_init_args)
 			return ERR_BAD_PARAMETER;
 		}
     if(client_init_args.client->args->N > nodes->size) {
-        return ERR_BAD_PARAMETER;
+        client_init_args.client->args->N = nodes->size;
     }
     client_init_args.client->server = *nodes;
     client_init_args.client->socket = get_socket(1);
