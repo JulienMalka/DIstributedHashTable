@@ -11,11 +11,9 @@
  */
 void client_end(client_t *client)
 {
-<<<<<<< HEAD
+
 		close(client->socket);
-=======
-    client->socket = 0;
->>>>>>> 3e0b10c7f0c007959925c60411c65f6e3e9d17f4
+
     free(client->args);
     node_list_free(&client->server);
 }
@@ -28,14 +26,9 @@ error_code client_init(client_init_args_t client_init_args)
 
     client_init_args.size_args--;
 
-<<<<<<< HEAD
-    /* check if there is enough arguments */
-    if(client_init_args.size_args < client_init_args.required) {
-=======
     /* check if there is enough arguments - special case SIZE_MAX for pps-client-cat */
     if(!(client_init_args.required == SIZE_MAX) && client_init_args.size_args < client_init_args.required) {
 		printf("it failed there\n");
->>>>>>> 3e0b10c7f0c007959925c60411c65f6e3e9d17f4
         return ERR_BAD_PARAMETER;
     }
     int adress_start = argv_size(*client_init_args.argv);
@@ -54,10 +47,10 @@ error_code client_init(client_init_args_t client_init_args)
         client_init_args.client->args = args_opt;
     }
     //printf("NB OPT PARSED = %d\n", nb_parsed);
-    
+
     /* check if there is exactly the number of mandatory arguments - special case SIZE_MAX for pps-client-cat */
     if(!(client_init_args.required == SIZE_MAX) && client_init_args.size_args - nb_parsed != client_init_args.required) {
-		
+
         return ERR_BAD_PARAMETER;
     }
     node_list_t* nodes = get_nodes();

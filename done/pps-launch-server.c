@@ -36,11 +36,7 @@ int main(void)
         error_code error_bind =  bind_server(s, ip, port);
 
         if (error != 1 && error_bind == ERR_NONE)
-<<<<<<< HEAD
-			ok = 0;
-=======
             ok = 0;
->>>>>>> 3e0b10c7f0c007959925c60411c65f6e3e9d17f4
         else {
             printf("FAIL\n");
         }
