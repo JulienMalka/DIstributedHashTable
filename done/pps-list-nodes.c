@@ -14,9 +14,10 @@
 #include "util.h"
 #include <arpa/inet.h>
 
-/*
- * Utilitary executable which pings every server in servers.txt and returns their status
- * Return 0 on normal exit and -1 on abnormal exit
+/**
+ * @brief Utilitary executable which pings every server in servers.txt and returns their status
+ * As follows : pps-list-nodes
+ * @return 0 on normal exit and -1 on abnormal exit
  */
 int main(int argc, char* argv[])
 {

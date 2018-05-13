@@ -11,9 +11,10 @@
 #include "client.h"
 #include <stdlib.h>
 
-/*
- * Main executable to insert key value pairs into the distributed hashtable
- * Return 0 on normal exit and -1 on abnormal exit
+/**
+ * @brief Main executable to insert key value pairs into the distributed hashtable
+ * As follows : pps-client-put [-n N] [-w W] [--] <key> <value>
+ * @return 0 on normal exit and -1 on abnormal exit
  */
 int main(int argc, char* argv[])
 {

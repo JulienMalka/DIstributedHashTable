@@ -13,7 +13,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-/*
+/**
  * Main executable, launches a server on given ip and port
  */
 

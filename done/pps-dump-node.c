@@ -26,6 +26,11 @@ size_t parse_nbr_kv_pair(char* in_msg)
     return (in_msg[3]) | (in_msg[2] << 8) | (in_msg[1] << 16) | (in_msg[0] << 24);
 }
 
+/**
+ * @brief Dump content of given node (ip, port)
+ * As follows : pps-dump-node <IP> <Port>
+ * @return 0 on normal exit, -1 otherwise
+ */ 
 int main(int argc, char* argv[])
 {
 
@@ -47,8 +52,6 @@ int main(int argc, char* argv[])
 
     char* ip;
     int port;
-
-//   printf("arguments 0 = %s and 1 = %s\n", argv[0], argv[1]);
 
     /* parse ip and port */
     if (argv[0] != NULL && argv[1] != NULL) {

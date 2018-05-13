@@ -14,6 +14,7 @@
 
 /**
  * @brief Main executable to retrieve value from a given key
+ * As follows : pps-client-get [-n N] [-r R] [--] <key>
  * @return Returns 0 on normal exit, -1 otherwise
  */
 int main(int argc, char* argv[])
