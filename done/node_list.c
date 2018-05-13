@@ -8,20 +8,24 @@
 
 /**
  * @brief creates a new, empty, node_list_t
- * @return (a pointer to) the new list of nodes
+ * @return (a pointer to) the new list of nodes or NULL if memory allocation fails
  */
 node_list_t *node_list_new()
 {
     node_list_t* new = malloc(sizeof(node_list_t));
+    if (new == NULL)
+		return NULL;
     new->size = 0;
     new->allocated_size = ALLOCATED_MEMORY_LIST;
     new->nodes = calloc(ALLOCATED_MEMORY_LIST, sizeof(node_t));
+    if (new->nodes == NULL)
+		return NULL;
     return new;
 }
 
 /**
  * @brief parse the PPS_SERVERS_LIST_FILENAME file and return the corresponding list of nodes
- * @return the list of nodes initialized from the server file (PPS_SERVERS_LIST_FILENAME)
+ * @return the list of nodes initialized from the server file (PPS_SERVERS_LIST_FILENAME) or NULL if there is an error
  */
 node_list_t *get_nodes()
 {
@@ -101,7 +105,7 @@ error_code node_list_add(node_list_t *list, node_t node)
 
     list->size++;
 
-    list->nodes[list->size-1] = node;
+    list->nodes[list->size - 1] = node;
     return ERR_NONE;
 }
 

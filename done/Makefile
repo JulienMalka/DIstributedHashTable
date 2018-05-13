@@ -2,7 +2,7 @@ CFLAGS= -g -std=c99 -pedantic -Wall -Wextra
 
 all:  week05 week08 week09
 	#Reformat code of every file in folder
-	@astyle -A8 *.c
+	#@astyle -A8 *.c
 
 #error.o: error.c
 

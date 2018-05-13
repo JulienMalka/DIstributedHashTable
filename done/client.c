@@ -17,8 +17,14 @@ void client_end(client_t *client)
     node_list_free(&client->server);
 }
 
+/**
+ * @brief properly initialize a client
+ * @param client_init_args
+ * 
+ */ 
 error_code client_init(client_init_args_t client_init_args)
 {
+	
     /* name of the client is name of the executable */
     client_init_args.client->name = *client_init_args.argv[0];
     ++*client_init_args.argv;
@@ -27,12 +33,11 @@ error_code client_init(client_init_args_t client_init_args)
 
     /* check if there is enough arguments - special case SIZE_MAX for pps-client-cat */
     if(!(client_init_args.required == SIZE_MAX) && client_init_args.size_args < client_init_args.required) {
-        printf("it failed there\n");
         return ERR_BAD_PARAMETER;
     }
     int adress_start = argv_size(*client_init_args.argv);
     args_t* args_opt = parse_opt_args(client_init_args.optionnal, client_init_args.argv);
-    //printf("went there\n");
+
     int nb_parsed;
     if(args_opt == NULL) {
         nb_parsed = 0;
@@ -45,22 +50,23 @@ error_code client_init(client_init_args_t client_init_args)
         nb_parsed = adress_start - argv_size(*client_init_args.argv);
         client_init_args.client->args = args_opt;
     }
-    //printf("NB OPT PARSED = %d\n", nb_parsed);
 
     /* check if there is exactly the number of mandatory arguments - special case SIZE_MAX for pps-client-cat */
     if(!(client_init_args.required == SIZE_MAX) && client_init_args.size_args - nb_parsed != client_init_args.required) {
         return ERR_BAD_PARAMETER;
     }
     node_list_t* nodes = get_nodes();
+    
     if(nodes == NULL) {
-        printf("get nodes returned NULL");
         return ERR_BAD_PARAMETER;
     }
+    
     if(client_init_args.client->args->N > nodes->size) {
         client_init_args.client->args->N = nodes->size;
     }
+    
     client_init_args.client->server = *nodes;
     client_init_args.client->socket = get_socket(1);
-    //printf("We've done that !\n");
+
     return ERR_NONE;
 }

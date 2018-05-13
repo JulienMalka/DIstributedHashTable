@@ -4,7 +4,7 @@
 #include "ctype.h"
 #include "args.h"
 
-/*
+/**
  * @brief helper function for parse_opt_args()
  * @param supported_arg checks if arg is supported
  * @param rem_argv pointer on current string
@@ -12,22 +12,17 @@
  */
 void parse_option(size_t supported_arg, char ***rem_argv, size_t* value)
 {
-
     if (supported_arg) {
 
         ++*rem_argv;
 
         /* If option value isn't defined, throw an error */
         if (*rem_argv == NULL || !strcmp(**rem_argv, "--") || !isdigit(***rem_argv)) {
-//            fprintf(stderr, "ERREUR: pas d'argument pour l'option \n");
         } else {
-            /* Convert char to int */
+            /* Converts char to int */
             *value = ***rem_argv - '0';
         }
-
-    } else {
-//        fprintf(stderr, "ERREUR: option non prise en compte \n");
-    }
+    } 
 }
 
 args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
@@ -35,15 +30,11 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
 
     /* |*rem_argv|  i the pointer on a string of the string array rem_argv */
 
-//	printf("segfault happens after 0\n");
-
     /* Structure with default values */
     args_t* parsed = malloc(sizeof(args_t));
     parsed->N = 3;
     parsed->R = 2;
     parsed->W = 2;
-
-//	printf("segfault happens after 1\n");
 
     /* Counts the number of parsed arguments*/
     int parsed_n = 0;
@@ -75,10 +66,7 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
             }
         }
 
-        //printf("current string = %s\n", **rem_argv);
-
         ++*rem_argv;
-//		printf("increamting interator\n");
     }
 
     return parsed;
