@@ -11,7 +11,6 @@
  */
 void client_end(client_t *client)
 {
-
     close(client->socket);
     free(client->args);
     node_list_free(&client->server);

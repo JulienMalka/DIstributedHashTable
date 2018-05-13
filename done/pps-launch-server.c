@@ -58,11 +58,10 @@ int main(void)
             continue;
         }
 
-
         if(in_msg_len==0) {
-
             sendto(s, NULL, 0, 0, (struct sockaddr *) &cli_addr, sizeof(cli_addr));
         }
+        
         // Write Request
         else if (memchr(in_msg, '\0', in_msg_len)!=NULL) {
 
@@ -131,8 +130,8 @@ int main(void)
                 char* key = calloc(strlen(in_msg)+1, sizeof(char));
                 char* value = calloc(size_value, sizeof(char));
                 parse_put_request(in_msg, in_msg_len, key, value);
-                add_Htable_value(h_table, key, value);
-                sendto(s, NULL, 0, 0,
+                if (add_Htable_value(h_table, key, value) == ERR_NONE)
+					sendto(s, NULL, 0, 0,
                        (struct sockaddr *) &cli_addr, sizeof(cli_addr));
             }
         }
@@ -142,7 +141,7 @@ int main(void)
             char* request = in_msg;
             pps_value_t get = malloc(MAX_MSG_ELEM_SIZE);
             get = get_Htable_value(h_table, request);
-            if(get!=NULL) {
+            if(get != NULL) {
 
                 sendto(s, get, MAX_MSG_ELEM_SIZE, 0,
                        (struct sockaddr *) &cli_addr, sizeof(cli_addr));
@@ -151,7 +150,6 @@ int main(void)
                 msg[0] = '\0';
                 sendto(s, msg, 1, 0,
                        (struct sockaddr *) &cli_addr, sizeof(cli_addr));
-
 
             }
         }
