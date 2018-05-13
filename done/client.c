@@ -5,6 +5,7 @@
 #include "node.h"
 #include "network.h"
 #include <stdlib.h>
+#include <unistd.h>
 /**
  * @brief does all the work to be done at the end of life of a client
  * @param client the client to end
@@ -19,11 +20,11 @@ void client_end(client_t *client)
 /**
  * @brief properly initialize a client
  * @param client_init_args
- * 
- */ 
+ *
+ */
 error_code client_init(client_init_args_t client_init_args)
 {
-	
+
     /* name of the client is name of the executable */
     client_init_args.client->name = *client_init_args.argv[0];
     ++*client_init_args.argv;
@@ -55,15 +56,15 @@ error_code client_init(client_init_args_t client_init_args)
         return ERR_BAD_PARAMETER;
     }
     node_list_t* nodes = get_nodes();
-    
+
     if(nodes == NULL) {
         return ERR_BAD_PARAMETER;
     }
-    
+
     if(client_init_args.client->args->N > nodes->size) {
         client_init_args.client->args->N = nodes->size;
     }
-    
+
     client_init_args.client->server = *nodes;
     client_init_args.client->socket = get_socket(1);
 
