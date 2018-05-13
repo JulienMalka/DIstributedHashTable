@@ -12,9 +12,9 @@
 #include "stdlib.h"
 #include "util.h"
 
-/*
- * Main executable to retrieve value from a given key
- * Returns 0 on normal exit, -1 otherwise
+/**
+ * @brief Main executable to retrieve value from a given key
+ * @return Returns 0 on normal exit, -1 otherwise
  */
 int main(int argc, char* argv[])
 {

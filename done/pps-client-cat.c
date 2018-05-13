@@ -6,6 +6,10 @@
 #include "error.h"
 #include "util.h"
 
+/**
+ * @brief On n arguments, concatenate the n-1 associated values into a single string, then stores it as value at n_th key
+ * @return 0 on normal exit, -1 otherwise
+ */ 
 int main(int argc, char* argv[])
 {
 
@@ -21,7 +25,6 @@ int main(int argc, char* argv[])
     error_code error_init = client_init(client_i);
 
     if (error_init != ERR_NONE) {
-        printf("it failed in initialization\n");
         printf("FAIL\n");
         return -1;
     }
@@ -33,7 +36,7 @@ int main(int argc, char* argv[])
     }
 
     /* Parse the key */
-    char* keys[300];
+    char* keys[MAX_MANDATORY_ARGUMENTS];
     size_t nbr_arg = 0;
     while(argv[nbr_arg] != NULL) {
         keys[nbr_arg] = argv[nbr_arg];
@@ -50,21 +53,16 @@ int main(int argc, char* argv[])
     error_code error_code = network_get(client, keys[0], &value_from);
 
     if (error_code != ERR_NONE) {
-//        printf("it failed in the first get\n");
         printf("FAIL\n");
         return -1;
     }
 
     char* concat = value_from;
 
-//    printf("nbr_arg = %lu\n", nbr_arg);
-
     /* Get the respective values and concatenate them */
     for (size_t i = 1; i < nbr_arg; i++) {
 
         error_code = network_get(client, keys[i], &value_from);
-
-//		printf("i = %lu get the value %s and current concat = %s\n",i ,value_from, concat);
 
         if (error_code != ERR_NONE) {
             printf("FAIL\n");
@@ -74,8 +72,6 @@ int main(int argc, char* argv[])
         strcat(concat, value_from);
     }
 
-//    printf("put the string %s at the key value %s\n", concat, output_key);
-
     error_code = network_put(client, output_key, concat);
 
     if (error_code != ERR_NONE) {
@@ -84,7 +80,6 @@ int main(int argc, char* argv[])
     }
 
     printf("OK\n");
-
 
     return 0;
 }

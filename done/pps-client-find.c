@@ -12,6 +12,10 @@
 #include "stdlib.h"
 #include "util.h"
 
+/**
+ * @brief Find the first occurence of a given substr in the value associated of a given key 
+ * @return 0 on normal exit, -1 otherwise
+ */ 
 int main(int argc, char* argv[])
 {
 
@@ -40,9 +44,6 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-
-
-
     error_code error_1 = network_get(*client_i.client, argv[0], &get_value_1);
     error_code error_2 = network_get(*client_i.client, argv[1], &get_value_2);
 
@@ -64,7 +65,6 @@ int main(int argc, char* argv[])
     }
 
     client_end(&client);
-
 
     return 0;
 }

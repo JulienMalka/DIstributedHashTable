@@ -10,6 +10,12 @@
 #include <stddef.h> // for size_t
 
 /**
+ * @brief define a constant max for mandatory arguments
+ */ 
+ 
+ #define MAX_MANDATORY_ARGUMENTS 300
+
+/**
  * @brief containt parsed arguments
  */
 
