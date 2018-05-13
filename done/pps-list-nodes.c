@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
     client_i.client = &client;
     client_i.argv = &argv;
     client_i.required = 0;
-    client_i.optionnal =TOTAL_SERVERS ;
+    client_i.optionnal = 0;
     client_i.size_args = argc;
 
     error_code error_init = client_init(client_i);

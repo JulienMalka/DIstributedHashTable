@@ -67,7 +67,6 @@ char* format_put_request(pps_value_t key, pps_value_t value, int skey, int svalu
     }
 
     return result;
-
 }
 
 /**

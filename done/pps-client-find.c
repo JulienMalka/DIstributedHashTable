@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
     client_i.client = &client;
     client_i.argv = &argv;
     client_i.required = 2;
-    client_i.optionnal = (TOTAL_SERVERS | GET_NEEDED);
+    client_i.optionnal = (TOTAL_SERVERS | GET_NEEDED | PUT_NEEDED);
     client_i.size_args = argc;
 
     error_code error_init = client_init(client_i);
