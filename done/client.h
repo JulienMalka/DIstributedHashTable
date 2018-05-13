@@ -18,10 +18,6 @@
 /**
  * @brief client state
  */
-/* TODO WEEK 05:
- * Définir ici le type client_t
- * (et supprimer ces trois lignes de commentaire).
- */
 
 typedef struct{
 	const char* name;

@@ -3,7 +3,7 @@
 #include "hashtable.h"
 #include "error.h"
 
-/*
+/**
  * Private implementation of the bucket structure
  * It is a linked list of kv_pair_t
  */
@@ -12,7 +12,7 @@ struct bucket {
     struct bucket* next;
 };
 
-/*
+/**
  * @brief Create a new Htable of parameter size. An htable is an array of buckets.
  * @param number of buckets in the htable
  * @return new htable or NULL if memory allocation fails
@@ -26,7 +26,7 @@ Htable_t construct_Htable(size_t size)
 
     return htable_new;
 }
-/*
+/**
  * @brief Create a new bucket.
  * @param key_value of the bucket
  * @param reference to the next bucket
@@ -50,7 +50,7 @@ struct bucket* create_bucket(kv_pair_t key_value, struct bucket* next)
     return new;
 }
 
-/*
+/**
  * @brief free the reference key and value from a kv_pair
  * @param kv to free
  */
@@ -60,7 +60,7 @@ void kv_pair_free(kv_pair_t *kv)
     free((char*) kv->value);
 }
 
-/*
+/**
  * @brief Create a deep copy kv_pair from given key and value
  * @param key
  * @param value
@@ -123,7 +123,7 @@ void delete_Htable_and_content(Htable_t* table)
 
 }
 
-/*
+/**
  * @brief adds a key value pair to a existent bucket
  * @param bck bucket to add the pair to
  * @param key

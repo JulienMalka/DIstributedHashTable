@@ -38,8 +38,6 @@ int main(int argc, char* argv[])
     /* Parse mandatory argument 1 and 2 */
     char* value = argv[1];
     char* key = argv[0];
-    //printf("key : %s\n", argv[0]);
-    //printf("value : %s\n", argv[1]);
 
     error_code error = network_put(*client_i.client, key, value);
     if (error == ERR_NONE) {
