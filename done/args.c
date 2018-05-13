@@ -16,8 +16,6 @@ error_code parse_option(size_t supported_arg, char ***rem_argv, size_t* value)
 {
     if (supported_arg) {
 
-		printf("ça passe lol + %s \n", *rem_argv + 1);
-
         ++*rem_argv;
 
         /* If option value isn't defined, throw an error */
