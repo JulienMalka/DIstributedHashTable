@@ -1,8 +1,10 @@
+#include <stdio.h>
 #include "node.h"
 #include "error.h"
 #include "system.h"
-
-
+#include <stdlib.h>
+#include <string.h>
+#include <openssl/sha.h>
 
 /**
  * @brief node initialization function
@@ -14,9 +16,23 @@
  */
 error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused node_id)
 {
-	 node->id = node_id;
+     const size_t sha_len = 20;
+     char sha[sha_len];
+	   node->id = node_id;
+     char* port_str = calloc(8, sizeof(char));
+     sprintf(port_str, "%d", port);
+     char* id_str = calloc(2, sizeof(char));
+     sprintf(id_str, "%lu", node_id);
+     char dest[strlen(ip)+1+strlen(port_str)+1+strlen(id_str)];
+     char* space = " ";
+     strcat(dest, ip);
+     strcat(dest, space);
+     strcat(dest, port_str);
+     strcat(dest, space);
+     strcat(dest, id_str);
+     SHA1(dest,strlen(dest), sha);
      return get_server_addr(ip, port, &node->addr);
-    
+
 }
 
 
@@ -33,5 +49,5 @@ void node_end(node_t *node)
 
 int node_cmp_sha(const node_t *first, const node_t *second){
 
-
+return strcmp(first->sha, second->sha);
 }
