@@ -84,7 +84,6 @@ void print_nodes(node_t* nodes, size_t size)
     char buffer[20];
 
     for (int i = 0; i < size; i++) {
-        printf("node %d address = %s port = %hu\n", i, inet_ntop(AF_INET, &nodes[i].sin_addr, buffer, 20), ntohs(nodes[i].sin_port));
     }
 
 }

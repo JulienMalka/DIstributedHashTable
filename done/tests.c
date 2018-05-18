@@ -21,6 +21,7 @@
 #include <arpa/inet.h>
 
 #include "args.h"
+#include "node.h"
 
 void print_htable(Htable_t* table);
 
@@ -89,8 +90,8 @@ void print_nodes(node_t* nodes, size_t size)
 {
     char buffer[20];
 
-    for (int i = 0; i < size; i++) {
-        printf("node %d address = %s port = %hu\n", i, inet_ntop(AF_INET, &nodes[i].sin_addr, buffer, 20), ntohs(nodes[i].sin_port));
+    for (size_t i = 0; i < size; i++) {
+        printf("node %lu address = %s port = %hu #nodes = %lu\n", i, inet_ntop(AF_INET, &nodes[i].addr.sin_addr, buffer, 20), ntohs(nodes[i].addr.sin_port), nodes[i].id);
     }
 
 }
@@ -99,6 +100,11 @@ START_TEST(get_nodes_test)
 {
     printf("\nSTARTING TESTS FOR GET_NODES\n\n");
     node_list_t* nodes = get_nodes();
+
+    if (nodes == NULL) {
+        printf("get_nodes return NULL reference\n");
+        return;
+    }
 
     print_nodes(nodes->nodes, nodes->size);
 }
@@ -261,6 +267,16 @@ START_TEST(parsing_argv)
 }
 END_TEST
 
+START_TEST(node_list_sorting){
+
+    printf("STARTING TESTS FOR SORTING NODE LIST\n");
+
+    node_list_t *list_nodes = get_nodes();
+
+    node_list_sort(list_nodes, node_cmp_sha);
+}
+END_TEST
+
 Suite *hashtable_suite()
 {
 
@@ -274,6 +290,7 @@ Suite *hashtable_suite()
     tcase_add_test(tc_ht, get_hashtable_size);
     tcase_add_test(tc_ht, get_hashtable_content);
     tcase_add_test(tc_ht, parsing_argv);
+    tcase_add_test(tc_ht, node_list_sorting);
 
     return s;
 }
