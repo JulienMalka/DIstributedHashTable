@@ -56,8 +56,8 @@ int main(int argc, char* argv[])
         /* Checks if second and third argument are valid numbers */
         if (isValidNumber(argv[1]) && isValidNumber(argv[2])) {
             key_from = argv[0];
-            position = strtol(argv[1], NULL, 10);
-            length = strtol(argv[2], NULL, 10);
+            position = (int) strtol(argv[1], NULL, 10);
+            length = (size_t) strtol(argv[2], NULL, 10);
             key_to = argv[3];
         } else {
             printf("FAIL\n");
@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 
     /*COMPUTE THE SUBSTRING*/
     if (position < 0) {
-        position = strlen(value_from) + position;
+        position = (int) (strlen(value_from) + position);
     }
 
     /*ERROR HANDLING*/

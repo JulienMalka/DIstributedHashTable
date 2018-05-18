@@ -12,6 +12,7 @@
 #include "stdlib.h"
 #include "network-utils.h"
 #include "util.h"
+#include "node.h"
 #include <arpa/inet.h>
 
 /**
@@ -23,7 +24,7 @@ int main(int argc, char* argv[])
 {
     size_t BUFFER_LENGTH = 20;
 
-    /* Client initialization and parsing optionnal arguments */
+    /* Client initialization and parsing optional arguments */
     client_t client;
     client_init_args_t client_i;
     client_i.client = &client;
@@ -44,7 +45,7 @@ int main(int argc, char* argv[])
         char* buffer_send = malloc(0);
         send_packet(client.socket, buffer_send, 0, client.server.nodes[i]);
 
-        int error_receive = recv(client.socket, NULL,0,0);
+        int error_receive = recv(client.socket, NULL, 0, 0);
         char* status;
         if(error_receive == -1) {
             status = "FAIL";
@@ -52,13 +53,10 @@ int main(int argc, char* argv[])
         } else {
 
             status = "OK";
-
         }
         char buffer[BUFFER_LENGTH];
-        printf("%s %hu %s\n", inet_ntop(AF_INET, &client.server.nodes[i].sin_addr, buffer, BUFFER_LENGTH), ntohs(client.server.nodes[i].sin_port), status);
+        printf("%s %hu %s\n", inet_ntop(AF_INET, &client.server.nodes[i].addr.sin_addr, buffer, BUFFER_LENGTH), ntohs(client.server.nodes[i].addr.sin_port), status);
     }
-
-
 
     return 0;
 }

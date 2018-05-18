@@ -40,16 +40,21 @@ node_list_t *get_nodes()
 
     int current_char = fgetc(file);
 
-    /* 15 is the maximum size for an ip adress + terminating \0 */
+    /* 15 is the maximum size for an ip address + terminating \0 */
     char ip[16];
     size_t index = 0;
     uint16_t port = 0;
+    size_t node_id_max = 0;
 
     while(!feof(file)) {
 
         if (isspace(current_char)) {
             if (fscanf(file, "%hu", &port) != 1)
                 return NULL;
+
+            if (fscanf(file, "%lu", &node_id_max) != 1)
+                return NULL;
+
             current_char = fgetc(file);
 
             //take the n first chars + terminating \0, discard else
@@ -59,10 +64,14 @@ node_list_t *get_nodes()
                 real_ip[i] = ip[i];
             }
 
-            node_t node;
-            if (node_init(&node, real_ip, port, 0) != ERR_NONE)
-                return NULL;
-            node_list_add(nodes, node);
+            for(size_t node_id = node_id_max - 1; node_id < node_id_max; node_id--){
+
+                node_t node;
+                if (node_init(&node, real_ip, port, node_id + 1) != ERR_NONE)
+                    return NULL;
+                node_list_add(nodes, node);
+            }
+
             free(real_ip);
             while(current_char != '\n') {
                 current_char = fgetc(file);
@@ -125,5 +134,5 @@ void node_list_free(node_list_t *list)
 }
 
 void node_list_sort(node_list_t *list, int (*comparator)(const node_t *, const node_t *)){
-    qsort(list->nodes, sizeof(node_t), list->size, comparator);
+    qsort(list->nodes, sizeof(node_t), list->size, (__compar_fn_t) comparator);
 }
