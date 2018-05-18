@@ -120,5 +120,10 @@ void node_list_free(node_list_t *list)
     }
 
     free(list->nodes);
+    list->nodes = NULL;
     list = NULL;
+}
+
+void node_list_sort(node_list_t *list, int (*comparator)(const node_t *, const node_t *)){
+    qsort(list->nodes, sizeof(node_t), list->size, comparator);
 }
