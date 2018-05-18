@@ -17,7 +17,10 @@
  * @brief node data structure
  */
 
- typedef struct sockaddr_in node_t;
+ typedef struct {
+struct sockaddr_in addr;
+size_t id;
+}node_t;
 
 
 /**

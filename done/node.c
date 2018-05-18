@@ -14,7 +14,9 @@
  */
 error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused node_id)
 {
-    return get_server_addr(ip, port, node);
+	 node->id = node_id;
+     return get_server_addr(ip, port, &node->addr);
+    
 }
 
 
@@ -26,4 +28,10 @@ error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused
 void node_end(node_t *node)
 {
     //Void for now
+}
+
+
+int node_cmp_sha(const node_t *first, const node_t *second){
+
+
 }
