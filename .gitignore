@@ -19,3 +19,9 @@ test-hashtable
 
 #ignore the .gch
 *.gch
+
+#ignore CLion files
+.idea/
+CMakeLists.txt
+cmake-build-debug/
+done/launch_servers.txt
