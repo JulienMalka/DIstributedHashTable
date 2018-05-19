@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
     if (length == 0)
         memset(substring, '\0', strlen(substring));
     else {
-        for(size_t i = position; i < position + length; i++) {
+        for(int i = position; i < position + length; i++) {
             substring[i - position] = value_from[i];
         }
         substring[length] = '\0';

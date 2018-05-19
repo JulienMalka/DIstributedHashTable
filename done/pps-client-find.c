@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
             place = -1;
         } else {
 
-            place = firstocc - get_value_1;
+            place = (int) (firstocc - get_value_1);
         }
         printf("OK %d\n", place);
         free_const_ptr(get_value_1);

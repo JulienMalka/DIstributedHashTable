@@ -273,6 +273,12 @@ START_TEST(node_list_sorting){
 
     node_list_t *list_nodes = get_nodes();
 
+    if (list_nodes == NULL) {
+        printf("an error occurred in get_nodes");
+        return;
+    }
+
+
     node_list_sort(list_nodes, node_cmp_sha);
 }
 END_TEST

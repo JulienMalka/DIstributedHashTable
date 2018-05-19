@@ -55,6 +55,9 @@ node_list_t *get_nodes()
             if (fscanf(file, "%lu", &node_id_max) != 1)
                 return NULL;
 
+            if (node_id_max == 0)
+                return NULL;
+
             current_char = fgetc(file);
 
             //take the n first chars + terminating \0, discard else
@@ -63,6 +66,8 @@ node_list_t *get_nodes()
             for (size_t i = 0; i < index; i++) {
                 real_ip[i] = ip[i];
             }
+            //TODO : use the following instead
+            //strncpy(real_ip, ip, index + 1);
 
             for(size_t node_id = node_id_max - 1; node_id < node_id_max; node_id--){
 
@@ -106,7 +111,7 @@ error_code node_list_add(node_list_t *list, node_t node)
         if(nodes == NULL) {
             return ERR_NOMEM;
         } else {
-            list->allocated_size += 32;
+            list->allocated_size += ALLOCATED_MEMORY_LIST;
         }
 
         list->nodes = nodes;

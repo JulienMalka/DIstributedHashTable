@@ -65,7 +65,7 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
 				return NULL;
 				
             parsed_n++;
-            /* Check for end of optionnal arguments */
+            /* Check for end of optional arguments */
         } else if (!strcmp(**rem_argv, "--")) {
             ++*rem_argv;
             return parsed;

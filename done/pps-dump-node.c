@@ -12,7 +12,7 @@
 #include "hashtable.h"
 #include "network-utils.h"
 
-size_t parse_kv_pairs(char* in_msg, size_t length, size_t starting_index, kv_list_t* kv_list);
+size_t parse_kv_pairs(char* in_msg, ssize_t length, size_t starting_index, kv_list_t* kv_list);
 
 void print_kv_pair_list(kv_list_t kv_pair_list);
 
@@ -23,7 +23,7 @@ void print_kv_pair_list(kv_list_t kv_pair_list);
  */
 size_t parse_nbr_kv_pair(char* in_msg)
 {
-    return (in_msg[3]) | (in_msg[2] << 8) | (in_msg[1] << 16) | (in_msg[0] << 24);
+    return (size_t) ((in_msg[3]) | (in_msg[2] << 8) | (in_msg[1] << 16) | (in_msg[0] << 24));
 }
 
 /**
@@ -51,12 +51,12 @@ int main(int argc, char* argv[])
     }
 
     char* ip;
-    int port;
+    uint16_t port;
 
     /* parse ip and port */
     if (argv[0] != NULL && argv[1] != NULL) {
         ip = argv[0];
-        port = strtol(argv[1], NULL, 10);
+        port = (uint16_t) strtol(argv[1], NULL, 10);
     } else {
         printf("FAIL\n");
         return -1;
@@ -139,7 +139,7 @@ void print_kv_pair_list(kv_list_t kv_pair_list)
  * @param kv_list pointer to a kv_list
  * @return the number of key_value pairs parsed, -1 (unsigned) if parsing failed
  */
-size_t parse_kv_pairs(char* in_msg, size_t length, size_t starting_index, kv_list_t* kv_list)
+size_t parse_kv_pairs(char* in_msg, ssize_t length, size_t starting_index, kv_list_t* kv_list)
 {
 
     if (length < 4) {

@@ -63,7 +63,7 @@ int main(void)
         }
         
         // Write Request
-        else if (memchr(in_msg, '\0', in_msg_len)!=NULL) {
+        else if (memchr(in_msg, '\0', in_msg_len) != NULL) {
 
             if(in_msg_len == 1) {
 
@@ -95,7 +95,7 @@ int main(void)
                                 key_new[4+i] = node_dump->list[counter].key[i];
                             }
 
-                            kv_request = format_put_request(key_new, node_dump->list[counter].value, 4+strlen(node_dump->list[counter].key) , -1);
+                            kv_request = format_put_request(key_new, node_dump->list[counter].value, 4 + strlen(node_dump->list[counter].key) , -1);
                             for(size_t i = 0; i< 5 + strlen(node_dump->list[counter].key)+ strlen(node_dump->list[counter].value); i++) {
 
                                 packet[i] =  kv_request[i];

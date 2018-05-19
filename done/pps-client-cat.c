@@ -59,6 +59,9 @@ int main(int argc, char* argv[])
 
     char* concat = value_from;
 
+    //TODO use this instead
+    //strncpy(concat, value_from, strlen(value_from));
+
     /* Get the respective values and concatenate them */
     for (size_t i = 1; i < nbr_arg; i++) {
 
