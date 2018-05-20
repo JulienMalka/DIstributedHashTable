@@ -16,8 +16,7 @@
  */
 error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused node_id)
 {
-     const size_t sha_len = 20;
-     char sha[sha_len];
+     char* sha = calloc(SHA_DIGEST_LENGTH, sizeof(char));
      node->id = node_id;
      char* port_str = calloc(8, sizeof(char));
      sprintf(port_str, "%d", port);
@@ -25,13 +24,24 @@ error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused
      sprintf(id_str, "%lu", node_id);
 
      char dest[strlen(ip) + 1 + strlen(port_str) + 1 + strlen(id_str) + 1];
+     memset(dest, '\0', 1);
      char* space = " ";
+     printf("ip = %s\n", ip);
      strcat(dest, ip);
+     printf("current string = %s\n", dest);
      strcat(dest, space);
      strcat(dest, port_str);
+     printf("current string = %s\n", dest);
      strcat(dest, space);
      strcat(dest, id_str);
-//     SHA1(dest,strlen(dest), sha);
+     printf("current string = %s\n", dest);
+     SHA1(dest,strlen(dest), sha);
+
+     node->sha = sha;
+
+     free_const_ptr(port_str);
+     free_const_ptr(id_str);
+
      return get_server_addr(ip, port, &node->addr);
 }
 

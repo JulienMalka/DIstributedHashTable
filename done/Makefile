@@ -1,4 +1,4 @@
-CFLAGS= -g -std=c99 -pedantic -Wall -Wextra
+CFLAGS= -g -std=c99 -lcrypto -pedantic -Wall -Wextra
 
 all:  week05 week08 week09
 	#Reformat code of every file in folder

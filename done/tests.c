@@ -22,6 +22,7 @@
 
 #include "args.h"
 #include "node.h"
+#include "ring.h"
 
 void print_htable(Htable_t* table);
 
@@ -91,7 +92,7 @@ void print_nodes(node_t* nodes, size_t size)
     char buffer[20];
 
     for (size_t i = 0; i < size; i++) {
-        printf("node %lu address = %s port = %hu #nodes = %lu\n", i, inet_ntop(AF_INET, &nodes[i].addr.sin_addr, buffer, 20), ntohs(nodes[i].addr.sin_port), nodes[i].id);
+        printf("node %lu address = %s port = %hu #nodes = %lu sha = (%s)\n", i, inet_ntop(AF_INET, &nodes[i].addr.sin_addr, buffer, 20), ntohs(nodes[i].addr.sin_port), nodes[i].id, nodes[i].sha);
     }
 
 }
@@ -283,6 +284,18 @@ START_TEST(node_list_sorting){
     node_list_sort(list_nodes, node_cmp_sha);
 
     print_nodes(list_nodes->nodes, list_nodes->size);
+}
+END_TEST
+
+START_TEST(ring_t_does_its_job){
+    printf("\nSTARTING TESTS FOR RINGS\n");
+
+    ring_t* ring = ring_alloc();
+    ring_init(ring);
+
+    print_nodes(ring->nodes, ring->size);
+
+
 }
 END_TEST
 
