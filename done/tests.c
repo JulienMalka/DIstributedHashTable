@@ -278,8 +278,11 @@ START_TEST(node_list_sorting){
         return;
     }
 
+    print_nodes(list_nodes->nodes, list_nodes->size);
 
     node_list_sort(list_nodes, node_cmp_sha);
+
+    print_nodes(list_nodes->nodes, list_nodes->size);
 }
 END_TEST
 

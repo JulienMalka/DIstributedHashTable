@@ -18,21 +18,21 @@ error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused
 {
      const size_t sha_len = 20;
      char sha[sha_len];
-	   node->id = node_id;
+     node->id = node_id;
      char* port_str = calloc(8, sizeof(char));
      sprintf(port_str, "%d", port);
      char* id_str = calloc(2, sizeof(char));
      sprintf(id_str, "%lu", node_id);
-     char dest[strlen(ip)+1+strlen(port_str)+1+strlen(id_str)];
+
+     char dest[strlen(ip) + 1 + strlen(port_str) + 1 + strlen(id_str) + 1];
      char* space = " ";
      strcat(dest, ip);
      strcat(dest, space);
      strcat(dest, port_str);
      strcat(dest, space);
      strcat(dest, id_str);
-     SHA1(dest,strlen(dest), sha);
+//     SHA1(dest,strlen(dest), sha);
      return get_server_addr(ip, port, &node->addr);
-
 }
 
 
@@ -41,13 +41,13 @@ error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused
  *        Actually useless (=empty) in the current version of the project, but remains here as a placeholder
  * @param node the node that is removed, passed by reference as it might be modified.
  */
-void node_end(node_t *node)
+void node_end(node_t* _unused node)
 {
     //Void for now
 }
 
 
-int node_cmp_sha(const node_t *first, const node_t *second){
-
+int node_cmp_sha(const node_t *first, const node_t *second)
+{
 return strcmp(first->sha, second->sha);
 }
