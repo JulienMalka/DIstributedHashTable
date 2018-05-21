@@ -4,7 +4,7 @@
 #include "system.h"
 #include <stdlib.h>
 #include <string.h>
-#include <openssl/sha.h>
+#include "openssl/sha.h"
 
 /**
  * @brief node initialization function
@@ -25,7 +25,8 @@ error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused
 
      char dest[strlen(ip) + 1 + strlen(port_str) + 1 + strlen(id_str) + 1];
      memset(dest, '\0', 1);
-     char* space = " ";
+     char space[1];
+     memset(space, ' ', 1);
      printf("ip = %s\n", ip);
      strcat(dest, ip);
      printf("current string = %s\n", dest);
@@ -35,12 +36,12 @@ error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused
      strcat(dest, space);
      strcat(dest, id_str);
      printf("current string = %s\n", dest);
-     SHA1(dest,strlen(dest), sha);
+     SHA1(dest, strlen(dest), sha);
 
      node->sha = sha;
 
-     free_const_ptr(port_str);
-     free_const_ptr(id_str);
+     free(port_str);
+     free(id_str);
 
      return get_server_addr(ip, port, &node->addr);
 }
@@ -53,11 +54,16 @@ error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused
  */
 void node_end(node_t* _unused node)
 {
-    //Void for now
+	if (node == NULL)
+		return;
+	else
+    	free(node->sha);
+	node->sha = NULL;
+	node = NULL;
 }
 
 
 int node_cmp_sha(const node_t *first, const node_t *second)
 {
-return strcmp(first->sha, second->sha);
+     return strcmp(first->sha, second->sha);
 }

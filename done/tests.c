@@ -174,74 +174,10 @@ START_TEST(get_hashtable_content)
 }
 END_TEST
 
-void print_kv_pair_list(kv_pair_t* kv_pair_list, size_t length)
-{
-
-    for (int i = 0; i < length; i++) {
-        printf("%s %s", kv_pair_list[i].key, kv_pair_list[i].value);
-    }
-
-}
-
-kv_pair_t* parse_and_print_response(char* in_msg, size_t length)
-{
-
-    printf("STARTING TEST FOR DUMP NODE\n");
-
-    size_t expected_nbr_kv_pair = (in_msg[3]) & (in_msg[2] << 8) & (in_msg[1] << 16) & (in_msg[0] << 24);
-    printf("%lu\n", expected_nbr_kv_pair);
-
-    kv_pair_t* kv_pair_list = calloc(expected_nbr_kv_pair, sizeof(kv_pair_t));
-
-    char key[MAX_MSG_SIZE];
-    int key_index = 0;
-    char value[MAX_MSG_SIZE];
-    int value_index = 0;
-
-    size_t list_index = 0;
-
-    int parsing_key = 1;
-
-    char iterator;
-
-    for (int i = 4; i < length; i++) {
-        iterator = in_msg[i];
-
-        if (parsing_key && iterator != '\0') {
-            key[key_index] = iterator;
-            key_index++;
-        } else if (parsing_key && iterator == '\0') {
-            parsing_key = 0;
-            key_index = 0;
-        } else if (!parsing_key && iterator != '\0') {
-            value[value_index] = iterator;
-            value_index++;
-        } else if (!parsing_key && iterator == '\0') {
-            printf("%s %s\n", key, value);
-
-            kv_pair_list[list_index] = create_kv_pair(key, value);
-            list_index++;
-
-            parsing_key = 1;
-            value_index = 0;
-        }
-
-    }
-    kv_pair_list[list_index] = create_kv_pair(key, value);
-    list_index++;
-
-    if (list_index != expected_nbr_kv_pair)
-        return NULL;
-
-    printf("%s %s\n", key, value);
-
-    return kv_pair_list;
-}
-
 START_TEST(parsing_argv)
 {
 
-    printf("STARTING TESTS FOR PARSING LINE COMMANDE ARGUMENTS\n");
+    printf("STARTING TESTS FOR PARSING LINE COMMAND ARGUMENTS\n");
 
     char** array_of_str = calloc(7, sizeof(char));
     array_of_str[0] = "-n";
@@ -251,14 +187,6 @@ START_TEST(parsing_argv)
     array_of_str[4] = "--";
     array_of_str[5] = "antoine";
     array_of_str[6] = "crettenand";
-
-    /*	for (int i = 0; i < 7; i++){
-    		printf("%s ", array_of_str[i]);
-    	}
-    	printf("\n");
-
-    	printf("LAUNCHING METHOD\n");
-    */
 
     args_t* args = parse_opt_args(TOTAL_SERVERS | PUT_NEEDED, &array_of_str);
 
@@ -294,8 +222,6 @@ START_TEST(ring_t_does_its_job){
     ring_init(ring);
 
     print_nodes(ring->nodes, ring->size);
-
-
 }
 END_TEST
 
