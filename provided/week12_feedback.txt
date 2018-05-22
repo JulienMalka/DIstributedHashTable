@@ -1,0 +1,50 @@
+Using master branch for submission. (sha: bc4ed32a8188bf532699b3057f0ea6df9ac1ae97)
+--------
+Checking for expected files
+Found expected file done/tests.h on master
+Found expected file done/args.c on master
+Found expected file done/node.c on master
+Found expected file done/system.h on master
+Found expected file done/ring.c on master
+Found expected file done/config.h on master
+Found expected file done/network.h on master
+Found expected file done/network.c on master
+Found expected file done/hashtable.c on master
+Found expected file done/pps-client-find.c on master
+Found expected file done/Makefile on master
+Found expected file done/client.h on master
+Found expected file done/pps-client-put.c on master
+Found expected file done/util.c on master
+Found expected file done/pps-client-substr.c on master
+Found expected file done/log-packets.c on master
+Found expected file done/pps-client-cat.c on master
+Found expected file done/util.h on master
+Found expected file done/node_list.h on master
+Found expected file done/pps-dump-node.c on master
+Found expected file done/ring.h on master
+Found expected file done/pps-launch-server.c on master
+Found expected file done/test-hashtable.c on master
+Found expected file done/pps-list-nodes.c on master
+Found expected file done/hashtable.h on master
+Found expected file done/pps-client-get.c on master
+Found expected file done/client.c on master
+Found expected file done/node.h on master
+Found expected file done/args.h on master
+Found expected file done/node_list.c on master
+Found expected file done/error.c on master
+Found expected file done/system.c on master
+Found expected file done/error.h on master
+--------
+Force copying (overwriting) provided file: tests.h
+Force copying (overwriting) provided file: system.h
+Force copying (overwriting) provided file: config.h
+Force copying (overwriting) provided file: network.h
+Force copying (overwriting) provided file: util.c
+Force copying (overwriting) provided file: log-packets.c
+Force copying (overwriting) provided file: util.h
+Force copying (overwriting) provided file: ring.h
+Force copying (overwriting) provided file: error.c
+Force copying (overwriting) provided file: system.c
+Force copying (overwriting) provided file: error.h
+Unable to find directory /test/done
+
