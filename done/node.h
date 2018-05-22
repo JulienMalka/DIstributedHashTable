@@ -20,7 +20,7 @@
  typedef struct {
 struct sockaddr_in addr;
 size_t id;
-char* sha;
+unsigned char *sha;
 }node_t;
 
 

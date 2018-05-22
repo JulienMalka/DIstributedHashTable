@@ -26,6 +26,14 @@
 
 void print_htable(Htable_t* table);
 
+void print_sha(unsigned char* input){
+	if (input != NULL){
+		for (int i = 0; i < SHA_DIGEST_LENGTH; i++){
+			printf("%02x", input[i]);
+		}
+	}
+}
+
 START_TEST(add_get_hashtable)
 {
 //	printf("\nSTARTING TESTS FOR HTABLE\n\n");
@@ -91,8 +99,16 @@ void print_nodes(node_t* nodes, size_t size)
 {
     char buffer[20];
 
+    if (nodes == NULL)
+    	printf("THE REFERENCE IS NULL\n");
+
+    printf("size_t = %lu\n", size);
+
     for (size_t i = 0; i < size; i++) {
-        printf("node %lu address = %s port = %hu #nodes = %lu sha = (%s)\n", i, inet_ntop(AF_INET, &nodes[i].addr.sin_addr, buffer, 20), ntohs(nodes[i].addr.sin_port), nodes[i].id, nodes[i].sha);
+        printf("node %lu address = %s port = %hu #nodes = %lu ", i, inet_ntop(AF_INET, &nodes[i].addr.sin_addr, buffer, 20), ntohs(nodes[i].addr.sin_port), nodes[i].id);
+		printf("sha = ");
+        print_sha(nodes[i].sha);
+        printf("\n");
     }
 
 }
@@ -196,6 +212,7 @@ START_TEST(parsing_argv)
 }
 END_TEST
 
+/*
 START_TEST(node_list_sorting){
 
     printf("STARTING TESTS FOR SORTING NODE LIST\n");
@@ -207,13 +224,15 @@ START_TEST(node_list_sorting){
         return;
     }
 
+    printf("BEFORE SORTING : \n");
     print_nodes(list_nodes->nodes, list_nodes->size);
 
     node_list_sort(list_nodes, node_cmp_sha);
 
+    printf("AFTER SORTING : \n");
     print_nodes(list_nodes->nodes, list_nodes->size);
 }
-END_TEST
+END_TEST*/
 
 START_TEST(ring_t_does_its_job){
     printf("\nSTARTING TESTS FOR RINGS\n");
@@ -222,6 +241,30 @@ START_TEST(ring_t_does_its_job){
     ring_init(ring);
 
     print_nodes(ring->nodes, ring->size);
+}
+END_TEST
+
+START_TEST(debug_print_ring_get_nodes_for_key){
+
+	printf("\nSTARTING TESTS FOR RING_GET_NODES_FOR_KEY\n");
+
+	ring_t* ring = ring_alloc();
+	ring_init(ring);
+
+	pps_key_t coucou = "coucou";
+
+	printf("Segfault happens after\n");
+	node_list_t* nodes_for_key = ring_get_nodes_for_key(ring, 3, coucou);
+
+	if (nodes_for_key == NULL)	printf("nodes_for_key is NULL\n");
+	if (nodes_for_key->nodes == NULL) printf("the list is null\n");
+	printf("size of the nodes list = %lu\n", nodes_for_key->size);
+
+	char buffer[20];
+	printf("informations on first node = %s %hu %lu \n", inet_ntop(AF_INET, &nodes_for_key->nodes[0].addr.sin_addr, buffer, 20), ntohs(nodes_for_key->nodes[0].addr.sin_port), nodes_for_key->nodes[0].id);
+
+	print_nodes(nodes_for_key->nodes, nodes_for_key->size);
+
 }
 END_TEST
 
@@ -238,7 +281,9 @@ Suite *hashtable_suite()
     tcase_add_test(tc_ht, get_hashtable_size);
     tcase_add_test(tc_ht, get_hashtable_content);
     tcase_add_test(tc_ht, parsing_argv);
-    tcase_add_test(tc_ht, node_list_sorting);
+    tcase_add_test(tc_ht, ring_t_does_its_job);
+//    tcase_add_test(tc_ht, node_list_sorting);
+	tcase_add_test(tc_ht, debug_print_ring_get_nodes_for_key);
 
     return s;
 }

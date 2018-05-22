@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "config.h"
 #include "node_list.h"
+#include "node.h"
 #include <ctype.h>
 
 
@@ -121,6 +122,17 @@ error_code node_list_add(node_list_t *list, node_t node)
 
     list->nodes[list->size - 1] = node;
     return ERR_NONE;
+}
+
+
+int node_list_contains(node_list_t *list, node_t node){
+
+	for (size_t i = 0; i < list->size; ++i) {
+		if (list->nodes[i].addr.sin_addr.s_addr == node.addr.sin_addr.s_addr && list->nodes[i].addr.sin_port == node.addr.sin_port){
+			return 1;
+		}
+	}
+	return 0;
 }
 
 /**

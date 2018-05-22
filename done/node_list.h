@@ -57,3 +57,11 @@ void node_list_sort(node_list_t *list, int (*comparator)(const node_t *, const n
  * @param list list of nodes to clean
  */
 void node_list_free(node_list_t *list);
+
+/**
+ * @brief Checks if given list contains given node
+ * @param list
+ * @param node
+ * @return 1 if so, 0 otherwise
+ */
+int node_list_contains(node_list_t *list, node_t node);
