@@ -1,4 +1,6 @@
-CFLAGS= -g -pedantic -Wall -Wextra -std=c99 -lcrypto
+CFLAGS= -g -pedantic -Wall -Wextra -std=c99
+
+LDLIBS += -lcrypto
 
 all:  week05 week08 week09
 	#Reformat code of every file in folder
@@ -10,11 +12,8 @@ week08: pps-dump-node pps-list-nodes
 
 week09: pps-client-cat pps-client-substr pps-client-find
 
-node.o: node.c
-	$(GCC) -c node.c $(CFLAGS)
-
 test-hashtable: test-hashtable.c
-	gcc -o test-hashtable test-hashtable.c node_list.o error.o node.o system.o -lcheck -lm -lrt -pthread -lsubunit
+	gcc -o test-hashtable test-hashtable.c node_list.o error.c node.o system.o -lcheck -lm -lrt -pthread -lsubunit -lcrypto
 
 pps-launch-server: pps-launch-server.o system.o network.o hashtable.o network-utils.o util.o
 

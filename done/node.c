@@ -36,8 +36,10 @@ error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused
      strcat(dest, space);
      strcat(dest, id_str);
      printf("current string = %s\n", dest);
-     SHA1(dest, strlen(dest), sha);
 
+     SHA1(dest, SHA_DIGEST_LENGTH, sha);
+
+     printf("dest = %s\n", dest);
      node->sha = sha;
 
      free(port_str);
