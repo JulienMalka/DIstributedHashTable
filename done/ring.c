@@ -31,6 +31,10 @@ void ring_free(ring_t *ring) {
 
 node_list_t *ring_get_nodes_for_key(const ring_t *ring, size_t wanted_list_size, pps_key_t key){
 
+	if (wanted_list_size == 0)
+		return NULL;
+
+	/*Compute SHA of given key*/
 	unsigned char sha[SHA_DIGEST_LENGTH];
 	SHA1((const unsigned char *) key, strlen(key), sha);
 
@@ -38,24 +42,21 @@ node_list_t *ring_get_nodes_for_key(const ring_t *ring, size_t wanted_list_size,
 
 	size_t iterator = 0;
 
-	/*Compute the place of the key in the ring*/
-	while (strcmp(sha, ring->nodes[iterator].sha) < 0)
+	/* Compute the place of the key in the ring */
+	while (strcmp(sha, ring->nodes[iterator].sha) > 0)
 		iterator++;
 
-	iterator--;
-
-	printf("iterator = %lu", iterator);
+	if (node_list_add(nodes ,ring->nodes[iterator]) != ERR_NONE)
+		return NULL;
 
 	size_t left = wanted_list_size - 1;
-	node_list_add(nodes ,ring->nodes[iterator]);
 
 	while (left != 0){
-
 		if (!node_list_contains(nodes, ring->nodes[iterator])){
-			node_list_add(nodes, ring->nodes[iterator]);
+			if (node_list_add(nodes, ring->nodes[iterator]) != ERR_NONE)
+				return NULL;
 			left--;
 		}
-
 		iterator++;
 	}
 

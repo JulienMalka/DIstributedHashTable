@@ -253,15 +253,15 @@ START_TEST(debug_print_ring_get_nodes_for_key){
 
 	pps_key_t coucou = "coucou";
 
-	printf("Segfault happens after\n");
+//	printf("Segfault happens after\n");
 	node_list_t* nodes_for_key = ring_get_nodes_for_key(ring, 3, coucou);
 
 	if (nodes_for_key == NULL)	printf("nodes_for_key is NULL\n");
 	if (nodes_for_key->nodes == NULL) printf("the list is null\n");
 	printf("size of the nodes list = %lu\n", nodes_for_key->size);
 
-	char buffer[20];
-	printf("informations on first node = %s %hu %lu \n", inet_ntop(AF_INET, &nodes_for_key->nodes[0].addr.sin_addr, buffer, 20), ntohs(nodes_for_key->nodes[0].addr.sin_port), nodes_for_key->nodes[0].id);
+//	char buffer[20];
+//	printf("informations on first node = %s %hu %lu \n", inet_ntop(AF_INET, &nodes_for_key->nodes[0].addr.sin_addr, buffer, 20), ntohs(nodes_for_key->nodes[0].addr.sin_port), nodes_for_key->nodes[0].id);
 
 	print_nodes(nodes_for_key->nodes, nodes_for_key->size);
 
