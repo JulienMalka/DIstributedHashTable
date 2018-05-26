@@ -42,7 +42,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
                 error_not_found++;
             } else {
                 //	char* count = strcpy(
-                char* count = get_Htable_value(local_h_table, in_msg);
+                char* count = (char *) get_Htable_value(local_h_table, in_msg);
                 if(count == NULL) {
                     char count_c = 0;
                     count = &count_c;
@@ -61,7 +61,9 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 
     }
 
-    if(error_not_found==0) return ERR_NETWORK;
+    node_list_free(nodes);
+
+    if(error_not_found == 0) return ERR_NETWORK;
     else return ERR_NOT_FOUND;
 }
 
@@ -90,9 +92,11 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value)
         size_t request_len = strlen(key)+strlen(value)+1;
         error_code error_send = send_packet(client.socket, request, request_len, nodes->nodes[i]);
         free(request);
-        int error_receive = recv(client.socket, NULL,0,0);
-        if(error_send!=ERR_NONE ||error_receive==-1) errors++;
+        ssize_t error_receive = recv(client.socket, NULL,0,0);
+        if(error_send != ERR_NONE || error_receive == -1) errors++;
     }
+
+    node_list_free(nodes);
     if(errors>client.args->N-client.args->W) {
         return ERR_NETWORK;
     } else {

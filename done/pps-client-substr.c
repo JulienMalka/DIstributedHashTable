@@ -26,7 +26,7 @@ int isValidNumber(const char* str)
  * @brief Compute a substring of given position and length of a value associated to a given key and stores it with a given key
  * As follows : pps-client-substr [-n N] [-w W] [-r R] [--] <input-key> <position> <length> <output-key>
  * @return 0 on normal exit, -1 otherwise
- */ 
+ */
 int main(int argc, char* argv[])
 {
 

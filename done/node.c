@@ -16,31 +16,31 @@
  */
 error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused node_id)
 {
-     unsigned char *sha = calloc(SHA_DIGEST_LENGTH, sizeof(char));
-     node->id = node_id;
-     char* port_str = calloc(8, sizeof(char));
-     sprintf(port_str, "%d", port);
-     char* id_str = calloc(2, sizeof(char));
-     sprintf(id_str, "%lu", node_id);
+    unsigned char *sha = calloc(SHA_DIGEST_LENGTH, sizeof(char));
+    node->id = node_id;
+    char* port_str = calloc(8, sizeof(char));
+    sprintf(port_str, "%d", port);
+    char* id_str = calloc(2, sizeof(char));
+    sprintf(id_str, "%lu", node_id);
 
-     unsigned char dest[strlen(ip) + 1 + strlen(port_str) + 1 + strlen(id_str) + 1];
-     memset(dest, '\0', 1);
-     char space[1];
-     memset(space, ' ', 1);
-     strcat(dest, ip);
-     strcat(dest, space);
-     strcat(dest, port_str);
-     strcat(dest, space);
-     strcat(dest, id_str);
+    unsigned char dest[strlen(ip) + 1 + strlen(port_str) + 1 + strlen(id_str) + 1];
+    memset(dest, '\0', 1);
+    char space[1];
+    memset(space, ' ', 1);
+    strcat(dest, ip);
+    strcat(dest, space);
+    strcat(dest, port_str);
+    strcat(dest, space);
+    strcat(dest, id_str);
 
-     SHA1(dest, strlen(dest), sha);
+    SHA1(dest, strlen(dest), sha);
 
-     node->sha = sha;
+    node->sha = sha;
 
-     free(port_str);
-     free(id_str);
+    free(port_str);
+    free(id_str);
 
-     return get_server_addr(ip, port, &node->addr);
+    return get_server_addr(ip, port, &node->addr);
 }
 
 
@@ -51,23 +51,23 @@ error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused
  */
 void node_end(node_t* _unused node)
 {
-	if (node == NULL)
-		return;
-	else
-    	free(node->sha);
-	node->sha = NULL;
-	node = NULL;
+    if (node == NULL)
+        return;
+    else
+        free(node->sha);
+    node->sha = NULL;
+    node = NULL;
 }
 
 
 int node_cmp_sha(const node_t *first, const node_t *second)
 {
-     return strcmp(first->sha, second->sha);
+    return strcmp(first->sha, second->sha);
 }
 
 int node_cmp_server_addr(const node_t* n1, const node_t* n2)
 {
-	if (n1->addr.sin_addr.s_addr == n2->addr.sin_addr.s_addr)
-		return n1->addr.sin_port > n2->addr.sin_port;
-	else return n1->addr.sin_addr.s_addr > n2->addr.sin_addr.s_addr;
+    if (n1->addr.sin_addr.s_addr == n2->addr.sin_addr.s_addr)
+        return n1->addr.sin_port > n2->addr.sin_port;
+    else return n1->addr.sin_addr.s_addr > n2->addr.sin_addr.s_addr;
 }

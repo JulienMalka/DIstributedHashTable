@@ -13,10 +13,10 @@
 #include "util.h"
 
 /**
- * @brief Find the first occurence of a given substr in the value associated of a given key 
+ * @brief Find the first occurence of a given substr in the value associated of a given key
  * As follows : pps-client-find [-n N] [-w W] [-r R] [--] <key-to-search> <key-to-search-for>
  * @return 0 on normal exit, -1 otherwise
- */ 
+ */
 int main(int argc, char* argv[])
 {
 

@@ -30,7 +30,7 @@ size_t parse_nbr_kv_pair(char* in_msg)
  * @brief Dump content of given node (ip, port)
  * As follows : pps-dump-node <IP> <Port>
  * @return 0 on normal exit, -1 otherwise
- */ 
+ */
 int main(int argc, char* argv[])
 {
 

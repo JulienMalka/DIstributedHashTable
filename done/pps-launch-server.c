@@ -61,7 +61,7 @@ int main(void)
         if(in_msg_len==0) {
             sendto(s, NULL, 0, 0, (struct sockaddr *) &cli_addr, sizeof(cli_addr));
         }
-        
+
         // Write Request
         else if (memchr(in_msg, '\0', in_msg_len) != NULL) {
 
@@ -131,8 +131,8 @@ int main(void)
                 char* value = calloc(size_value, sizeof(char));
                 parse_put_request(in_msg, in_msg_len, key, value);
                 if (add_Htable_value(h_table, key, value) == ERR_NONE)
-					sendto(s, NULL, 0, 0,
-                       (struct sockaddr *) &cli_addr, sizeof(cli_addr));
+                    sendto(s, NULL, 0, 0,
+                           (struct sockaddr *) &cli_addr, sizeof(cli_addr));
             }
         }
 

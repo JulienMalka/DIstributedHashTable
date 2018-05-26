@@ -240,7 +240,7 @@ size_t hash_function(pps_key_t key, size_t size)
 /**
  * @brief De-allocate memory of kv_list_t
  * @param list to free
- */ 
+ */
 void kv_list_free(kv_list_t *list)
 {
     for (size_t i = 0; i < list->size; i++) {
@@ -255,7 +255,7 @@ void kv_list_free(kv_list_t *list)
  * @brief Compute the size of a bucket (ie. linkedlist) recursively
  * @param address of the bucket
  * @return the size as an unsigned integer
- */ 
+ */
 size_t get_bucket_size(struct bucket* bck)
 {
 
@@ -272,7 +272,7 @@ size_t get_bucket_size(struct bucket* bck)
  * @brief Compute the size of given hashtable
  * @param hashtable
  * @return size as unsigned integer
- */ 
+ */
 size_t get_Htable_size(Htable_t table)
 {
     size_t total = 0;
@@ -290,7 +290,7 @@ size_t get_Htable_size(Htable_t table)
  * @param list to store the content
  * @param from, index from which to start filling the list
  * @return the number of key_value pairs stored until then
- */ 
+ */
 size_t get_bucket_content(struct bucket* bck, kv_list_t* list, size_t from)
 {
     if (bck->key_value.key == NULL || bck->key_value.value == NULL) {
@@ -308,7 +308,7 @@ size_t get_bucket_content(struct bucket* bck, kv_list_t* list, size_t from)
  * @brief compute the content of given hashtable
  * @param hash_table
  * @return a new allocated kv_list_t with stored content from the hashtable
- */ 
+ */
 kv_list_t *get_Htable_content(Htable_t table)
 {
     size_t htable_size = get_Htable_size(table);

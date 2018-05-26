@@ -9,7 +9,7 @@
 /**
  * @brief On n arguments, concatenate the n-1 associated values into a single string, then stores it as value at n_th key
  * @return 0 on normal exit, -1 otherwise
- */ 
+ */
 int main(int argc, char* argv[])
 {
 

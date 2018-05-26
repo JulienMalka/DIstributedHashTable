@@ -15,9 +15,10 @@
 #include "node.h"
 #include <arpa/inet.h>
 
-void print_sha(unsigned char* input){
-    if (input != NULL){
-        for (int i = 0; i < SHA_DIGEST_LENGTH; i++){
+void print_sha(unsigned char* input)
+{
+    if (input != NULL) {
+        for (int i = 0; i < SHA_DIGEST_LENGTH; i++) {
             printf("%02x", input[i]);
         }
     }
@@ -49,7 +50,7 @@ int main(int argc, char* argv[])
     }
 
     /* Sort the servers by port */
-	node_list_sort(&client.server, node_cmp_server_addr);
+    node_list_sort(&client.server, node_cmp_server_addr);
 
     /* Pings every server */
     for(size_t i = 0; i < client.server.size; i++) {
@@ -67,9 +68,9 @@ int main(int argc, char* argv[])
         }
         char buffer[BUFFER_LENGTH];
         printf("%s %hu (", inet_ntop(AF_INET, &client.server.nodes[i].addr.sin_addr, buffer, BUFFER_LENGTH), ntohs(client.server.nodes[i].addr.sin_port));
- 		print_sha(client.server.nodes[i].sha);
- 		printf(") %s", status);
- 		printf("\n");
+        print_sha(client.server.nodes[i].sha);
+        printf(") %s", status);
+        printf("\n");
     }
 
     return 0;

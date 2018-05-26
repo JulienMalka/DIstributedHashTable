@@ -5,11 +5,13 @@
 #include "node.h"
 
 
-ring_t *ring_alloc(){
+ring_t *ring_alloc()
+{
     return node_list_new();
 }
 
-error_code ring_init(ring_t *ring){
+error_code ring_init(ring_t *ring)
+{
     node_list_t* node_list =  get_nodes();
 
     /* If parsing of servers.txt fails, get_nodes returns NULL */
@@ -24,45 +26,47 @@ error_code ring_init(ring_t *ring){
 }
 
 
-void ring_free(ring_t *ring) {
+void ring_free(ring_t *ring)
+{
     node_list_free(ring);
     ring = NULL;
 }
 
-node_list_t *ring_get_nodes_for_key(const ring_t *ring, size_t wanted_list_size, pps_key_t key){
+node_list_t *ring_get_nodes_for_key(const ring_t *ring, size_t wanted_list_size, pps_key_t key)
+{
 
-	if (wanted_list_size == 0)
-		return NULL;
+    if (wanted_list_size == 0)
+        return NULL;
 
-	/*Compute SHA of given key*/
-	unsigned char sha[SHA_DIGEST_LENGTH];
-	SHA1((const unsigned char *) key, strlen(key), sha);
+    /*Compute SHA of given key*/
+    unsigned char sha[SHA_DIGEST_LENGTH];
+    SHA1((const unsigned char *) key, strlen(key), sha);
 
-	node_list_t* nodes = node_list_new();
+    node_list_t* nodes = node_list_new();
 
-	size_t iterator = 0;
+    size_t iterator = 0;
 
-	/* Compute the place of the key in the ring */
-	while (strcmp((const char *) sha, (const char *) ring->nodes[iterator].sha) > 0)
-		iterator++;
+    /* Compute the place of the key in the ring */
+    while (strcmp((const char *) sha, (const char *) ring->nodes[iterator].sha) > 0)
+        iterator++;
 
-	if (node_list_add(nodes ,ring->nodes[iterator]) != ERR_NONE)
-		return NULL;
+    if (node_list_add(nodes ,ring->nodes[iterator]) != ERR_NONE)
+        return NULL;
 
-	size_t left = wanted_list_size - 1;
+    size_t left = wanted_list_size - 1;
 
-	while (left != 0){
+    while (left != 0) {
 
-		if (!node_list_contains(nodes, ring->nodes[iterator])){
-			if (node_list_add(nodes, ring->nodes[iterator]) != ERR_NONE)
-				return NULL;
-			left--;
-		}
-		iterator++;
+        if (!node_list_contains(nodes, ring->nodes[iterator])) {
+            if (node_list_add(nodes, ring->nodes[iterator]) != ERR_NONE)
+                return NULL;
+            left--;
+        }
+        iterator++;
 
-		if (iterator >= ring->size)
-			iterator = 0;
-	}
+        if (iterator >= ring->size)
+            iterator = 0;
+    }
 
     return nodes;
 }

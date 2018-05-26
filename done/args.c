@@ -20,16 +20,16 @@ error_code parse_option(size_t supported_arg, char ***rem_argv, size_t* value)
 
         /* If option value isn't defined, throw an error */
         if (*rem_argv == NULL || !strcmp(**rem_argv, "--")) {
-			return ERR_BAD_PARAMETER;
+            return ERR_BAD_PARAMETER;
         } else {
 
-            /* Converts char to int */	
+            /* Converts char to int */
             *value = ***rem_argv - '0';
         }
-    } else 
-		return ERR_BAD_PARAMETER;
-    
-    return ERR_NONE; 
+    } else
+        return ERR_BAD_PARAMETER;
+
+    return ERR_NONE;
 }
 
 args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
@@ -50,20 +50,20 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
         /* Check for -n option*/
         if (!strcmp(**rem_argv, "-n")) {
             if (parse_option(supported_args & TOTAL_SERVERS, rem_argv, &parsed->N) != ERR_NONE)
-				return NULL;
-            
+                return NULL;
+
             parsed_n++;
             /* Check for -r option */
         } else if (!strcmp(**rem_argv, "-r")) {
             if (parse_option(supported_args & GET_NEEDED, rem_argv, &parsed->R) != ERR_NONE)
-				return NULL;
-            
+                return NULL;
+
             parsed_n++;
             /* Check for -w option */
         } else if (!strcmp(**rem_argv, "-w")) {
             if (parse_option(supported_args & PUT_NEEDED, rem_argv, &parsed->W) != ERR_NONE)
-				return NULL;
-				
+                return NULL;
+
             parsed_n++;
             /* Check for end of optional arguments */
         } else if (!strcmp(**rem_argv, "--")) {

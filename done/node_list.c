@@ -15,12 +15,12 @@ node_list_t *node_list_new()
 {
     node_list_t* new = malloc(sizeof(node_list_t));
     if (new == NULL)
-		return NULL;
+        return NULL;
     new->size = 0;
     new->allocated_size = ALLOCATED_MEMORY_LIST;
     new->nodes = calloc(ALLOCATED_MEMORY_LIST, sizeof(node_t));
     if (new->nodes == NULL)
-		return NULL;
+        return NULL;
     return new;
 }
 
@@ -70,7 +70,7 @@ node_list_t *get_nodes()
             //TODO : use the following instead
             //strncpy(real_ip, ip, index + 1);
 
-            for(size_t node_id = node_id_max - 1; node_id < node_id_max; node_id--){
+            for(size_t node_id = node_id_max - 1; node_id < node_id_max; node_id--) {
 
                 node_t node;
                 if (node_init(&node, real_ip, port, node_id + 1) != ERR_NONE)
@@ -125,14 +125,15 @@ error_code node_list_add(node_list_t *list, node_t node)
 }
 
 
-int node_list_contains(node_list_t *list, node_t node){
+int node_list_contains(node_list_t *list, node_t node)
+{
 
-	for (size_t i = 0; i < list->size; ++i) {
-		if (list->nodes[i].addr.sin_addr.s_addr == node.addr.sin_addr.s_addr && list->nodes[i].addr.sin_port == node.addr.sin_port){
-			return 1;
-		}
-	}
-	return 0;
+    for (size_t i = 0; i < list->size; ++i) {
+        if (list->nodes[i].addr.sin_addr.s_addr == node.addr.sin_addr.s_addr && list->nodes[i].addr.sin_port == node.addr.sin_port) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /**
@@ -150,6 +151,7 @@ void node_list_free(node_list_t *list)
     list = NULL;
 }
 
-void node_list_sort(node_list_t *list, int (*comparator)(const node_t *, const node_t *)){
+void node_list_sort(node_list_t *list, int (*comparator)(const node_t *, const node_t *))
+{
     qsort(list->nodes, list->size, sizeof(node_t), comparator);
 }

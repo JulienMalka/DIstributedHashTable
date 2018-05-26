@@ -15,7 +15,7 @@ void client_end(client_t *client)
 {
     close(client->socket);
     free(client->args);
-    node_list_free(&client->server);
+    ring_free(&client->server);
 }
 
 /**
@@ -59,13 +59,13 @@ error_code client_init(client_init_args_t client_init_args)
     ring_t* ring = ring_alloc();
     ring_init(ring);
 
-    if(ring == NULL) {
+    if(ring == NULL)
         return ERR_BAD_PARAMETER;
-    }
 
-    if(client_init_args.client->args->N > ring->size) {
+
+    if(client_init_args.client->args->N > ring->size)
         client_init_args.client->args->N = ring->size;
-    }
+
 
     client_init_args.client->server = *ring;
     client_init_args.client->socket = get_socket(1);
