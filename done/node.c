@@ -64,3 +64,10 @@ int node_cmp_sha(const node_t *first, const node_t *second)
 {
      return strcmp(first->sha, second->sha);
 }
+
+int node_cmp_server_addr(const node_t* n1, const node_t* n2)
+{
+	if (n1->addr.sin_addr.s_addr == n2->addr.sin_addr.s_addr)
+		return n1->addr.sin_port > n2->addr.sin_port;
+	else return n1->addr.sin_addr.s_addr > n2->addr.sin_addr.s_addr;
+}
