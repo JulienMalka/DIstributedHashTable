@@ -6,6 +6,7 @@
 #include "network.h"
 #include <stdlib.h>
 #include <unistd.h>
+
 /**
  * @brief does all the work to be done at the end of life of a client
  * @param client the client to end
@@ -55,17 +56,18 @@ error_code client_init(client_init_args_t client_init_args)
     if(client_init_args.required != SIZE_MAX && client_init_args.size_args - nb_parsed != client_init_args.required) {
         return ERR_BAD_PARAMETER;
     }
-    node_list_t* nodes = get_nodes();
+    ring_t* ring = ring_alloc();
+    ring_init(ring);
 
-    if(nodes == NULL) {
+    if(ring == NULL) {
         return ERR_BAD_PARAMETER;
     }
 
-    if(client_init_args.client->args->N > nodes->size) {
-        client_init_args.client->args->N = nodes->size;
+    if(client_init_args.client->args->N > ring->size) {
+        client_init_args.client->args->N = ring->size;
     }
 
-    client_init_args.client->server = *nodes;
+    client_init_args.client->server = *ring;
     client_init_args.client->socket = get_socket(1);
 
     return ERR_NONE;
