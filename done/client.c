@@ -59,7 +59,7 @@ error_code client_init(client_init_args_t client_init_args)
     ring_t* ring = ring_alloc();
     ring_init(ring);
 
-    if(ring == NULL)
+    if (ring == NULL)
         return ERR_BAD_PARAMETER;
 
 

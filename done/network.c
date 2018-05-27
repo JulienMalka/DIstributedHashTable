@@ -89,7 +89,7 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value)
     for(size_t i= 0; i<client.args->N; i++) {
 
         char* request = format_put_request(key, value, -1, -1);
-        size_t request_len = strlen(key)+strlen(value)+1;
+        size_t request_len = strlen(key) + strlen(value) + 1;
         error_code error_send = send_packet(client.socket, request, request_len, nodes->nodes[i]);
         free(request);
         ssize_t error_receive = recv(client.socket, NULL,0,0);

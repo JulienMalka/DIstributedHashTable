@@ -29,7 +29,6 @@ error_code ring_init(ring_t *ring)
 void ring_free(ring_t *ring)
 {
     node_list_free(ring);
-    ring = NULL;
 }
 
 node_list_t *ring_get_nodes_for_key(const ring_t *ring, size_t wanted_list_size, pps_key_t key)

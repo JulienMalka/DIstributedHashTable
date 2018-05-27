@@ -63,7 +63,6 @@ int main(int argc, char* argv[])
             status = "FAIL";
 
         } else {
-
             status = "OK";
         }
         char buffer[BUFFER_LENGTH];
