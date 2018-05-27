@@ -23,6 +23,8 @@
  */
 error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 {
+
+    int s = get_socket(1);
     M_EXIT_IF_TOO_LONG(key, MAX_MSG_ELEM_SIZE, key.name);
     Htable_t local_h_table = construct_Htable(HTABLE_SIZE);
 
@@ -31,10 +33,15 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
     int error_not_found = 0;
     for(size_t i = 0; i < client.args -> N; i++) {
         size_t size_to_send = strlen(key);
-        send_packet(client.socket, key, size_to_send, nodes->nodes[i]);
+        send_packet(s, key, size_to_send, nodes->nodes[i]);
+}
 
-        char* in_msg = malloc(MAX_MSG_ELEM_SIZE);
-        ssize_t in_msg_len = recv(client.socket, in_msg, MAX_MSG_ELEM_SIZE, 0);
+
+
+char* in_msg = malloc(MAX_MSG_ELEM_SIZE);
+ssize_t in_msg_len;
+while((in_msg_len= recv(s, in_msg, MAX_MSG_ELEM_SIZE, 0))!=-1){
+
         in_msg[in_msg_len] = '\0';
 
         if (in_msg_len != -1) {
@@ -78,6 +85,8 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 error_code network_put(client_t client, pps_key_t key, pps_value_t value)
 {
 
+
+    int s = get_socket(1);
     M_EXIT_IF_TOO_LONG(key, MAX_MSG_ELEM_SIZE, key.name);
     M_EXIT_IF_TOO_LONG(value, MAX_MSG_ELEM_SIZE, value.name);
     if (key == NULL || value == NULL) return ERR_BAD_PARAMETER;
@@ -89,17 +98,25 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value)
     for(size_t i= 0; i<client.args->N; i++) {
 
         char* request = format_put_request(key, value, -1, -1);
-        size_t request_len = strlen(key) + strlen(value) + 1;
-        error_code error_send = send_packet(client.socket, request, request_len, nodes->nodes[i]);
+        size_t request_len = strlen(key)+strlen(value)+1;
+        error_code error_send = send_packet(s, request, request_len, nodes->nodes[i]);
         free(request);
-        ssize_t error_receive = recv(client.socket, NULL,0,0);
-        if(error_send != ERR_NONE || error_receive == -1) errors++;
+      }
+
+      ssize_t error_receive;
+      size_t success;
+      while ( (error_receive = recv(s, NULL,0,0))!=-1){
+
+        if(error_receive!=-1) success++;
+
+        if(success>=client.args->W) {
+            node_list_free(nodes);
+            return ERR_NONE;
+          }
+
     }
 
     node_list_free(nodes);
-    if(errors>client.args->N-client.args->W) {
         return ERR_NETWORK;
-    } else {
-        return ERR_NONE;
-    }
+
 }
