@@ -23,7 +23,7 @@ error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused
     char* id_str = calloc(2, sizeof(char));
     sprintf(id_str, "%lu", node_id);
 
-    unsigned char dest[strlen(ip) + 1 + strlen(port_str) + 1 + strlen(id_str) + 1];
+    char dest[strlen(ip) + 1 + strlen(port_str) + 1 + strlen(id_str) + 1];
     memset(dest, '\0', 1);
     char space[1];
     memset(space, ' ', 1);
@@ -33,7 +33,7 @@ error_code node_init(node_t *node, const char *ip, uint16_t port, size_t _unused
     strcat(dest, space);
     strcat(dest, id_str);
 
-    SHA1(dest, strlen(dest), sha);
+    SHA1((const unsigned char *) dest, strlen(dest), sha);
 
     node->sha = sha;
 
@@ -62,7 +62,7 @@ void node_end(node_t* _unused node)
 
 int node_cmp_sha(const node_t *first, const node_t *second)
 {
-    return strcmp(first->sha, second->sha);
+    return strcmp((const char *) first->sha, (const char *) second->sha);
 }
 
 int node_cmp_server_addr(const node_t* n1, const node_t* n2)

@@ -54,7 +54,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value) {
 				}
 				count[0]++;
 
-				if (count[0] >= client.args->R) {
+				if (count[0] >= (int) client.args->R) {
 					*value = in_msg;
 					//        free(in_msg); (it's indeeed freed elsewhere)
 					return ERR_NONE;
@@ -91,17 +91,16 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value) {
 	node_list_t *nodes = ring_get_nodes_for_key(&client.server, client.args->N, key);
 
 
-	size_t errors = 0;
 	for (size_t i = 0; i < client.args->N; i++) {
 
 		char *request = format_put_request(key, value, -1, -1);
 		size_t request_len = strlen(key) + strlen(value) + 1;
-		error_code error_send = send_packet(s, request, request_len, nodes->nodes[i]);
+		send_packet(s, request, request_len, nodes->nodes[i]);
 		free(request);
 	}
 
 	ssize_t error_receive;
-	size_t success;
+	size_t success = 0;
 	while ((error_receive = recv(s, NULL, 0, 0)) != -1) {
 
 		if (error_receive != -1) success++;

@@ -50,14 +50,14 @@ int main(int argc, char* argv[])
     char* key_from;
     char* key_to;
     int position;
-    size_t length;
+    int length;
 
     if (argv[0] != NULL && argv[1] != NULL && argv[2] != NULL && argv[3] != NULL) {
         /* Checks if second and third argument are valid numbers */
         if (isValidNumber(argv[1]) && isValidNumber(argv[2])) {
             key_from = argv[0];
             position = (int) strtol(argv[1], NULL, 10);
-            length = (size_t) strtol(argv[2], NULL, 10);
+            length = (int) strtol(argv[2], NULL, 10);
             key_to = argv[3];
         } else {
             printf("FAIL\n");
@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
     }
 
     /*ERROR HANDLING*/
-    if (length + position > strlen(value_from)) {
+    if (length + position > (int) strlen(value_from)) {
         printf("FAIL\n");
         return -1;
     }

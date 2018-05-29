@@ -23,7 +23,7 @@ error_code parse_option(size_t supported_arg, char ***rem_argv, size_t* value)
             return ERR_BAD_PARAMETER;
         } else {
 
-            /* Converts char to int */
+            /* Converts char* to int with base 10*/
             long val = strtol(**rem_argv, NULL, 10);
 
             if (val > 0) {

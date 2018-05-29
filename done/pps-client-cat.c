@@ -57,10 +57,9 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    char* concat = value_from;
-
-    //TODO use this instead
-    //strncpy(concat, value_from, strlen(value_from));
+    pps_value_t concat_temp = value_from;
+    char concat[strlen(concat_temp) + 1];
+    strcpy(concat, concat_temp);
 
     /* Get the respective values and concatenate them */
     for (size_t i = 1; i < nbr_arg; i++) {

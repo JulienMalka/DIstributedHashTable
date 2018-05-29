@@ -154,5 +154,5 @@ void node_list_free(node_list_t *list)
 
 void node_list_sort(node_list_t *list, int (*comparator)(const node_t *, const node_t *))
 {
-    qsort(list->nodes, list->size, sizeof(node_t), comparator);
+    qsort(list->nodes, list->size, sizeof(node_t), (__compar_fn_t) comparator);
 }

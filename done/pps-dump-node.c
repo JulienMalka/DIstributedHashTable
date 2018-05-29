@@ -157,7 +157,7 @@ size_t parse_kv_pairs(char* in_msg, ssize_t length, size_t starting_index, kv_li
 
     char iterator;
 
-    for (size_t i = 0; i < length; i++) {
+    for (ssize_t i = 0; i < length; i++) {
         iterator = in_msg[i];
 
         if (parsing_key && iterator != '\0') {
