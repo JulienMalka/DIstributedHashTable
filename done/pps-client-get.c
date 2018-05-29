@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    client_end(&client);
+    //client_end(&client);
 
     return 0;
 }
