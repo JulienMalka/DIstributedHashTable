@@ -25,8 +25,8 @@ error_code send_packet(int socket, const char* message, size_t size, node_t node
 
     if(message == NULL) return ERR_BAD_PARAMETER;
 
-    int error = sendto(socket, message, size, 0,
-                       (struct sockaddr *) &node, sizeof(node));
+    ssize_t error = sendto(socket, message, size, 0,
+                           (struct sockaddr *) &node, sizeof(node));
 
 
     if(error==-1) return ERR_NETWORK;

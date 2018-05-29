@@ -24,6 +24,20 @@ void print_sha(unsigned char* input)
     }
 }
 
+void create_key_from_sockaddr(struct sockaddr_in address, char* dest){
+	memset(dest, '\0', 1);
+	char space[2];
+	memset(&space, ' ', 1);
+	space[1] = '\0';
+	strcat(dest, inet_ntoa(address.sin_addr));
+	strcat(dest, space);
+
+
+	char port_str[5];
+	sprintf(port_str, "%d", ntohs(address.sin_port));
+	strcat(dest, port_str);
+}
+
 /**
  * @brief Utilitary executable which pings every server in servers.txt and returns their status
  * As follows : pps-list-nodes
@@ -31,7 +45,7 @@ void print_sha(unsigned char* input)
  */
 int main(int argc, char* argv[])
 {
-    size_t BUFFER_LENGTH = 20;
+    socklen_t BUFFER_LENGTH = 20;
 
     /* Client initialization and parsing optional arguments */
     client_t client;
@@ -54,23 +68,52 @@ int main(int argc, char* argv[])
 
     /* Pings every server */
     for(size_t i = 0; i < client.server.size; i++) {
-        char* buffer_send = malloc(0);
-        send_packet(client.socket, buffer_send, 0, client.server.nodes[i]);
+        send_packet(client.socket, "", 0, client.server.nodes[i]);
+    }
 
-        int error_receive = recv(client.socket, NULL, 0, 0);
-        char* status;
-        if(error_receive == -1) {
+    Htable_t htable_nodes = construct_Htable(10);
+
+    struct sockaddr_in source_adress;
+    socklen_t address_size = sizeof(struct sockaddr_in);
+
+    size_t nbr_response = 0;
+    while (recvfrom(client.socket, NULL, 0, 0, (struct sockaddr *) &source_adress, &address_size) != -1) {
+
+	//		printf("received confirmation from %s and %d of length %hu \n", inet_ntoa(source_adress.sin_addr), ntohs(source_adress.sin_port), address_size);
+
+			char key[30];
+			create_key_from_sockaddr(source_adress, key);
+
+	//		printf("\nmade key successfully = %s \n", key);
+
+			add_Htable_value(htable_nodes, key, "OK");
+			nbr_response++;
+
+			/*Received enough responses*/
+			if (nbr_response >= client.server.size)
+				break;
+    }
+
+    for (size_t i = 0; i < client.server.size; i++) {
+
+    	char key[30];
+    	create_key_from_sockaddr(client.server.nodes[i].addr, key);
+	//	printf("\nmade key successfully = %s \n", key);
+
+        pps_value_t status = get_Htable_value(htable_nodes, key);
+
+        /*Key not found in the hashtable*/
+        if (status == NULL)
             status = "FAIL";
 
-        } else {
-            status = "OK";
-        }
         char buffer[BUFFER_LENGTH];
         printf("%s %hu (", inet_ntop(AF_INET, &client.server.nodes[i].addr.sin_addr, buffer, BUFFER_LENGTH), ntohs(client.server.nodes[i].addr.sin_port));
         print_sha(client.server.nodes[i].sha);
-        printf(") %s", status);
-        printf("\n");
+        printf(") %s\n", status);
+
     }
+
+    delete_Htable_and_content(&htable_nodes);
 
     return 0;
 }
