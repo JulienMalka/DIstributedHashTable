@@ -24,7 +24,12 @@ error_code parse_option(size_t supported_arg, char ***rem_argv, size_t* value)
         } else {
 
             /* Converts char to int */
-            *value = ***rem_argv - '0';
+            long val = strtol(**rem_argv, NULL, 10);
+
+            if (val > 0) {
+                *value = (size_t) val;
+            }
+            else return ERR_BAD_PARAMETER;
         }
     } else
         return ERR_BAD_PARAMETER;
