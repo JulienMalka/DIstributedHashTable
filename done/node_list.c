@@ -106,9 +106,10 @@ error_code node_list_add(node_list_t *list, node_t node)
     if (list == NULL)
         return ERR_BAD_PARAMETER;
 
-    if(list->size > list->allocated_size) {
+    if(list->size+1 > list->allocated_size) {
 
-        node_t* nodes = realloc(list->nodes, list->allocated_size + 32);
+       node_t* nodes = realloc(list->nodes, (list->allocated_size + ALLOCATED_MEMORY_LIST)*sizeof(node_t));
+
         if(nodes == NULL) {
             return ERR_NOMEM;
         } else {
@@ -146,7 +147,7 @@ void node_list_free(node_list_t *list)
         node_end(&list->nodes[i]);
     }
 
-    free(list->nodes);
+    //free(list->nodes);
     list->nodes = NULL;
     list = NULL;
 }
