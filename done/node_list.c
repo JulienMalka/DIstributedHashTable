@@ -108,8 +108,8 @@ error_code node_list_add(node_list_t *list, node_t node)
 
     if(list->size > list->allocated_size) {
 
-        node_t* nodes = realloc(list->nodes, list->allocated_size + 32);
-        if(nodes == NULL) {
+        node_t* nodes = realloc(list->nodes, list-> allocated_size + ALLOCATED_MEMORY_LIST);
+        if (nodes == NULL) {
             return ERR_NOMEM;
         } else {
             list->allocated_size += ALLOCATED_MEMORY_LIST;
