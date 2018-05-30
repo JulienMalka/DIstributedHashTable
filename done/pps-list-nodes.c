@@ -59,7 +59,8 @@ int main(int argc, char* argv[])
     error_code error_init = client_init(client_i);
 
     if(error_init != ERR_NONE) {
-        printf("FAIL\n");
+		client_end(&client);
+		printf("FAIL\n");
         return -1;
     }
 
@@ -114,6 +115,7 @@ int main(int argc, char* argv[])
     }
 
     delete_Htable_and_content(&htable_nodes);
+	client_end(&client);
 
-    return 0;
+	return 0;
 }

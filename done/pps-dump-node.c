@@ -46,7 +46,8 @@ int main(int argc, char* argv[])
     error_code error_init = client_init(client_i);
 
     if(error_init!=ERR_NONE) {
-        printf("FAIL\n");
+		client_end(&client);
+		printf("FAIL\n");
         return -1;
     }
 
@@ -58,7 +59,8 @@ int main(int argc, char* argv[])
         ip = argv[0];
         port = (uint16_t) strtol(argv[1], NULL, 10);
     } else {
-        printf("FAIL\n");
+		client_end(&client);
+		printf("FAIL\n");
         return -1;
     }
 
@@ -68,9 +70,12 @@ int main(int argc, char* argv[])
     node_t node;
     node_init(&node, ip, port, 0);
 
+    printf("ip = %s, port = %d\n", ip, port);
+
     /* Send packet to node */
     if (send_packet(s, "\0", 1, node) != ERR_NONE) {
-        //error handling
+		client_end(&client);
+		//error handling
         printf("FAIL\n");
         return -1;
     }
@@ -80,6 +85,7 @@ int main(int argc, char* argv[])
     ssize_t in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
 
     if (in_msg_len == -1) {
+    	client_end(&client);
         printf("FAIL\n");
         return -1;
     }
@@ -91,22 +97,37 @@ int main(int argc, char* argv[])
     /* 4 is the size (in bytes) of a 32-bit unsigned integer */
     size_t parsed_kv_pairs = parse_kv_pairs(&in_msg[4], in_msg_len - 4, 0, kv_list);
 
-    if (parsed_kv_pairs == -1) {
+    if ((int) parsed_kv_pairs == -1) {
+    	kv_list_free(kv_list);
+		client_end(&client);
+
         printf("FAIL\n");
         return -1;
     }
 
     /* More packets handling */
-    if (parsed_kv_pairs < kv_list->size) {
+    while (parsed_kv_pairs < kv_list->size) {
 
-        size_t starting_index = parsed_kv_pairs;
+    	printf("came here\n");
+        size_t startingIndex = parsed_kv_pairs;
         in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
-        parsed_kv_pairs += parse_kv_pairs(in_msg, in_msg_len, starting_index, kv_list);
 
-        if (parsed_kv_pairs != kv_list->size) {
-            printf("FAIL\n");
+        if (in_msg_len == -1) {
+
+//			kv_list_free(kv_list);
+//			client_end(&client);
+
+			printf("FAIL\n");
+			return -1;
+		}
+
+        parsed_kv_pairs += parse_kv_pairs(in_msg, in_msg_len, startingIndex, kv_list);
+
+
+   /*     if (parsed_kv_pairs != kv_list->size) {
+            printf("error in more packets handling FAIL only parsed = %lu to %lu\n", parsed_kv_pairs, kv_list->size);
             return -1;
-        }
+        }*/
 
     }
 
@@ -143,7 +164,7 @@ size_t parse_kv_pairs(char* in_msg, ssize_t length, size_t starting_index, kv_li
 {
 
     if (length < 4) {
-        return -1;
+        return (size_t) -1;
     }
 
     char key[MAX_MSG_SIZE];
@@ -178,7 +199,7 @@ size_t parse_kv_pairs(char* in_msg, ssize_t length, size_t starting_index, kv_li
             list_index++;
 
             if (list_index >= kv_list->size) {
-                return -1;
+                return (size_t) -1;
             }
 
             parsing_key = 1;

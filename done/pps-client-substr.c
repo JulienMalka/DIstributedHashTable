@@ -42,7 +42,8 @@ int main(int argc, char* argv[])
     error_code error_init = client_init(client_i);
 
     if(error_init!=ERR_NONE) {
-        printf("FAIL\n");
+		client_end(&client);
+		printf("FAIL\n");
         return -1;
     }
 
@@ -60,10 +61,12 @@ int main(int argc, char* argv[])
             length = (int) strtol(argv[2], NULL, 10);
             key_to = argv[3];
         } else {
-            printf("FAIL\n");
+			client_end(&client);
+			printf("FAIL\n");
             return -1;
         }
     } else {
+        client_end(&client);
         printf("FAIL\n");
         return -1;
     }
@@ -73,7 +76,8 @@ int main(int argc, char* argv[])
     error_code error_get = network_get(client, key_from, &value_from);
 
     if (error_get != ERR_NONE) {
-        printf("FAIL/n");
+		client_end(&client);
+		printf("FAIL/n");
         return -1;
     }
 
@@ -84,7 +88,8 @@ int main(int argc, char* argv[])
 
     /*ERROR HANDLING*/
     if (length + position > (int) strlen(value_from)) {
-        printf("FAIL\n");
+		client_end(&client);
+		printf("FAIL\n");
         return -1;
     }
 
@@ -103,7 +108,8 @@ int main(int argc, char* argv[])
     error_code error_put = network_put(client, key_to, substring);
 
     if (error_put != ERR_NONE) {
-        printf("FAIL\n");
+		client_end(&client);
+		printf("FAIL\n");
         return -1;
     }
 

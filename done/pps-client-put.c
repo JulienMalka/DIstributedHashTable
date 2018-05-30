@@ -40,6 +40,7 @@ int main(int argc, char* argv[])
     char* key = argv[0];
 
     error_code error = network_put(*client_i.client, key, value);
+
     if (error == ERR_NONE) {
         printf("OK\n");
     } else {
