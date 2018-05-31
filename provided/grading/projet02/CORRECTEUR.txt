@@ -1,0 +1,4 @@
+* [-0.5 style] Occasionally mixing tabs and spaces for indentation.
+
+* [remark] There are lots of occasions where strings/bytes are copied with
+  hand-written rules. Please take a look at memcpy(3) and strncpy(3).
