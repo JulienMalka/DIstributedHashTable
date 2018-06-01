@@ -28,15 +28,17 @@ error_code client_init(client_init_args_t client_init_args)
 
     /* name of the client is name of the executable */
     client_init_args.client->name = *client_init_args.argv[0];
+
     ++*client_init_args.argv;
 
     client_init_args.size_args--;
 
     /* check if there is enough arguments - special case SIZE_MAX for pps-client-cat */
-    if(client_init_args.required != SIZE_MAX && client_init_args.size_args < client_init_args.required) {
+    if (client_init_args.required != SIZE_MAX && client_init_args.size_args < client_init_args.required) {
         return ERR_BAD_PARAMETER;
     }
     size_t adress_start = argv_size(*client_init_args.argv);
+
     args_t* args_opt = parse_opt_args(client_init_args.optionnal, client_init_args.argv);
 
     size_t nb_parsed;

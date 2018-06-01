@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
 	error_code error_1 = network_get(*client_i.client, argv[0], &get_value_1);
 	error_code error_2 = network_get(*client_i.client, argv[1], &get_value_2);
 
-	if (error_1 == ERR_NONE && error_2 == ERR_NONE) {
+	if (error_1 == ERR_NONE || error_2 == ERR_NONE) {
 		char *firstocc = strstr(get_value_1, get_value_2);
 		int place;
 		if (firstocc == NULL) {

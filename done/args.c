@@ -32,7 +32,7 @@ error_code parse_option(size_t supported_arg, char ***rem_argv, size_t* value)
             else return ERR_BAD_PARAMETER;
         }
     } else
-        return ERR_BAD_PARAMETER;
+        return ERR_NOT_FOUND;
 
     return ERR_NONE;
 }
@@ -77,8 +77,10 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
         } else {
             /* if no arguments parsed, returns NULL, otherwise returns what was parsed until now */
             if(parsed_n == 0) {
-                free(parsed);
-                return NULL;
+                parsed->N = 3;
+                parsed->R = 2;
+                parsed->W = 2;
+                return parsed;
             } else {
                 return parsed;
             }
