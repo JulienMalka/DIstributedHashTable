@@ -12,7 +12,7 @@
 #include "hashtable.h"
 #include "network-utils.h"
 
-size_t parse_kv_pairs(char* in_msg, ssize_t length, size_t starting_index, kv_list_t* kv_list);
+size_t parse_kv_pairs(char *in_msg, ssize_t length, size_t starting_index, kv_list_t *kv_list);
 
 void print_kv_pair_list(kv_list_t kv_pair_list);
 
@@ -21,9 +21,8 @@ void print_kv_pair_list(kv_list_t kv_pair_list);
  * @param in_msg to parse, in big-endian
  * @return 32-bit unsigned int
  */
-size_t parse_nbr_kv_pair(char* in_msg)
-{
-    return (size_t) ((in_msg[3]) | (in_msg[2] << 8) | (in_msg[1] << 16) | (in_msg[0] << 24));
+size_t parse_nbr_kv_pair(char *in_msg) {
+	return (size_t) ntohs((uint16_t) ((in_msg[3]) | (in_msg[2] << 8) | (in_msg[1] << 16) | (in_msg[0] << 24)));
 }
 
 /**
@@ -31,113 +30,111 @@ size_t parse_nbr_kv_pair(char* in_msg)
  * As follows : pps-dump-node <IP> <Port>
  * @return 0 on normal exit, -1 otherwise
  */
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
 
-    /* Client initialization and parsing optionnal arguments */
-    client_t client;
-    client_init_args_t client_i;
-    client_i.client = &client;
-    client_i.argv = &argv;
-    client_i.required = 2;
-    client_i.optionnal = 0;
-    client_i.size_args = argc;
+	/* Client initialization and parsing optionnal arguments */
+	client_t client;
+	client_init_args_t client_i;
+	client_i.client = &client;
+	client_i.argv = &argv;
+	client_i.required = 2;
+	client_i.optionnal = 0;
+	client_i.size_args = argc;
 
-    error_code error_init = client_init(client_i);
+	error_code error_init = client_init(client_i);
 
-    if(error_init!=ERR_NONE) {
+	if (error_init != ERR_NONE) {
+		printf("FAIL\n");
+		return -1;
+	}
+
+	char *ip;
+	uint16_t port;
+
+	/* parse ip and port */
+	if (argv[0] != NULL && argv[1] != NULL) {
+		ip = argv[0];
+		port = (uint16_t) strtol(argv[1], NULL, 10);
+	} else {
 		client_end(&client);
 		printf("FAIL\n");
-        return -1;
-    }
+		return -1;
+	}
 
-    char* ip;
-    uint16_t port;
+	/* Set up socket */
+	int s = get_socket(1);
 
-    /* parse ip and port */
-    if (argv[0] != NULL && argv[1] != NULL) {
-        ip = argv[0];
-        port = (uint16_t) strtol(argv[1], NULL, 10);
-    } else {
-		client_end(&client);
-		printf("FAIL\n");
-        return -1;
-    }
+	node_t node;
+	node_init(&node, ip, port, 0);
 
-    /* Set up socket */
-    int s = get_socket(1);
+	printf("ip = %s, port = %d\n", ip, port);
 
-    node_t node;
-    node_init(&node, ip, port, 0);
-
-    printf("ip = %s, port = %d\n", ip, port);
-
-    /* Send packet to node */
-    if (send_packet(s, "\0", 1, node) != ERR_NONE) {
+	/* Send packet to node */
+	if (send_packet(s, "\0", 1, node) != ERR_NONE) {
 		client_end(&client);
 		//error handling
-        printf("FAIL\n");
-        return -1;
-    }
+		printf("FAIL in sending\n");
+		return -1;
+	}
 
-    /* Wait to receive the response */
-    char in_msg[MAX_MSG_SIZE];
-    ssize_t in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
+	/* Wait to receive the response */
+	char in_msg[MAX_MSG_SIZE];
+	ssize_t in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
 
-    if (in_msg_len == -1) {
-    	client_end(&client);
-        printf("FAIL\n");
-        return -1;
-    }
+	if (in_msg_len == -1) {
+		client_end(&client);
+		printf("FAIL in receiving\n");
+		return -1;
+	}
 
-    kv_list_t* kv_list = malloc(sizeof(kv_list_t));
-    kv_list->list = calloc(MAX_MSG_SIZE, sizeof(kv_pair_t));
-    kv_list->size = parse_nbr_kv_pair(in_msg);
+	kv_list_t *kv_list = malloc(sizeof(kv_list_t));
+	kv_list->list = calloc(MAX_MSG_SIZE, sizeof(kv_pair_t));
+	kv_list->size = parse_nbr_kv_pair(in_msg);
 
-    /* 4 is the size (in bytes) of a 32-bit unsigned integer */
-    size_t parsed_kv_pairs = parse_kv_pairs(&in_msg[4], in_msg_len - 4, 0, kv_list);
+	/* 4 is the size (in bytes) of a 32-bit unsigned integer */
+	size_t parsed_kv_pairs = parse_kv_pairs(&in_msg[4], in_msg_len - 4, 0, kv_list);
 
-    if ((int) parsed_kv_pairs == -1) {
-    	kv_list_free(kv_list);
+	if ((int) parsed_kv_pairs == -1) {
+		kv_list_free(kv_list);
 		client_end(&client);
 
-        printf("FAIL\n");
-        return -1;
-    }
+		printf("FAIL\n");
+		return -1;
+	}
 
-    /* More packets handling */
-    while (parsed_kv_pairs < kv_list->size) {
+	/* More packets handling */
+	while (parsed_kv_pairs < kv_list->size) {
 
-    	printf("came here\n");
-        size_t startingIndex = parsed_kv_pairs;
-        in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
+		printf("came here\n");
+		size_t startingIndex = parsed_kv_pairs;
+		in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
 
-        if (in_msg_len == -1) {
+		if (in_msg_len == -1) {
 
 //			kv_list_free(kv_list);
 //			client_end(&client);
 
-			printf("FAIL\n");
+			printf("FAIL in parsing keys\n");
 			return -1;
 		}
 
-        parsed_kv_pairs += parse_kv_pairs(in_msg, in_msg_len, startingIndex, kv_list);
+		parsed_kv_pairs += parse_kv_pairs(in_msg, in_msg_len, startingIndex, kv_list);
 
 
-   /*     if (parsed_kv_pairs != kv_list->size) {
-            printf("error in more packets handling FAIL only parsed = %lu to %lu\n", parsed_kv_pairs, kv_list->size);
-            return -1;
-        }*/
+		     if (parsed_kv_pairs != kv_list->size) {
+				 printf("error in more packets handling FAIL only parsed = %lu to %lu\n", parsed_kv_pairs, kv_list->size);
+				 return -1;
+			 }
 
-    }
+	}
 
-    print_kv_pair_list(*kv_list);
+	print_kv_pair_list(*kv_list);
 
-    kv_list_free(kv_list);
+	kv_list_free(kv_list);
 
-    client_end(&client);
+	client_end(&client);
 
-    return 0;
+	return 0;
 
 }
 
@@ -145,11 +142,10 @@ int main(int argc, char* argv[])
  * @brief Iterate over a list of key_value and prints its content
  * @param kv_pair_list to print
  */
-void print_kv_pair_list(kv_list_t kv_pair_list)
-{
-    for (size_t i = 0; i < kv_pair_list.size; i++) {
-        printf("%s = %s\n", kv_pair_list.list[i].key, kv_pair_list.list[i].value);
-    }
+void print_kv_pair_list(kv_list_t kv_pair_list) {
+	for (size_t i = 0; i < kv_pair_list.size; i++) {
+		printf("%s = %s\n", kv_pair_list.list[i].key, kv_pair_list.list[i].value);
+	}
 }
 
 /**
@@ -160,54 +156,53 @@ void print_kv_pair_list(kv_list_t kv_pair_list)
  * @param kv_list pointer to a kv_list
  * @return the number of key_value pairs parsed, -1 (unsigned) if parsing failed
  */
-size_t parse_kv_pairs(char* in_msg, ssize_t length, size_t starting_index, kv_list_t* kv_list)
-{
+size_t parse_kv_pairs(char *in_msg, ssize_t length, size_t starting_index, kv_list_t *kv_list) {
 
-    if (length < 4) {
-        return (size_t) -1;
-    }
+	if (length < 4) {
+		return (size_t) -1;
+	}
 
-    char key[MAX_MSG_SIZE];
-    int key_index = 0;
-    char value[MAX_MSG_SIZE];
-    int value_index = 0;
+	char key[MAX_MSG_SIZE];
+	int key_index = 0;
+	char value[MAX_MSG_SIZE];
+	int value_index = 0;
 
-    size_t list_index = starting_index;
+	size_t list_index = starting_index;
 
-    int parsing_key = 1;
+	int parsing_key = 1;
 
-    char iterator;
+	char iterator;
 
-    for (ssize_t i = 0; i < length; i++) {
-        iterator = in_msg[i];
+	for (ssize_t i = 0; i < length; i++) {
+		iterator = in_msg[i];
 
-        if (parsing_key && iterator != '\0') {
-            key[key_index] = iterator;
-            key_index++;
-        } else if (parsing_key && iterator == '\0') {
-            parsing_key = 0;
-            key[key_index] = '\0';
-            key_index = 0;
-        } else if (!parsing_key && iterator != '\0') {
-            value[value_index] = iterator;
-            value_index++;
-        } else if (!parsing_key && iterator == '\0') {
+		if (parsing_key && iterator != '\0') {
+			key[key_index] = iterator;
+			key_index++;
+		} else if (parsing_key && iterator == '\0') {
+			parsing_key = 0;
+			key[key_index] = '\0';
+			key_index = 0;
+		} else if (!parsing_key && iterator != '\0') {
+			value[value_index] = iterator;
+			value_index++;
+		} else if (!parsing_key && iterator == '\0') {
 
-            value[value_index] = '\0';
+			value[value_index] = '\0';
 
-            kv_list->list[list_index] = create_kv_pair(key, value);
-            list_index++;
+			kv_list->list[list_index] = create_kv_pair(key, value);
+			list_index++;
 
-            if (list_index >= kv_list->size) {
-                return (size_t) -1;
-            }
+			if (list_index >= kv_list->size) {
+				return (size_t) -1;
+			}
 
-            parsing_key = 1;
-            value_index = 0;
-        }
-    }
-    value[value_index] = '\0';
-    kv_list->list[list_index] = create_kv_pair(key, value);
+			parsing_key = 1;
+			value_index = 0;
+		}
+	}
+	value[value_index] = '\0';
+	kv_list->list[list_index] = create_kv_pair(key, value);
 
-    return list_index + 1;
+	return list_index + 1;
 }

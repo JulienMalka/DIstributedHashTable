@@ -46,14 +46,11 @@ struct bucket *create_bucket(kv_pair_t key_value, struct bucket *next) {
 
 	new->key_value = key_value;
 
-	new->next = malloc(sizeof(struct bucket));
-
 	if (new->next == NULL) {
 		free(new);
 		return NULL;
 	}
 
-	delete_bucket(next->next);
 	new->next = next;
 	return new;
 }
@@ -93,7 +90,7 @@ kv_pair_t create_kv_pair(pps_key_t key, pps_value_t value) {
  * @param bck bucket to delete
  */
 void delete_bucket(struct bucket *bck) {
-	if (bck == NULL) {}
+	if (bck == NULL){}
 	else if (bck->key_value.key == NULL || bck->key_value.value == NULL) {
 		if (bck->next != NULL)
 			delete_bucket(bck->next);

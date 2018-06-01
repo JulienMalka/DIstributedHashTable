@@ -147,7 +147,6 @@ void node_list_free(node_list_t *list)
         node_end(&list->nodes[i]);
     }
 
-    //free(list->nodes);
     list->nodes = NULL;
     list = NULL;
 }

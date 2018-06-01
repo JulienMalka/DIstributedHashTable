@@ -59,7 +59,6 @@ int main(int argc, char* argv[])
     error_code error_init = client_init(client_i);
 
     if(error_init != ERR_NONE) {
-		client_end(&client);
 		printf("FAIL\n");
         return -1;
     }
@@ -77,7 +76,7 @@ int main(int argc, char* argv[])
     struct sockaddr_in source_adress;
     socklen_t address_size = sizeof(struct sockaddr_in);
 
-    size_t nbr_response = 0;
+	size_t nbr_response = 0;
     while (recvfrom(client.socket, NULL, 0, 0, (struct sockaddr *) &source_adress, &address_size) != -1) {
 
 	//		printf("received confirmation from %s and %d of length %hu \n", inet_ntoa(source_adress.sin_addr), ntohs(source_adress.sin_port), address_size);
@@ -88,7 +87,8 @@ int main(int argc, char* argv[])
 	//		printf("\nmade key successfully = %s \n", key);
 
 			add_Htable_value(htable_nodes, key, "OK");
-			nbr_response++;
+
+		nbr_response++;
 
 			/*Received enough responses*/
 			if (nbr_response >= client.server.size)
@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
 
     }
 
-    delete_Htable_and_content(&htable_nodes);
+	delete_Htable_and_content(&htable_nodes);
 	client_end(&client);
 
 	return 0;

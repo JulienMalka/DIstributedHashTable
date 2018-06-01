@@ -31,7 +31,6 @@ int main(int argc, char *argv[]) {
 	error_code error_init = client_init(client_i);
 
 	if (error_init != ERR_NONE) {
-		client_end(&client);
 		printf("FAIL\n");
 		return -1;
 	}
