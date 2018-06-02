@@ -12,7 +12,7 @@ ring_t *ring_alloc()
 
 error_code ring_init(ring_t *ring)
 {
-    node_list_t* node_list =  get_nodes();
+    node_list_t *node_list = get_nodes();
 
     /* If parsing of servers.txt fails, get_nodes returns NULL */
     if (node_list == NULL)
@@ -41,7 +41,7 @@ node_list_t *ring_get_nodes_for_key(const ring_t *ring, size_t wanted_list_size,
     unsigned char sha[SHA_DIGEST_LENGTH];
     SHA1((const unsigned char *) key, strlen(key), sha);
 
-    node_list_t* nodes = node_list_new();
+    node_list_t *nodes = node_list_new();
 
     size_t iterator = 0;
 
@@ -49,7 +49,7 @@ node_list_t *ring_get_nodes_for_key(const ring_t *ring, size_t wanted_list_size,
     while (strcmp((const char *) sha, (const char *) ring->nodes[iterator].sha) > 0)
         iterator++;
 
-    if (node_list_add(nodes ,ring->nodes[iterator]) != ERR_NONE)
+    if (node_list_add(nodes, ring->nodes[iterator]) != ERR_NONE)
         return NULL;
 
     size_t left = wanted_list_size - 1;

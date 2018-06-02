@@ -12,7 +12,7 @@
  * @param value pointer to a value of the struct
  * @return error_code ERR_NONE, ERR_BAD_PARAMETER otherwise
  */
-error_code parse_option(size_t supported_arg, char ***rem_argv, size_t* value)
+error_code parse_option(size_t supported_arg, char ***rem_argv, size_t *value)
 {
     if (supported_arg) {
 
@@ -22,14 +22,12 @@ error_code parse_option(size_t supported_arg, char ***rem_argv, size_t* value)
         if (*rem_argv == NULL || !strcmp(**rem_argv, "--")) {
             return ERR_BAD_PARAMETER;
         } else {
-
             /* Converts char* to int with base 10*/
             long val = strtol(**rem_argv, NULL, 10);
 
             if (val > 0) {
                 *value = (size_t) val;
-            }
-            else return ERR_BAD_PARAMETER;
+            } else return ERR_BAD_PARAMETER;
         }
     } else
         return ERR_NOT_FOUND;
@@ -43,14 +41,14 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
     /* |*rem_argv|  i the pointer on a string of the string array rem_argv */
 
     /* Structure with default values */
-    args_t* parsed = malloc(sizeof(args_t));
+    args_t *parsed = malloc(sizeof(args_t));
     parsed->N = 3;
     parsed->R = 2;
     parsed->W = 2;
 
     /* Counts the number of parsed arguments*/
     int parsed_n = 0;
-    while(**rem_argv != NULL) {
+    while (**rem_argv != NULL) {
 
         /* Check for -n option*/
         if (!strcmp(**rem_argv, "-n")) {
@@ -75,15 +73,7 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
             ++*rem_argv;
             return parsed;
         } else {
-            /* if no arguments parsed, returns NULL, otherwise returns what was parsed until now */
-            if(parsed_n == 0) {
-                parsed->N = 3;
-                parsed->R = 2;
-                parsed->W = 2;
-                return parsed;
-            } else {
-                return parsed;
-            }
+            return parsed;
         }
 
         ++*rem_argv;

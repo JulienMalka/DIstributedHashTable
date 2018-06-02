@@ -279,10 +279,10 @@ Suite *hashtable_suite()
     TCase *tc_ht = tcase_create("hashtable");
     suite_add_tcase(s, tc_ht);
 
-  //  tcase_add_test(tc_ht, get_nodes_test);
-   // tcase_add_test(tc_ht, add_get_hashtable);
-  //  tcase_add_test(tc_ht, get_hashtable_size);
-  //  tcase_add_test(tc_ht, get_hashtable_content);
+    //  tcase_add_test(tc_ht, get_nodes_test);
+    // tcase_add_test(tc_ht, add_get_hashtable);
+    //  tcase_add_test(tc_ht, get_hashtable_size);
+    //  tcase_add_test(tc_ht, get_hashtable_content);
     tcase_add_test(tc_ht, parsing_argv);
 //    tcase_add_test(tc_ht, ring_t_does_its_job);
 //    tcase_add_test(tc_ht, node_list_sorting);

@@ -46,8 +46,8 @@ int main(int argc, char* argv[])
         printf("OK %s\n", get_value);
         free_const_ptr(get_value);
     } else {
-		client_end(&client);
-		printf("FAIL\n");
+        client_end(&client);
+        printf("FAIL\n");
         return -1;
     }
 

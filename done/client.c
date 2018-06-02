@@ -39,12 +39,12 @@ error_code client_init(client_init_args_t client_init_args)
     }
     size_t adress_start = argv_size(*client_init_args.argv);
 
-    args_t* args_opt = parse_opt_args(client_init_args.optionnal, client_init_args.argv);
+    args_t *args_opt = parse_opt_args(client_init_args.optionnal, client_init_args.argv);
 
     size_t nb_parsed;
-    if(args_opt == NULL) {
+    if (args_opt == NULL) {
         nb_parsed = 0;
-        args_t* args_default = malloc(sizeof(args_t));
+        args_t *args_default = malloc(sizeof(args_t));
         args_default->N = 3;
         args_default->R = 2;
         args_default->W = 2;
@@ -55,17 +55,18 @@ error_code client_init(client_init_args_t client_init_args)
     }
 
     /* check if there is exactly the number of mandatory arguments - special case SIZE_MAX for pps-client-cat */
-    if(client_init_args.required != SIZE_MAX && client_init_args.size_args - nb_parsed != client_init_args.required) {
+    if (client_init_args.required != SIZE_MAX && client_init_args.size_args - nb_parsed != client_init_args.required) {
         return ERR_BAD_PARAMETER;
     }
-    ring_t* ring = ring_alloc();
+
+    ring_t *ring = ring_alloc();
     ring_init(ring);
 
     if (ring == NULL)
         return ERR_BAD_PARAMETER;
 
 
-    if(client_init_args.client->args->N > ring->size)
+    if (client_init_args.client->args->N > ring->size)
         client_init_args.client->args->N = ring->size;
 
 
