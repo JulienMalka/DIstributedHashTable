@@ -31,12 +31,13 @@ void create_key_from_sockaddr(struct sockaddr_in address, char *dest)
     memset(&space, ' ', 1);
     space[1] = '\0';
     strcat(dest, inet_ntoa(address.sin_addr));
-    strcat(dest, space);
+    strncat(dest, space, 2);
 
 
+    /* 4 char for #port + '\0'*/
     char port_str[5];
     sprintf(port_str, "%d", ntohs(address.sin_port));
-    strcat(dest, port_str);
+    strncat(dest, port_str, 5);
 }
 
 /**
@@ -82,7 +83,7 @@ int main(int argc, char *argv[])
 
         //		printf("received confirmation from %s and %d of length %hu \n", inet_ntoa(source_adress.sin_addr), ntohs(source_adress.sin_port), address_size);
 
-        char key[30];
+        char key[BUFFER_LENGTH];
         create_key_from_sockaddr(source_adress, key);
 
         //		printf("\nmade key successfully = %s \n", key);
@@ -98,7 +99,7 @@ int main(int argc, char *argv[])
 
     for (size_t i = 0; i < client.server.size; i++) {
 
-        char key[30];
+        char key[BUFFER_LENGTH];
         create_key_from_sockaddr(client.server.nodes[i].addr, key);
         //	printf("\nmade key successfully = %s \n", key);
 

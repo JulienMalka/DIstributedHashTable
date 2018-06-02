@@ -23,7 +23,7 @@ void print_kv_pair_list(kv_list_t kv_pair_list);
  */
 size_t parse_nbr_kv_pair(char *in_msg)
 {
-    return (size_t) ntohs((uint16_t) ((in_msg[3]) | (in_msg[2] << 8) | (in_msg[1] << 16) | (in_msg[0] << 24)));
+    return (size_t) ntohl((uint32_t) ((in_msg[3]) | (in_msg[2] << 8) | (in_msg[1] << 16) | (in_msg[0] << 24)));
 }
 
 /**
@@ -93,6 +93,8 @@ int main(int argc, char *argv[])
     kv_list->list = calloc(MAX_MSG_SIZE, sizeof(kv_pair_t));
     kv_list->size = parse_nbr_kv_pair(in_msg);
 
+    printf("nbr of key to parse = %lu\n", kv_list->size);
+
     /* 4 is the size (in bytes) of a 32-bit unsigned integer */
     size_t parsed_kv_pairs = parse_kv_pairs(&in_msg[4], in_msg_len - 4, 0, kv_list);
 
@@ -111,7 +113,9 @@ int main(int argc, char *argv[])
         size_t startingIndex = parsed_kv_pairs;
         in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
 
-        if (in_msg_len == -1) {
+      parsed_kv_pairs += parse_kv_pairs(in_msg, in_msg_len, startingIndex, kv_list);
+
+      if (in_msg_len == -1 && parsed_kv_pairs != kv_list->size) {
 
 //			kv_list_free(kv_list);
 //			client_end(&client);
@@ -120,14 +124,12 @@ int main(int argc, char *argv[])
             return -1;
         }
 
-        parsed_kv_pairs += parse_kv_pairs(in_msg, in_msg_len, startingIndex, kv_list);
 
+    }
 
-        if (parsed_kv_pairs != kv_list->size) {
-            printf("error in more packets handling FAIL only parsed = %lu to %lu\n", parsed_kv_pairs, kv_list->size);
-            return -1;
-        }
-
+    if (parsed_kv_pairs != kv_list->size) {
+        printf("error in more packets handling FAIL only parsed = %lu to %lu\n", parsed_kv_pairs, kv_list->size);
+        return -1;
     }
 
     print_kv_pair_list(*kv_list);
@@ -206,6 +208,7 @@ size_t parse_kv_pairs(char *in_msg, ssize_t length, size_t starting_index, kv_li
         }
     }
     value[value_index] = '\0';
+    printf("parsed key = %s value = %s\n", key, value);
     kv_list->list[list_index] = create_kv_pair(key, value);
 
     return list_index + 1;
