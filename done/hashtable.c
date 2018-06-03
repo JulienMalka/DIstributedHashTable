@@ -25,8 +25,9 @@ Htable_t construct_Htable(size_t size)
     Htable_t htable_new;
     htable_new.buckets = calloc(size, sizeof(struct bucket));
 
-    if (htable_new.buckets == NULL) {}
-
+    if (htable_new.buckets == NULL) {
+        //return NO_HASHTABLE
+    }
 
     htable_new.size = size;
 

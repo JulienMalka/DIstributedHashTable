@@ -254,7 +254,7 @@ START_TEST(debug_print_ring_get_nodes_for_key)
     ring_t* ring = ring_alloc();
     ring_init(ring);
 
-    pps_key_t coucou = "bite";
+    pps_key_t coucou = "bite1";
 
 	printf("Segfault happens after\n");
     node_list_t* nodes_for_key = ring_get_nodes_for_key(ring, 3, coucou);
