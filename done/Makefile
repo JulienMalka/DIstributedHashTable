@@ -2,7 +2,7 @@ CFLAGS = -g -pedantic -Wall -Wextra -std=c99
 
 LDLIBS += -lcrypto
 
-all:  week05 week08 week09
+all:  week05 week08 week09 performance
 	#Reformat code of every file in folder
 	#@astyle -A8 *.c
 
@@ -28,3 +28,7 @@ pps-client-find : pps-client-find.o client.o node.o network.o system.o node_list
 pps-client-cat: pps-client-cat.o network.o client.o node_list.o system.o node.o network-utils.o hashtable.o args.o util.o ring.o
 
 pps-client-substr: pps-client-substr.o network.o client.o node_list.o system.o node.o network-utils.o hashtable.o args.o util.o ring.o
+
+performance: scenario_1
+
+scenario_1: scenario_1.o network.o client.o node_list.o system.o node.o network-utils.o hashtable.o args.o util.o ring.o

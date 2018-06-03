@@ -21,9 +21,9 @@ void print_kv_pair_list(kv_list_t kv_pair_list);
  * @param in_msg to parse, in big-endian
  * @return 32-bit unsigned int
  */
-size_t parse_nbr_kv_pair(char *in_msg)
+size_t parse_nbr_kv_pair(const char *in_msg)
 {
-    return (size_t) ntohl((uint32_t) ((in_msg[3]) | (in_msg[2] << 8) | (in_msg[1] << 16) | (in_msg[0] << 24)));
+    return (size_t) ((in_msg[3]) | (in_msg[2] << 8) | (in_msg[1] << 16) | (in_msg[0] << 24));
 }
 
 /**
@@ -113,7 +113,14 @@ int main(int argc, char *argv[])
         size_t startingIndex = parsed_kv_pairs;
         in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
 
-      parsed_kv_pairs += parse_kv_pairs(in_msg, in_msg_len, startingIndex, kv_list);
+        size_t more_kv_pairs = parse_kv_pairs(in_msg, in_msg_len, startingIndex, kv_list);
+
+        if (more_kv_pairs == (size_t) -1) {
+            printf("FAIL\n");
+            return -1;
+        }
+
+      parsed_kv_pairs += more_kv_pairs;
 
       if (in_msg_len == -1 && parsed_kv_pairs != kv_list->size) {
 

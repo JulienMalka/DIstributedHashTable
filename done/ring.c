@@ -52,6 +52,8 @@ node_list_t *ring_get_nodes_for_key(const ring_t *ring, size_t wanted_list_size,
     if (node_list_add(nodes, ring->nodes[iterator]) != ERR_NONE)
         return NULL;
 
+
+
     size_t left = wanted_list_size - 1;
 
     while (left != 0) {
