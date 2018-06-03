@@ -35,6 +35,10 @@ error_code parse_option(size_t supported_arg, char ***rem_argv, size_t *value)
     return ERR_NONE;
 }
 
+int check_bounds(args_t args){
+    return !(args.N < args.R || args.N < args.W);
+}
+
 args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
 {
 
@@ -71,13 +75,20 @@ args_t *parse_opt_args(size_t supported_args, char ***rem_argv)
             /* Check for end of optional arguments */
         } else if (!strcmp(**rem_argv, "--")) {
             ++*rem_argv;
+            if (!check_bounds(*parsed))
+                return NULL;
             return parsed;
         } else {
+            if (!check_bounds(*parsed))
+                return NULL;
             return parsed;
         }
 
         ++*rem_argv;
     }
+
+    if (!check_bounds(*parsed))
+        return NULL;
 
     return parsed;
 }
