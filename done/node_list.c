@@ -116,7 +116,14 @@ error_code node_list_add(node_list_t *list, node_t node)
 
     list->size++;
 
-    list->nodes[list->size - 1] = node;
+    /*Deep copy of node*/
+    node_t copy;
+    copy.addr = node.addr;
+    copy.id = node.id;
+    copy.sha = calloc(strlen((const char *) node.sha), sizeof(char));
+    strcpy((char *) copy.sha, (const char *) node.sha);
+
+    list->nodes[list->size - 1] = copy;
     return ERR_NONE;
 }
 
@@ -144,7 +151,7 @@ void node_list_free(node_list_t *list)
     }
 
     list->nodes = NULL;
-    list = NULL;
+    free(list);
 }
 
 void node_list_sort(node_list_t *list, int (*comparator)(const node_t *, const node_t *))
