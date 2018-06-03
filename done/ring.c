@@ -14,6 +14,8 @@ error_code ring_init(ring_t *ring)
 {
     node_list_t *node_list = get_nodes();
 
+    printf("size = %lu",  node_list->size);
+
     /* If parsing of servers.txt fails, get_nodes returns NULL */
     if (node_list == NULL)
         return ERR_BAD_PARAMETER;
@@ -44,6 +46,7 @@ node_list_t *ring_get_nodes_for_key(const ring_t *ring, size_t wanted_list_size,
     node_list_t *nodes = node_list_new();
 
     size_t iterator = 0;
+    printf("sha = %s ring size = %lu\n", sha, ring->size);
 
     /* Compute the place of the key in the ring */
     while (strcmp((const char *) sha, (const char *) ring->nodes[iterator].sha) > 0)
@@ -51,8 +54,6 @@ node_list_t *ring_get_nodes_for_key(const ring_t *ring, size_t wanted_list_size,
 
     if (node_list_add(nodes, ring->nodes[iterator]) != ERR_NONE)
         return NULL;
-
-
 
     size_t left = wanted_list_size - 1;
 

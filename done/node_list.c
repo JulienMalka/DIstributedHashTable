@@ -63,7 +63,7 @@ node_list_t *get_nodes()
             //take the n first chars + terminating \0, discard else
             char *real_ip = calloc(index + 1, sizeof(char));
 
-            strncpy(real_ip, ip, index + 1);
+            strncpy(real_ip, ip, index);
 
             for (size_t node_id = node_id_max - 1; node_id < node_id_max; node_id--) {
                 node_t node;
