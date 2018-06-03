@@ -38,7 +38,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 
 
     char *in_msg = malloc(MAX_MSG_ELEM_SIZE);
-    if(in_msg = NULL){
+    if(in_msg == NULL){
       return ERR_NOMEM;
     }
     ssize_t in_msg_len = 0;
@@ -51,11 +51,18 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
                 error_not_found++;
             } else {
                 //	char* count = strcpy(
-                char *count = (char *) get_Htable_value(local_h_table, in_msg);
-                if (count == NULL) {
-                    char count_c = 0;
-                    count = &count_c;
-                }
+                pps_value_t count_val = get_Htable_value(local_h_table, in_msg);
+                char* count = calloc(MAX_MSG_ELEM_SIZE, sizeof(char));
+
+                if(count_val == NULL){
+                  
+                  count[0]=0;
+                  count[1]='\0';
+                }else{
+
+                count = strcpy(count, count_val);
+              }
+
                 count[0]++;
 
                 if (count[0] >= (int) client.args->R) {

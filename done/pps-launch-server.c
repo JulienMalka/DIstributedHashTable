@@ -29,13 +29,13 @@ int main(void)
     int port;
     while(ok) {
         printf("IP port? ");
-        int error = scanf(" %s %d", ip, &port);
+        int count_rec = scanf(" %15s %d", ip, &port);
         if(strlen(ip)>15) {
             printf("FAIL\n");
         }
         error_code error_bind =  bind_server(s, ip, port);
 
-        if (error != 1 && error_bind == ERR_NONE)
+        if (count_rec == 2 && error_bind == ERR_NONE)
             ok = 0;
         else {
             printf("FAIL\n");
