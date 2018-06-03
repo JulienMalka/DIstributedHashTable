@@ -38,6 +38,9 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 
 
     char *in_msg = malloc(MAX_MSG_ELEM_SIZE);
+    if(in_msg = NULL){
+      return ERR_NOMEM;
+    }
     ssize_t in_msg_len = 0;
     while ((in_msg_len = recv(s, in_msg, MAX_MSG_ELEM_SIZE, 0)) != -1) {
 
