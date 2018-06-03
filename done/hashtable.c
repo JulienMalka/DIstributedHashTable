@@ -39,7 +39,7 @@ Htable_t construct_Htable(size_t size)
  * @param reference to the next bucket
  * @return reference to the new bucket or NULL if memory allocation fails
  */
-struct bucket *create_bucket(kv_pair_t key_value, struct bucket *next)
+struct bucket *create_bucket(kv_pair_t key_value)
 {
     struct bucket *new = malloc(sizeof(struct bucket));
 
@@ -48,12 +48,12 @@ struct bucket *create_bucket(kv_pair_t key_value, struct bucket *next)
 
     new->key_value = key_value;
 
-    if (new->next == NULL) {
+/*    if (new->next == NULL) {
         free(new);
         return NULL;
-    }
+    }*/
 
-    new->next = next;
+    new->next = NULL;
     return new;
 }
 
@@ -149,7 +149,7 @@ error_code add_value_to_bucket(struct bucket *bck, pps_key_t key, pps_value_t va
     } else if (bck->next == NULL) {
         kv_pair_t pair_new = create_kv_pair(key, value);
 
-        struct bucket *bucket_new = create_bucket(pair_new, NULL);
+        struct bucket *bucket_new = create_bucket(pair_new);
 
         /* on create_bucket error */
         if (bucket_new == NULL)
