@@ -10,6 +10,7 @@
 #include "network-utils.h"
 #include "config.h"
 #include "error.h"
+#include "hashtable.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -82,10 +83,13 @@ int main(void)
                   continue;
                 }
                 char header[4];
-                header[0] = node_dump->size >> 24;
-                header[1] = node_dump->size >> 16;
-                header[2] = node_dump->size >> 8;
-                header[3] = node_dump->size;
+                uint32_t converted_size = htonl((uint32_t) node_dump->size);
+   //             header[0] = node_dump->size >> 24;
+     //           header[1] = node_dump->size >> 16;
+       //         header[2] = node_dump->size >> 8;
+         //       header[3] = node_dump->size;
+                memcpy(header, &converted_size, 4);
+
 
                 while(counter < node_dump->size) {
 

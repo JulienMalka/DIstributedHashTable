@@ -23,7 +23,9 @@ void print_kv_pair_list(kv_list_t kv_pair_list);
  */
 size_t parse_nbr_kv_pair(const char *in_msg)
 {
-    return (size_t) ((in_msg[3]) | (in_msg[2] << 8) | (in_msg[1] << 16) | (in_msg[0] << 24));
+    size_t nbr = 0;
+    memcpy(&nbr, in_msg, 4);
+    return (size_t) ntohl((uint32_t) nbr);
 }
 
 /**
