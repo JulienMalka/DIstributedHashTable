@@ -19,17 +19,17 @@ void delete_bucket(struct bucket *bck);
  * @param number of buckets in the htable
  * @return new htable or NULL if memory allocation fails
  */
-Htable_t construct_Htable(size_t size)
+Htable_t* construct_Htable(size_t size)
 {
 
-    Htable_t htable_new;
-    htable_new.buckets = calloc(size, sizeof(struct bucket));
+    Htable_t* htable_new = malloc(sizeof(Htable_t));
+    htable_new->buckets = calloc(size, sizeof(struct bucket));
 
-    if (htable_new.buckets == NULL) {
-        //return NO_HASHTABLE
+    if (htable_new->buckets == NULL) {
+        return NULL;
     }
 
-    htable_new.size = size;
+    htable_new->size = size;
 
     return htable_new;
 }
@@ -122,7 +122,7 @@ void delete_Htable_and_content(Htable_t *table)
     free(table->buckets);
     table->buckets = NULL;
     table->size = 0;
-
+    free(table);
 }
 
 /**

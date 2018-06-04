@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
         send_packet(client.socket, "", 0, client.server.nodes[i]);
     }
 
-    Htable_t htable_nodes = construct_Htable(10);
+    Htable_t* htable_nodes = construct_Htable(10);
 
     struct sockaddr_in source_adress;
     socklen_t address_size = sizeof(struct sockaddr_in);
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 
         //		printf("\nmade key successfully = %s \n", key);
 
-        add_Htable_value(htable_nodes, key, "OK");
+        add_Htable_value(*htable_nodes, key, "OK");
 
         nbr_response++;
 
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
         create_key_from_sockaddr(client.server.nodes[i].addr, key);
         //	printf("\nmade key successfully = %s \n", key);
 
-        pps_value_t status = get_Htable_value(htable_nodes, key);
+        pps_value_t status = get_Htable_value(*htable_nodes, key);
 
         /*Key not found in the hashtable*/
         if (status == NULL)
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 
     }
 
-    delete_Htable_and_content(&htable_nodes);
+    delete_Htable_and_content(htable_nodes);
     client_end(&client);
 
     return 0;

@@ -23,7 +23,7 @@ int main(void)
     //Set up socket
     int s = get_socket(0);
 
-    Htable_t h_table = construct_Htable(HTABLE_SIZE);
+    Htable_t* h_table = construct_Htable(HTABLE_SIZE);
 
     int not_parsed = 1;
     char ip[16]; //max 15 characters in an ip adress
@@ -72,7 +72,7 @@ int main(void)
 
             if(in_msg_len == 1) {
 
-                kv_list_t* node_dump = get_Htable_content(h_table);
+                kv_list_t* node_dump = get_Htable_content(*h_table);
 
                 size_t counter = 0;
                 size_t size_packet =0;
@@ -84,10 +84,6 @@ int main(void)
                 }
                 char header[4];
                 uint32_t converted_size = htonl((uint32_t) node_dump->size);
-   //             header[0] = node_dump->size >> 24;
-     //           header[1] = node_dump->size >> 16;
-       //         header[2] = node_dump->size >> 8;
-         //       header[3] = node_dump->size;
                 memcpy(header, &converted_size, 4);
 
 
@@ -146,7 +142,7 @@ int main(void)
                   continue;
                 }
                 parse_put_request(in_msg, in_msg_len, key, value);
-                if (add_Htable_value(h_table, key, value) == ERR_NONE)
+                if (add_Htable_value(*h_table, key, value) == ERR_NONE)
                     sendto(s, NULL, 0, 0,
                            (struct sockaddr *) &cli_addr, sizeof(cli_addr));
             }
@@ -160,7 +156,7 @@ int main(void)
               printf("FAIL\n");
               continue;
             }
-            get = get_Htable_value(h_table, request);
+            get = get_Htable_value(*h_table, request);
             if(get != NULL) {
 
                 sendto(s, get, MAX_MSG_ELEM_SIZE, 0,

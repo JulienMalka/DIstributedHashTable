@@ -26,7 +26,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
 
     int s = get_socket(1);
     M_EXIT_IF_TOO_LONG(key, MAX_MSG_ELEM_SIZE, key.name);
-    Htable_t local_h_table = construct_Htable(HTABLE_SIZE);
+    Htable_t* local_h_table = construct_Htable(HTABLE_SIZE);
 
     node_list_t *nodes = ring_get_nodes_for_key(&client.server, client.args->N, key);
 
@@ -51,7 +51,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
                 error_not_found++;
             } else {
                 //	char* count = strcpy(
-                pps_value_t count_val = get_Htable_value(local_h_table, in_msg);
+                pps_value_t count_val = get_Htable_value(*local_h_table, in_msg);
                 char* count = calloc(MAX_MSG_ELEM_SIZE, sizeof(char));
 
                 if(count_val == NULL){
@@ -70,7 +70,7 @@ error_code network_get(client_t client, pps_key_t key, pps_value_t *value)
                     //        free(in_msg); (it's indeeed freed elsewhere)
                     return ERR_NONE;
                 }
-                add_Htable_value(local_h_table, in_msg, count);
+                add_Htable_value(*local_h_table, in_msg, count);
 
             }
         }
