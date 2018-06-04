@@ -124,7 +124,6 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value)
 
     }
 
-    printf("it segfaults before free nodes\n");
     node_list_free(nodes);
     return ERR_NETWORK;
 
