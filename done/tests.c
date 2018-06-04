@@ -244,7 +244,7 @@ START_TEST(debug_print_ring_get_nodes_for_key)
 
     pps_key_t coucou = "bite1";
 
-	printf("Segfault happens after\n");
+    printf("Segfault happens after\n");
     node_list_t* nodes_for_key = ring_get_nodes_for_key(ring, 3, coucou);
     printf("segfault\n");
 
@@ -273,7 +273,7 @@ Suite *hashtable_suite()
     TCase *tc_ht = tcase_create("hashtable");
     suite_add_tcase(s, tc_ht);
 
-      tcase_add_test(tc_ht, get_nodes_test);
+    tcase_add_test(tc_ht, get_nodes_test);
     // tcase_add_test(tc_ht, add_get_hashtable);
     //  tcase_add_test(tc_ht, get_hashtable_size);
     //  tcase_add_test(tc_ht, get_hashtable_content);
