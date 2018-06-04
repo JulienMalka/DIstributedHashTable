@@ -35,6 +35,12 @@ error_code parse_option(size_t supported_arg, char ***rem_argv, size_t *value)
     return ERR_NONE;
 }
 
+/**
+ * @brief If N is smaller than the quorum (R or W depending on supported args) then it returns false
+ * @param args parsed arguments
+ * @param supported_args optional arguments accepted
+ * @return false or true depending on the values of args
+ */
 int check_bounds(args_t args, size_t supported_args){
 
     if (supported_args & PUT_NEEDED & GET_NEEDED)
