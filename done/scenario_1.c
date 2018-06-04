@@ -70,10 +70,10 @@ int main(int argc, char *argv[]) {
 
 		error_code error_get = network_get(*client_i.client, key_buffer, &value);
 
-	/*	if (error_get != ERR_NONE) {
+		if (error_get != ERR_NONE) {
 			printf("Failed to get one of the keys : %s, got %s\n", key_buffer, value);
 			return 1;
-		}*/
+		}
 	}
 
 	int time_end_ret = clock_gettime(CLOCK_MONOTONIC, &time_end);
@@ -85,4 +85,3 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
-
