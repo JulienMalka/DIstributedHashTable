@@ -9,9 +9,8 @@
 #include "network.h"
 
 static void print_time(const struct timespec *p_time_start, const struct timespec *p_time_end) {
-	long nsec = p_time_end->tv_nsec - p_time_start->tv_nsec;
-	while (nsec < 0) nsec += 1000000000;
-	double sec = nsec / (double) 100000000;
+	double sec = (p_time_end->tv_nsec - p_time_start->tv_nsec) / 1000000000.0 +
+				  (p_time_end->tv_sec  - p_time_start->tv_sec);
 	printf("%f seconds\n", sec);
 }
 
