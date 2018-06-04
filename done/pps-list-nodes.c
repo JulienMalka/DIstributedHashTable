@@ -81,15 +81,9 @@ int main(int argc, char *argv[])
     size_t nbr_response = 0;
     while (recvfrom(client.socket, NULL, 0, 0, (struct sockaddr *) &source_adress, &address_size) != -1) {
 
-        //		printf("received confirmation from %s and %d of length %hu \n", inet_ntoa(source_adress.sin_addr), ntohs(source_adress.sin_port), address_size);
-
         char key[BUFFER_LENGTH];
         create_key_from_sockaddr(source_adress, key);
-
-        //		printf("\nmade key successfully = %s \n", key);
-
         add_Htable_value(*htable_nodes, key, "OK");
-
         nbr_response++;
 
         /*Received enough responses*/
@@ -101,8 +95,6 @@ int main(int argc, char *argv[])
 
         char key[BUFFER_LENGTH];
         create_key_from_sockaddr(client.server.nodes[i].addr, key);
-        //	printf("\nmade key successfully = %s \n", key);
-
         pps_value_t status = get_Htable_value(*htable_nodes, key);
 
         /*Key not found in the hashtable*/
