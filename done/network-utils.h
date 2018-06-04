@@ -15,7 +15,7 @@ error_code send_packet(int socket, const char* message, size_t size, node_t node
  * @param key key to format
  * @return the request correctly formated
  */
-char* format_put_request(pps_key_t key, pps_value_t value, int skey, int svalue);
+char* format_put_request(pps_key_t key, pps_value_t value, size_t skey, size_t svalue);
 
 
 /**
