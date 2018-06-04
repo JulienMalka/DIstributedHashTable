@@ -66,6 +66,10 @@ error_code client_init(client_init_args_t client_init_args)
 
 
     client_init_args.client->server = *ring;
+    int s = get_socket(1);
+    if(s == -1){
+    return ERR_NETWORK;  
+    }
     client_init_args.client->socket = get_socket(1);
 
     return ERR_NONE;
