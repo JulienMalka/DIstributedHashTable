@@ -37,7 +37,6 @@ int main(int argc, char *argv[]) {
 	/* Parse mandatory argument 1 and 2 */
 	long nbr_keys = strtol(argv[0], NULL, 10);
 	long buffer_length = 100;
-//	printf("nbr key = %ld\n", buffer_length);
 
 	/*Set up time monitoring */
 	struct timespec time_start, time_end;
@@ -72,7 +71,7 @@ int main(int argc, char *argv[]) {
 
 		if (error_get != ERR_NONE) {
 			printf("Failed to get one of the keys : %s, got %s\n", key_buffer, value);
-			return 1;
+//			return 1;
 		}
 	}
 

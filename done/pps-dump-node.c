@@ -69,13 +69,11 @@ int main(int argc, char *argv[]) {
 	node_t node;
 	node_init(&node, ip, port, 0);
 
-	printf("ip = %s, port = %d\n", ip, port);
-
 	/* Send packet to node */
 	if (send_packet(s, "\0", 1, node) != ERR_NONE) {
 		client_end(&client);
 		//error handling
-		printf("FAIL in sending\n");
+		printf("FAIL\n");
 		return -1;
 	}
 
@@ -85,15 +83,13 @@ int main(int argc, char *argv[]) {
 
 	if (in_msg_len == -1) {
 		client_end(&client);
-		printf("FAIL in receiving\n");
+		printf("FAIL\n");
 		return -1;
 	}
 
 	kv_list_t *kv_list = malloc(sizeof(kv_list_t));
 	kv_list->list = calloc(MAX_MSG_SIZE, sizeof(kv_pair_t));
 	kv_list->size = parse_nbr_kv_pair(in_msg);
-
-	printf("nbr of key to parse = %lu\n", kv_list->size);
 
 	/* 4 is the size (in bytes) of a 32-bit unsigned integer */
 	size_t parsed_kv_pairs = parse_kv_pairs(&in_msg[4], in_msg_len - 4, 0, kv_list);
@@ -109,7 +105,6 @@ int main(int argc, char *argv[]) {
 	/* More packets handling */
 	while (parsed_kv_pairs < kv_list->size) {
 
-		printf("came here\n");
 		size_t startingIndex = parsed_kv_pairs;
 		in_msg_len = recv(s, in_msg, MAX_MSG_SIZE, 0);
 
@@ -127,7 +122,7 @@ int main(int argc, char *argv[]) {
 //			kv_list_free(kv_list);
 //			client_end(&client);
 
-			printf("FAIL in parsing keys\n");
+			printf("FAIL\n");
 			return -1;
 		}
 
@@ -135,7 +130,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (parsed_kv_pairs != kv_list->size) {
-		printf("error in more packets handling FAIL only parsed = %lu to %lu\n", parsed_kv_pairs, kv_list->size);
+		printf("FAIL\n");
 		return -1;
 	}
 
@@ -209,7 +204,6 @@ size_t parse_kv_pairs(const char *in_msg, ssize_t length, size_t starting_index,
 		}
 	}
 	value[value_index] = '\0';
-	printf("parsed key = %s value = %s\n", key, value);
 	kv_list->list[list_index] = create_kv_pair(key, value);
 
 	return list_index + 1;

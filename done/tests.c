@@ -24,8 +24,6 @@
 #include "node.h"
 #include "ring.h"
 
-void print_htable(Htable_t* table);
-
 void print_sha(unsigned char* input)
 {
     if (input != NULL) {
@@ -81,16 +79,6 @@ void print_bucket(struct bucket* bck)
     } else {
         printf("kv(%s, %s), ", bck->key_value.key, bck->key_value.value);
         print_bucket(bck->next);
-    }
-}
-
-/*UTILITARY FUNCITON TO PRINT THE CONTENT OF AN HTABLE*/
-void print_htable(Htable_t* htable)
-{
-    printf("PRINTING CONTENT OF HTABLE\n");
-    for (int i = 0; i < htable->size; i++) {
-        printf("\nindex %d ", i);
-        print_bucket(&htable->buckets[i]);
     }
 }
 

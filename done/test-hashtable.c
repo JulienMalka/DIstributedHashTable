@@ -18,31 +18,25 @@
 
 #include <arpa/inet.h>
 
-void print_htable(Htable_t* table);
-
 START_TEST(week04)
 {
     printf("\nSTARTING TESTS FOR HTABLE\n\n");
-    Htable_t table = construct_Htable(HTABLE_SIZE);
+    Htable_t* table = construct_Htable(HTABLE_SIZE);
 
     // Defining tests ressource
     const pps_key_t key1 = "antoine";
     const pps_value_t value1 = "crettenand";
     const pps_key_t key2 = "julien";
     const pps_value_t value2 = "malka";
-    const pps_key_t key3 = "forgot_in_table";
 
     const pps_value_t value3 = "theboss";
 
-    add_Htable_value(table, key1, value1);
-    add_Htable_value(table, key2, value2);
-
-    const pps_value_t value_read1 = get_Htable_value(table, key1);
-    const pps_value_t value_read2 = get_Htable_value(table, key2);
+    add_Htable_value(*table, key1, value1);
+    add_Htable_value(*table, key2, value2);
 
 //    print_htable(&table);
 
-    add_Htable_value(table, key1, value3);
+    add_Htable_value(*table, key1, value3);
 
 //   const pps_value_t value_read3 = get_Htable_value(table, key1);
 //    const pps_value_t value_read4 = get_Htable_value(table, key3);
@@ -54,9 +48,9 @@ START_TEST(week04)
 //   ck_assert_str_eq(value2, value_read2);
     //  ck_assert_str_eq(value3, value_read3);
     // ck_assert_ptr_null(value_read4);
-    ck_assert_ptr_null(get_Htable_value(table, NULL));
+    ck_assert_ptr_null(get_Htable_value(*table, NULL));
 
-    delete_Htable_and_content(&table);
+    delete_Htable_and_content(table);
 }
 END_TEST
 
@@ -70,35 +64,13 @@ void print_bucket(struct bucket* bck)
     }
 }
 
-void print_htable(Htable_t* htable)
-{
-    printf("PRINTING CONTENT OF HTABLE\n");
-    for (int i = 0; i < htable->size; i++) {
-        printf("\nindex %d ", i);
-        print_bucket(&htable->buckets[i]);
-    }
-}
-
-void print_nodes(node_t* nodes, size_t size)
-{
-    char buffer[20];
-
-    for (int i = 0; i < size; i++) {
-    }
-
-}
-
 START_TEST(week05)
 {
     printf("\nSTARTING TESTS FOR GET_NODES\n\n");
-    node_list_t* nodes = node_list_new();
 
-    nodes = get_nodes();
 
-    print_nodes(nodes->nodes, nodes->size);
 }
 END_TEST
-
 
 
 Suite *hashtable_suite()

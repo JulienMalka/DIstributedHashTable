@@ -1,17 +1,18 @@
 CFLAGS = -g -pedantic -Wall -Wextra -std=c99
 
-LDLIBS += -lcrypto
+LDLIBS += -lcrypto -lcheck -lm -lrt -pthread -lsubunit
 
 all:  week05 week08 week09 performance
 	#Reformat code of every file in folder
 	#@astyle -A8 *.c
 
-week05: pps-launch-server pps-client-get pps-client-put 
+week05: pps-launch-server pps-client-get pps-client-put test-hashtable
 
 week08: pps-dump-node pps-list-nodes
 
 week09: pps-client-cat pps-client-substr pps-client-find
 
+test-hashtable: test-hashtable.o
 
 pps-launch-server: pps-launch-server.o system.o network.o hashtable.o network-utils.o util.o ring.o node.o node_list.o
 
