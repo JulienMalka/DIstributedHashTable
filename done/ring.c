@@ -64,8 +64,9 @@ node_list_t *ring_get_nodes_for_key(const ring_t *ring, size_t wanted_list_size,
 
     size_t left = wanted_list_size - 1;
 
-    while (left != 0) {
+    int looped = 0;
 
+    while (left != 0) {
         if (!node_list_contains(nodes, ring->nodes[iterator])) {
             if (node_list_add(nodes, ring->nodes[iterator]) != ERR_NONE)
                 return NULL;
@@ -73,8 +74,11 @@ node_list_t *ring_get_nodes_for_key(const ring_t *ring, size_t wanted_list_size,
         }
         iterator++;
 
-        if (iterator >= ring->size)
+        if (iterator >= ring->size) {
+            if (looped) break;
+            else looped += 1;
             iterator = 0;
+        }
     }
 
     return nodes;
