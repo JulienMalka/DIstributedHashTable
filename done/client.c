@@ -43,12 +43,7 @@ error_code client_init(client_init_args_t client_init_args)
 
     size_t nb_parsed;
     if (args_opt == NULL) {
-        nb_parsed = 0;
-        args_t *args_default = malloc(sizeof(args_t));
-        args_default->N = 3;
-        args_default->R = 2;
-        args_default->W = 2;
-        client_init_args.client->args = args_default;
+        return ERR_BAD_PARAMETER;
     } else {
         nb_parsed = adress_start - argv_size(*client_init_args.argv);
         client_init_args.client->args = args_opt;
