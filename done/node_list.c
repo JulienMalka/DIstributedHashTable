@@ -127,7 +127,12 @@ error_code node_list_add(node_list_t *list, node_t node)
     return ERR_NONE;
 }
 
-
+/**
+ * @brief Looks for given node in the given node_list_t
+ * @param list  node_list
+ * @param node
+ * @return true if node_list contains given node
+ */
 int node_list_contains(node_list_t *list, node_t node)
 {
 
@@ -151,7 +156,7 @@ void node_list_free(node_list_t *list)
     }
 
     list->nodes = NULL;
-//    free(list);
+    free(list);
 }
 
 void node_list_sort(node_list_t *list, int (*comparator)(const node_t *, const node_t *))
