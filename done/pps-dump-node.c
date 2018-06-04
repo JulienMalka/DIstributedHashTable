@@ -118,10 +118,6 @@ int main(int argc, char *argv[]) {
 		parsed_kv_pairs += more_kv_pairs;
 
 		if (in_msg_len == -1 && parsed_kv_pairs != kv_list->size) {
-
-//			kv_list_free(kv_list);
-//			client_end(&client);
-
 			printf("FAIL\n");
 			return -1;
 		}
