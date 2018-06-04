@@ -42,9 +42,6 @@ int main(void) {
 		}
 	}
 
-	//Bind server to the address:port
-
-
 	//Receive messages forever
 	while (!feof(stdin)) {
 
