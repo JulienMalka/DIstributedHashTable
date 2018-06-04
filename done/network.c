@@ -111,8 +111,6 @@ error_code network_put(client_t client, pps_key_t key, pps_value_t value)
         free(request);
     }
 
-    printf("sending ok\n");
-
     ssize_t error_receive;
     size_t success = 0;
     while ((error_receive = recv(s, NULL, 0, 0)) != -1) {
