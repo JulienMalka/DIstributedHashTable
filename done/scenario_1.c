@@ -10,6 +10,7 @@
 
 static void print_time(const struct timespec *p_time_start, const struct timespec *p_time_end) {
 	long nsec = p_time_end->tv_nsec - p_time_start->tv_nsec;
+	while (nsec < 0) nsec += 1000000000;
 	double sec = nsec / (double) 100000000;
 	printf("%f seconds\n", sec);
 }
