@@ -156,7 +156,7 @@ void node_list_free(node_list_t *list)
     }
 
     list->nodes = NULL;
-    free(list);
+    //free(list);
 }
 
 void node_list_sort(node_list_t *list, int (*comparator)(const node_t *, const node_t *))
