@@ -18,8 +18,6 @@
 
 #include <arpa/inet.h>
 
-void print_htable(Htable_t* table);
-
 START_TEST(week04)
 {
 	printf("\nSTARTING TESTS FOR HTABLE\n\n");
@@ -67,14 +65,6 @@ void print_bucket(struct bucket* bck){
 		printf("kv(%s, %s), ", bck->key_value.key, bck->key_value.value);
 		print_bucket(bck->next);
 	}	
-}
-
-void print_htable(Htable_t* htable){
-	printf("PRINTING CONTENT OF HTABLE\n");
-	for (int i = 0; i < htable->size; i++){
-		printf("\nindex %d ", i);
-		print_bucket(&htable->buckets[i]);		
-	}
 }
 
 void print_nodes(node_t* nodes, size_t size)

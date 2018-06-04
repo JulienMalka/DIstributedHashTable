@@ -32,6 +32,38 @@ error_code send_packet(int socket, const char *message, size_t size, node_t node
 
 
 /**
+ * @brief format a put request with the caracter \0 correctly placed
+ * @param value value to format
+ * @param key key to format
+ * @return the request correctly formated
+ */
+char *format_put_request(pps_value_t key, pps_value_t value, int skey, int svalue) {
+
+	size_t size_key;
+	size_t size_value;
+	if (skey == -1) {
+		size_key = strlen(key);
+	} else {
+		size_key = (size_t) skey;
+	}
+	if (svalue == -1) {
+		size_value = strlen(value);
+	} else {
+		size_value = (size_t) svalue;
+	}
+	char *result = calloc(size_key + size_value + 1, sizeof(char));
+	for (size_t i = 0; i < size_key; i++) {
+		result[i] = key[i];
+	}
+	result[size_key] = '\0';
+	for (size_t i = size_key + 1; i < size_key + 1 + size_value; i++) {
+		result[i] = value[i - size_key - 1];
+	}
+
+	return result;
+}
+
+/**
  * @brief parse a put request
  * @param in_msg the packet to parse
  * @param length length of request
