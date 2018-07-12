@@ -70,7 +70,7 @@ typedef struct{
  * @return the newly allocated hash-table
  */
 
-Htable_t construct_Htable(size_t size);
+Htable_t* construct_Htable(size_t size);
 
 /**
  * @brief delete the given hash-table

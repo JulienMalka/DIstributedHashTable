@@ -9,44 +9,52 @@
  */
 struct bucket {
     kv_pair_t key_value;
-    struct bucket* next;
+    struct bucket *next;
 };
+
+void delete_bucket(struct bucket *bck);
 
 /**
  * @brief Create a new Htable of parameter size. An htable is an array of buckets.
  * @param number of buckets in the htable
  * @return new htable or NULL if memory allocation fails
  */
-Htable_t construct_Htable(size_t size)
+Htable_t *construct_Htable(size_t size)
 {
 
-    Htable_t htable_new;
-    htable_new.buckets = calloc(size, sizeof(struct bucket));
-    htable_new.size = size;
+    Htable_t *htable_new = malloc(sizeof(Htable_t));
+    htable_new->buckets = calloc(size, sizeof(struct bucket));
+
+    if (htable_new->buckets == NULL) {
+        return NULL;
+    }
+
+    htable_new->size = size;
 
     return htable_new;
 }
+
 /**
  * @brief Create a new bucket.
  * @param key_value of the bucket
  * @param reference to the next bucket
  * @return reference to the new bucket or NULL if memory allocation fails
  */
-struct bucket* create_bucket(kv_pair_t key_value, struct bucket* next)
+struct bucket *create_bucket(kv_pair_t key_value)
 {
-    struct bucket* new = malloc(sizeof(struct bucket));
+    struct bucket *new = malloc(sizeof(struct bucket));
 
     if (new == NULL)
         return NULL;
 
     new->key_value = key_value;
 
-    new->next = malloc(sizeof(struct bucket));
+    /*    if (new->next == NULL) {
+            free(new);
+            return NULL;
+        }*/
 
-    if (new->next == NULL)
-        return NULL;
-
-    new->next = next;
+    new->next = NULL;
     return new;
 }
 
@@ -56,8 +64,8 @@ struct bucket* create_bucket(kv_pair_t key_value, struct bucket* next)
  */
 void kv_pair_free(kv_pair_t *kv)
 {
-    free((char*) kv->key);
-    free((char*) kv->value);
+    free((char *) kv->key);
+    free((char *) kv->value);
 }
 
 /**
@@ -69,16 +77,11 @@ void kv_pair_free(kv_pair_t *kv)
 kv_pair_t create_kv_pair(pps_key_t key, pps_value_t value)
 {
 
-    char* key_new = calloc(strlen(key) + 1, sizeof(char));
-    char* value_new = calloc(strlen(value) + 1, sizeof(char));
+    char *key_new = calloc(strlen(key) + 1, sizeof(char));
+    char *value_new = calloc(strlen(value) + 1, sizeof(char));
 
-    for (size_t i = 0; i < strlen(key); i++) {
-        key_new[i] = key[i];
-    }
-
-    for (size_t i = 0; i < strlen(value); i++) {
-        value_new[i] = value[i];
-    }
+    strcpy(key_new, key);
+    strcpy(value_new, value);
 
     kv_pair_t pair_new;
     pair_new.key = key_new;
@@ -91,14 +94,13 @@ kv_pair_t create_kv_pair(pps_key_t key, pps_value_t value)
  * @brief free the linked-list recursively bottom-up approach
  * @param bck bucket to delete
  */
-void delete_bucket(struct bucket* bck)
+void delete_bucket(struct bucket *bck)
 {
     if (bck == NULL) {}
     else if (bck->key_value.key == NULL || bck->key_value.value == NULL) {
         if (bck->next != NULL)
             delete_bucket(bck->next);
     } else if (bck->next == NULL) {
-        free(bck->next);
         kv_pair_free(&bck->key_value);
     } else {
         delete_bucket(bck->next);
@@ -111,16 +113,16 @@ void delete_bucket(struct bucket* bck)
  *    Note: does NOTHING until week 07.
  * @param table the hash-table to free (passed by reference)
  */
-void delete_Htable_and_content(Htable_t* table)
+void delete_Htable_and_content(Htable_t *table)
 {
-    for(size_t i = 0; i < table->size; i++) {
+    for (size_t i = 0; i < table->size; i++) {
         delete_bucket(&table->buckets[i]);
     }
 
     free(table->buckets);
     table->buckets = NULL;
     table->size = 0;
-
+    free(table);
 }
 
 /**
@@ -130,7 +132,7 @@ void delete_Htable_and_content(Htable_t* table)
  * @param value
  * @return 0
  */
-error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t value)
+error_code add_value_to_bucket(struct bucket *bck, pps_key_t key, pps_value_t value)
 {
 
     kv_pair_t key_value = bck->key_value;
@@ -148,7 +150,7 @@ error_code add_value_to_bucket(struct bucket* bck, pps_key_t key, pps_value_t va
     } else if (bck->next == NULL) {
         kv_pair_t pair_new = create_kv_pair(key, value);
 
-        struct bucket* bucket_new = create_bucket(pair_new, NULL);
+        struct bucket *bucket_new = create_bucket(pair_new);
 
         /* on create_bucket error */
         if (bucket_new == NULL)
@@ -183,7 +185,7 @@ error_code add_Htable_value(Htable_t htable, pps_key_t key, pps_value_t value)
  * @param key
  * @return value associated or NULL if the key does not exist in the htable
  */
-pps_value_t get_value_from_bucket(struct bucket* bck, pps_key_t key)
+pps_value_t get_value_from_bucket(struct bucket *bck, pps_key_t key)
 {
     kv_pair_t key_value = bck->key_value;
 
@@ -208,7 +210,7 @@ pps_value_t get_Htable_value(Htable_t htable, pps_key_t key)
         return NULL;
 
     size_t index = hash_function(key, htable.size);
-    struct bucket* row = &htable.buckets[index];
+    struct bucket *row = &htable.buckets[index];
     return get_value_from_bucket(row, key);
 }
 
@@ -228,9 +230,9 @@ size_t hash_function(pps_key_t key, size_t size)
     for (size_t i = 0; i < key_len; ++i) {
         hash += (unsigned char) key[i];
         hash += (hash << 10);
-        hash ^= (hash >>  6);
+        hash ^= (hash >> 6);
     }
-    hash += (hash <<  3);
+    hash += (hash << 3);
     hash ^= (hash >> 11);
     hash += (hash << 15);
 
@@ -240,23 +242,23 @@ size_t hash_function(pps_key_t key, size_t size)
 /**
  * @brief De-allocate memory of kv_list_t
  * @param list to free
- */ 
+ */
 void kv_list_free(kv_list_t *list)
 {
     for (size_t i = 0; i < list->size; i++) {
         kv_pair_free(&list->list[i]);
     }
     list->size = 0;
-    free(list);
     list->list = NULL;
+    free(list);
 }
 
 /**
  * @brief Compute the size of a bucket (ie. linkedlist) recursively
  * @param address of the bucket
  * @return the size as an unsigned integer
- */ 
-size_t get_bucket_size(struct bucket* bck)
+ */
+size_t get_bucket_size(struct bucket *bck)
 {
 
     size_t total = 0;
@@ -272,7 +274,7 @@ size_t get_bucket_size(struct bucket* bck)
  * @brief Compute the size of given hashtable
  * @param hashtable
  * @return size as unsigned integer
- */ 
+ */
 size_t get_Htable_size(Htable_t table)
 {
     size_t total = 0;
@@ -290,8 +292,8 @@ size_t get_Htable_size(Htable_t table)
  * @param list to store the content
  * @param from, index from which to start filling the list
  * @return the number of key_value pairs stored until then
- */ 
-size_t get_bucket_content(struct bucket* bck, kv_list_t* list, size_t from)
+ */
+size_t get_bucket_content(struct bucket *bck, kv_list_t *list, size_t from)
 {
     if (bck->key_value.key == NULL || bck->key_value.value == NULL) {
         return 0;
@@ -308,13 +310,22 @@ size_t get_bucket_content(struct bucket* bck, kv_list_t* list, size_t from)
  * @brief compute the content of given hashtable
  * @param hash_table
  * @return a new allocated kv_list_t with stored content from the hashtable
- */ 
+ */
 kv_list_t *get_Htable_content(Htable_t table)
 {
     size_t htable_size = get_Htable_size(table);
 
-    kv_list_t* list_of_kv = malloc (sizeof(kv_list_t));
+    kv_list_t *list_of_kv = malloc(sizeof(kv_list_t));
+
+    if (list_of_kv == NULL)
+        return NULL;
+
     list_of_kv->list = calloc(htable_size, sizeof(kv_list_t));
+
+    if (list_of_kv->list == NULL)
+        return NULL;
+
+
     list_of_kv->size = htable_size;
     size_t used_until = 0;
 

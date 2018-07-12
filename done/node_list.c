@@ -6,21 +6,20 @@
 #include <ctype.h>
 
 
-
 /**
  * @brief creates a new, empty, node_list_t
  * @return (a pointer to) the new list of nodes or NULL if memory allocation fails
  */
 node_list_t *node_list_new()
 {
-    node_list_t* new = malloc(sizeof(node_list_t));
+    node_list_t *new = malloc(sizeof(node_list_t));
     if (new == NULL)
-		return NULL;
+        return NULL;
     new->size = 0;
     new->allocated_size = ALLOCATED_MEMORY_LIST;
     new->nodes = calloc(ALLOCATED_MEMORY_LIST, sizeof(node_t));
     if (new->nodes == NULL)
-		return NULL;
+        return NULL;
     return new;
 }
 
@@ -31,11 +30,11 @@ node_list_t *node_list_new()
 node_list_t *get_nodes()
 {
 
-    node_list_t* nodes = node_list_new();
+    node_list_t *nodes = node_list_new();
 
-    FILE* file = fopen(PPS_SERVERS_LIST_FILENAME, "r");
+    FILE *file = fopen(PPS_SERVERS_LIST_FILENAME, "r");
 
-    if(file == NULL) {
+    if (file == NULL) {
         return NULL;
     }
 
@@ -47,7 +46,7 @@ node_list_t *get_nodes()
     uint16_t port = 0;
     size_t node_id_max = 0;
 
-    while(!feof(file)) {
+    while (!feof(file)) {
 
         if (isspace(current_char)) {
             if (fscanf(file, "%hu", &port) != 1)
@@ -62,16 +61,11 @@ node_list_t *get_nodes()
             current_char = fgetc(file);
 
             //take the n first chars + terminating \0, discard else
-            char* real_ip = calloc(index + 1, sizeof(char));
+            char *real_ip = calloc(index + 1, sizeof(char));
 
-            for (size_t i = 0; i < index; i++) {
-                real_ip[i] = ip[i];
-            }
-            //TODO : use the following instead
-            //strncpy(real_ip, ip, index + 1);
+            strncpy(real_ip, ip, index);
 
-            for(size_t node_id = node_id_max - 1; node_id < node_id_max; node_id--){
-
+            for (size_t node_id = node_id_max - 1; node_id < node_id_max; node_id--) {
                 node_t node;
                 if (node_init(&node, real_ip, port, node_id + 1) != ERR_NONE)
                     return NULL;
@@ -79,14 +73,14 @@ node_list_t *get_nodes()
             }
 
             free(real_ip);
-            while(current_char != '\n') {
+            while (current_char != '\n') {
                 current_char = fgetc(file);
             }
             index = 0;
             current_char = fgetc(file);
         }
 
-        ip[index] = current_char;
+        ip[index] = (char) current_char;
 
         index += 1;
         current_char = fgetc(file);
@@ -94,6 +88,7 @@ node_list_t *get_nodes()
 
     return nodes;
 }
+
 /**
  * @brief add a node to a list of nodes
  * @param list list of nodes where to add to (modified)
@@ -106,10 +101,11 @@ error_code node_list_add(node_list_t *list, node_t node)
     if (list == NULL)
         return ERR_BAD_PARAMETER;
 
-    if(list->size > list->allocated_size) {
+    if (list->size + 1 > list->allocated_size) {
 
-        node_t* nodes = realloc(list->nodes, list->allocated_size + 32);
-        if(nodes == NULL) {
+        node_t *nodes = realloc(list->nodes, (list->allocated_size + ALLOCATED_MEMORY_LIST) * sizeof(node_t));
+
+        if (nodes == NULL) {
             return ERR_NOMEM;
         } else {
             list->allocated_size += ALLOCATED_MEMORY_LIST;
@@ -120,19 +116,33 @@ error_code node_list_add(node_list_t *list, node_t node)
 
     list->size++;
 
-    list->nodes[list->size - 1] = node;
+    /*Deep copy of node*/
+    node_t copy;
+    copy.addr = node.addr;
+    copy.id = node.id;
+    copy.sha = calloc(strlen((const char *) node.sha), sizeof(char));
+    strcpy((char *) copy.sha, (const char *) node.sha);
+
+    list->nodes[list->size - 1] = copy;
     return ERR_NONE;
 }
 
+/**
+ * @brief Looks for given node in the given node_list_t
+ * @param list  node_list
+ * @param node
+ * @return true if node_list contains given node
+ */
+int node_list_contains(node_list_t *list, node_t node)
+{
 
-int node_list_contains(node_list_t *list, node_t node){
-
-	for (size_t i = 0; i < list->size; ++i) {
-		if (list->nodes[i].addr.sin_addr.s_addr == node.addr.sin_addr.s_addr && list->nodes[i].addr.sin_port == node.addr.sin_port){
-			return 1;
-		}
-	}
-	return 0;
+    for (size_t i = 0; i < list->size; ++i) {
+        if (list->nodes[i].addr.sin_addr.s_addr == node.addr.sin_addr.s_addr &&
+            list->nodes[i].addr.sin_port == node.addr.sin_port) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /**
@@ -141,15 +151,15 @@ int node_list_contains(node_list_t *list, node_t node){
  */
 void node_list_free(node_list_t *list)
 {
-    for(size_t i=0; i<list->size; i++) {
+    for (size_t i = 0; i < list->size; i++) {
         node_end(&list->nodes[i]);
     }
 
-    free(list->nodes);
     list->nodes = NULL;
-    list = NULL;
+//    free(list);
 }
 
-void node_list_sort(node_list_t *list, int (*comparator)(const node_t *, const node_t *)){
-    qsort(list->nodes, list->size, sizeof(node_t), comparator);
+void node_list_sort(node_list_t *list, int (*comparator)(const node_t *, const node_t *))
+{
+    qsort(list->nodes, list->size, sizeof(node_t), (__compar_fn_t) comparator);
 }

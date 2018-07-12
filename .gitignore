@@ -13,6 +13,7 @@ pps-client-find
 week04
 tests
 test-hashtable
+scenario_1
 
 #ignore the .orig
 *.orig

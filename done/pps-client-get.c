@@ -17,7 +17,7 @@
  * As follows : pps-client-get [-n N] [-r R] [--] <key>
  * @return Returns 0 on normal exit, -1 otherwise
  */
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 
     /* Client initialization and parsing optionnal arguments */
@@ -31,21 +31,22 @@ int main(int argc, char* argv[])
 
     error_code error_init = client_init(client_i);
 
-    if(error_init!=ERR_NONE) {
+    if (error_init != ERR_NONE) {
         printf("FAIL\n");
         return -1;
     }
 
     /* Parsing mandatory argument */
     pps_value_t get_value;
-    char* key = argv[0];
+    char *key = argv[0];
 
     error_code error = network_get(*client_i.client, key, &get_value);
 
-    if(error == ERR_NONE) {
+    if (error == ERR_NONE) {
         printf("OK %s\n", get_value);
         free_const_ptr(get_value);
     } else {
+        client_end(&client);
         printf("FAIL\n");
         return -1;
     }

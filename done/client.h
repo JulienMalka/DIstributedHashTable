@@ -21,7 +21,7 @@
 
 typedef struct{
 	const char* name;
-	node_list_t server;
+	ring_t server;
 	int socket;
 	args_t* args;
 	} client_t;

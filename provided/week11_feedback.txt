@@ -1,329 +1,57 @@
-Using master branch for submission. (sha: d6af46c8cc5581888743a1394e50c4a0f2eae395)
+Using master branch for submission. (sha: 8eb9017dc9e0cc93520358132acf0cb071f7d0d7)
 --------
 Checking for expected files
-Found expected file done/tests.h on master
-Found expected file done/args.c on master
-Found expected file done/node.c on master
-Found expected file done/system.h on master
-Didn't find expected file done/ring.c on master
-Found expected file done/config.h on master
-Found expected file done/network.h on master
-Found expected file done/network.c on master
 Found expected file done/hashtable.c on master
 Found expected file done/pps-client-find.c on master
-Found expected file done/Makefile on master
-Found expected file done/client.h on master
-Found expected file done/pps-client-put.c on master
-Found expected file done/util.c on master
+Found expected file done/system.c on master
+Found expected file done/ring.h on master
+Found expected file done/config.h on master
+Found expected file done/node_list.h on master
+Found expected file done/tests.h on master
+Found expected file done/system.h on master
+Found expected file done/node_list.c on master
+Found expected file done/network.c on master
 Found expected file done/pps-client-substr.c on master
 Found expected file done/log-packets.c on master
-Found expected file done/pps-client-cat.c on master
-Found expected file done/util.h on master
-Found expected file done/node_list.h on master
-Found expected file done/pps-dump-node.c on master
-Found expected file done/ring.h on master
-Found expected file done/pps-launch-server.c on master
-Found expected file done/test-hashtable.c on master
 Found expected file done/pps-list-nodes.c on master
-Found expected file done/hashtable.h on master
+Found expected file done/ring.c on master
+Found expected file done/args.c on master
 Found expected file done/pps-client-get.c on master
-Found expected file done/client.c on master
 Found expected file done/node.h on master
-Found expected file done/args.h on master
-Found expected file done/node_list.c on master
+Found expected file done/pps-client-cat.c on master
+Found expected file done/pps-dump-node.c on master
+Found expected file done/node.c on master
 Found expected file done/error.c on master
-Found expected file done/system.c on master
+Found expected file done/pps-launch-server.c on master
+Found expected file done/pps-client-put.c on master
+Found expected file done/Makefile on master
+Found expected file done/hashtable.h on master
+Found expected file done/util.c on master
 Found expected file done/error.h on master
+Found expected file done/util.h on master
+Found expected file done/client.c on master
+Found expected file done/args.h on master
+Found expected file done/network.h on master
+Found expected file done/client.h on master
+Found expected file done/test-hashtable.c on master
 --------
+Force copying (overwriting) provided file: system.c
+Force copying (overwriting) provided file: ring.h
+Force copying (overwriting) provided file: config.h
 Force copying (overwriting) provided file: tests.h
 Force copying (overwriting) provided file: system.h
-Force copying (overwriting) provided file: config.h
-Force copying (overwriting) provided file: network.h
-Force copying (overwriting) provided file: util.c
 Force copying (overwriting) provided file: log-packets.c
-Force copying (overwriting) provided file: util.h
-Force copying (overwriting) provided file: ring.h
 Force copying (overwriting) provided file: error.c
-Force copying (overwriting) provided file: system.c
+Force copying (overwriting) provided file: util.c
 Force copying (overwriting) provided file: error.h
-Got error code 2 when running trying to build target 'pps-client-substr' with command 'make pps-client-substr'
-stdout: cc -g -std=c99   -c -o pps-client-substr.o pps-client-substr.c
-cc -g -std=c99   -c -o network-utils.o network-utils.c
-cc -g -std=c99   -c -o network.o network.c
-cc -g -std=c99   -c -o client.o client.c
-cc -g -std=c99   -c -o node_list.o node_list.c
-cc -g -std=c99   -c -o system.o system.c
-cc -g -std=c99   -c -o node.o node.c
-cc -g -std=c99   -c -o hashtable.o hashtable.c
-cc -g -std=c99   -c -o args.o args.c
-cc   pps-client-substr.o network.o client.o node_list.o system.o node.o network-utils.o hashtable.o args.o   -o pps-client-substr
-<builtin>: recipe for target 'pps-client-substr' failed
-
----
-stderr: network.c: In function 'network_get':
-network.c:42:31: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-                 char* count = get_Htable_value(local_h_table, in_msg);
-                               ^
-client.c: In function 'client_init':
-client.c:31:24: warning: initialization makes integer from pointer without a cast [-Wint-conversion]
-     int adress_start = *client_init_args.argv;
-                        ^
-client.c:43:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-         nb_parsed = ((int)*client_init_args.argv - adress_start) / sizeof(char**);
-                      ^
-network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-substr.o:(.data+0x0): first defined here
-client.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-substr.o:/test/done/pps-client-substr.c:16: first defined here
-node_list.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-substr.o:/test/done/pps-client-substr.c:16: first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-substr.o:/test/done/pps-client-substr.c:16: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-client-substr] Error 1
-
-Got error code 2 when running trying to build target 'pps-client-substr' with command 'make'
-stdout: cc -g -std=c99   -c -o pps-launch-server.o pps-launch-server.c
-cc   pps-launch-server.o system.o network.o hashtable.o network-utils.o   -o pps-launch-server
-<builtin>: recipe for target 'pps-launch-server' failed
-
----
-stderr: network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:(.data+0x0): first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:/test/done/pps-launch-server.c:21: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-launch-server] Error 1
-
-Got error code 2 when running trying to build target 'pps-client-substr' with command '[staff makefile]'
-Got error code 2 when running trying to build target 'pps-client-substr' with command '[staff makefile]'
-Unable to build target 'pps-client-substr'
-Got error code 2 when running trying to build target 'pps-client-put' with command 'make pps-client-put'
-stdout: cc -g -std=c99   -c -o pps-client-put.o pps-client-put.c
-cc   pps-client-put.o client.o node.o network.o system.o node_list.o network-utils.o hashtable.o args.o   -o pps-client-put
-<builtin>: recipe for target 'pps-client-put' failed
-
----
-stderr: client.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-put.o:(.data+0x0): first defined here
-network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-put.o:/test/done/pps-client-put.c:19: first defined here
-node_list.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-put.o:/test/done/pps-client-put.c:19: first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-put.o:/test/done/pps-client-put.c:19: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-client-put] Error 1
-
-Got error code 2 when running trying to build target 'pps-client-put' with command 'make'
-stdout: cc   pps-launch-server.o system.o network.o hashtable.o network-utils.o   -o pps-launch-server
-<builtin>: recipe for target 'pps-launch-server' failed
-
----
-stderr: network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:(.data+0x0): first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:/test/done/pps-launch-server.c:21: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-launch-server] Error 1
-
-Got error code 2 when running trying to build target 'pps-client-put' with command '[staff makefile]'
-Got error code 2 when running trying to build target 'pps-client-put' with command '[staff makefile]'
-Unable to build target 'pps-client-put'
-Got error code 2 when running trying to build target 'pps-dump-node' with command 'make pps-dump-node'
-stdout: cc -g -std=c99   -c -o pps-dump-node.o pps-dump-node.c
-cc   pps-dump-node.o network.o system.o node.o hashtable.o network-utils.o args.o client.o node_list.o   -o pps-dump-node
-<builtin>: recipe for target 'pps-dump-node' failed
-
----
-stderr: network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-dump-node.o:(.data+0x0): first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-dump-node.o:/test/done/pps-dump-node.c:25: first defined here
-client.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-dump-node.o:/test/done/pps-dump-node.c:25: first defined here
-node_list.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-dump-node.o:/test/done/pps-dump-node.c:25: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-dump-node] Error 1
-
-Got error code 2 when running trying to build target 'pps-dump-node' with command 'make'
-stdout: cc   pps-launch-server.o system.o network.o hashtable.o network-utils.o   -o pps-launch-server
-<builtin>: recipe for target 'pps-launch-server' failed
-
----
-stderr: network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:(.data+0x0): first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:/test/done/pps-launch-server.c:21: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-launch-server] Error 1
-
-Got error code 2 when running trying to build target 'pps-dump-node' with command '[staff makefile]'
-Got error code 2 when running trying to build target 'pps-dump-node' with command '[staff makefile]'
-Unable to build target 'pps-dump-node'
-Got error code 2 when running trying to build target 'pps-client-find' with command 'make pps-client-find'
-stdout: cc -g -std=c99   -c -o pps-client-find.o pps-client-find.c
-cc   pps-client-find.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o args.o   -o pps-client-find
-<builtin>: recipe for target 'pps-client-find' failed
-
----
-stderr: client.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-find.o:(.data+0x0): first defined here
-network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-find.o:/test/done/pps-client-find.c:16: first defined here
-node_list.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-find.o:/test/done/pps-client-find.c:16: first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-find.o:/test/done/pps-client-find.c:16: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-client-find] Error 1
-
-Got error code 2 when running trying to build target 'pps-client-find' with command 'make'
-stdout: cc   pps-launch-server.o system.o network.o hashtable.o network-utils.o   -o pps-launch-server
-<builtin>: recipe for target 'pps-launch-server' failed
-
----
-stderr: network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:(.data+0x0): first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:/test/done/pps-launch-server.c:21: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-launch-server] Error 1
-
-Got error code 2 when running trying to build target 'pps-client-find' with command '[staff makefile]'
-Got error code 2 when running trying to build target 'pps-client-find' with command '[staff makefile]'
-Unable to build target 'pps-client-find'
-Got error code 2 when running trying to build target 'pps-client-cat' with command 'make pps-client-cat'
-stdout: cc -g -std=c99   -c -o pps-client-cat.o pps-client-cat.c
-cc   pps-client-cat.o network.o client.o node_list.o system.o node.o network-utils.o hashtable.o args.o   -o pps-client-cat
-<builtin>: recipe for target 'pps-client-cat' failed
-
----
-stderr: pps-client-cat.c: In function 'main':
-pps-client-cat.c:51:17: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-  char* concat = value_from;
-                 ^
-network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-cat.o:(.data+0x0): first defined here
-client.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-cat.o:/test/done/pps-client-cat.c:9: first defined here
-node_list.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-cat.o:/test/done/pps-client-cat.c:9: first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-cat.o:/test/done/pps-client-cat.c:9: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-client-cat] Error 1
-
-Got error code 2 when running trying to build target 'pps-client-cat' with command 'make'
-stdout: cc   pps-launch-server.o system.o network.o hashtable.o network-utils.o   -o pps-launch-server
-<builtin>: recipe for target 'pps-launch-server' failed
-
----
-stderr: network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:(.data+0x0): first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:/test/done/pps-launch-server.c:21: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-launch-server] Error 1
-
-Got error code 2 when running trying to build target 'pps-client-cat' with command '[staff makefile]'
-Got error code 2 when running trying to build target 'pps-client-cat' with command '[staff makefile]'
-Unable to build target 'pps-client-cat'
-Got error code 2 when running trying to build target 'pps-launch-server' with command 'make pps-launch-server'
-stdout: cc   pps-launch-server.o system.o network.o hashtable.o network-utils.o   -o pps-launch-server
-<builtin>: recipe for target 'pps-launch-server' failed
-
----
-stderr: network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:(.data+0x0): first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:/test/done/pps-launch-server.c:21: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-launch-server] Error 1
-
-Got error code 2 when running trying to build target 'pps-launch-server' with command 'make'
-stdout: cc   pps-launch-server.o system.o network.o hashtable.o network-utils.o   -o pps-launch-server
-<builtin>: recipe for target 'pps-launch-server' failed
-
----
-stderr: network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:(.data+0x0): first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:/test/done/pps-launch-server.c:21: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-launch-server] Error 1
-
-Got error code 2 when running trying to build target 'pps-launch-server' with command '[staff makefile]'
-Got error code 2 when running trying to build target 'pps-launch-server' with command '[staff makefile]'
-Unable to build target 'pps-launch-server'
-Got error code 2 when running trying to build target 'pps-list-nodes' with command 'make pps-list-nodes'
-stdout: cc -g -std=c99   -c -o pps-list-nodes.o pps-list-nodes.c
-cc   pps-list-nodes.o system.o network.o client.o node_list.o node.o network-utils.o hashtable.o args.o   -o pps-list-nodes
-<builtin>: recipe for target 'pps-list-nodes' failed
-
----
-stderr: network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-list-nodes.o:(.data+0x0): first defined here
-client.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-list-nodes.o:/test/done/pps-list-nodes.c:22: first defined here
-node_list.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-list-nodes.o:/test/done/pps-list-nodes.c:22: first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-list-nodes.o:/test/done/pps-list-nodes.c:22: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-list-nodes] Error 1
-
-Got error code 2 when running trying to build target 'pps-list-nodes' with command 'make'
-stdout: cc   pps-launch-server.o system.o network.o hashtable.o network-utils.o   -o pps-launch-server
-<builtin>: recipe for target 'pps-launch-server' failed
-
----
-stderr: network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:(.data+0x0): first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:/test/done/pps-launch-server.c:21: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-launch-server] Error 1
-
-Got error code 2 when running trying to build target 'pps-list-nodes' with command '[staff makefile]'
-Got error code 2 when running trying to build target 'pps-list-nodes' with command '[staff makefile]'
-Unable to build target 'pps-list-nodes'
-Got error code 2 when running trying to build target 'pps-client-get' with command 'make pps-client-get'
-stdout: cc -g -std=c99   -c -o pps-client-get.o pps-client-get.c
-cc   pps-client-get.o client.o node.o network.o system.o node_list.o util.o network-utils.o hashtable.o args.o   -o pps-client-get
-<builtin>: recipe for target 'pps-client-get' failed
-
----
-stderr: client.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-get.o:(.data+0x0): first defined here
-network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-get.o:/test/done/pps-client-get.c:20: first defined here
-node_list.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-get.o:/test/done/pps-client-get.c:20: first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-client-get.o:/test/done/pps-client-get.c:20: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-client-get] Error 1
-
-Got error code 2 when running trying to build target 'pps-client-get' with command 'make'
-stdout: cc   pps-launch-server.o system.o network.o hashtable.o network-utils.o   -o pps-launch-server
-<builtin>: recipe for target 'pps-launch-server' failed
-
----
-stderr: network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:(.data+0x0): first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:/test/done/pps-launch-server.c:21: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-launch-server] Error 1
-
-Got error code 2 when running trying to build target 'pps-client-get' with command '[staff makefile]'
-Got error code 2 when running trying to build target 'pps-client-get' with command '[staff makefile]'
-Unable to build target 'pps-client-get'
+Force copying (overwriting) provided file: util.h
+Force copying (overwriting) provided file: Makefile.log-packets
+Force copying (overwriting) provided file: network.h
+Deleting compilation file: log-packets.so
+Deleting compilation file: log-packets.so
 Got error code 2 when running trying to build target 'test-hashtable' with command 'make test-hashtable'
-stdout: gcc -o test-hashtable test-hashtable.c node_list.c error.c node.c system.c -lcheck -lm -lrt -pthread -lsubunit
-Makefile:35: recipe for target 'test-hashtable' failed
+stdout: cc -g -pedantic -Wall -Wextra -std=c99    test-hashtable.c  -lcrypto -o test-hashtable
+<builtin>: recipe for target 'test-hashtable' failed
 
 ---
 stderr: test-hashtable.c: In function 'construct_and_delete':
@@ -388,18 +116,6 @@ hashtable.h:97:13: note: expected 'Htable_t {aka struct <anonymous>}' but argume
              ^
 make: *** [test-hashtable] Error 1
 
-Got error code 2 when running trying to build target 'test-hashtable' with command 'make'
-stdout: cc   pps-launch-server.o system.o network.o hashtable.o network-utils.o   -o pps-launch-server
-<builtin>: recipe for target 'pps-launch-server' failed
-
----
-stderr: network.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:(.data+0x0): first defined here
-network-utils.o:(.data+0x0): multiple definition of `ALLOCATED_MEMORY_LIST'
-pps-launch-server.o:/test/done/pps-launch-server.c:21: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [pps-launch-server] Error 1
-
 Got error code 2 when running trying to build target 'test-hashtable' with command '[staff makefile]'
 Got error code 2 when running trying to build target 'test-hashtable' with command '[staff makefile]'
 Unable to build target 'test-hashtable'
@@ -409,21 +125,155 @@ Unable to run test-hashtable. Executable couldn't build
 Running test scripts
 
 
-Unable to run test '05.basic.sh' because the following executables weren't found: pps-client-put, pps-client-get, pps-launch-server
+Test 10.basic-quorum.sh returned code 1
+stdout:
+>> running 10.basic-quorum.sh
+Test 1 (launch server): PASS
+PASS
+PASS
+Test 2 (put s servers 1,2): PASS
+Test 3 (put s server 3): FAIL
+Expected:
+$ ./pps-client-put -n 1 -w 1 -- 's' 'beta'
+OK
+Actual:
+$ ./pps-client-put -n 1 -w 1 -- 's' 'beta'
+
+
+------
+stderr:
+
 -----------
-Unable to run test '06.basic.sh' because the following executables weren't found: pps-client-put, pps-client-get, pps-launch-server
+Test 09.basic-cat.sh returned code 1
+stdout:
+>> running 09.basic-cat.sh
+Test 1 (launch server): PASS
+PASS
+PASS
+Test 2 (put a): PASS
+Test 3 (put b): FAIL
+Expected:
+$ ./pps-client-put -n 3 -w 3 -- 'b' 'beta'
+OK
+Actual:
+$ ./pps-client-put -n 3 -w 3 -- 'b' 'beta'
+
+
+------
+stderr:
+
 -----------
-Unable to run test '11.basic-network-ring.sh' because the following executables weren't found: pps-client-substr, pps-client-put, pps-dump-node, pps-client-find, pps-client-cat, pps-launch-server, pps-list-nodes, pps-client-get
+Test 09.basic-substr.sh returned code 1
+stdout:
+>> running 09.basic-substr.sh
+Test 1 (launch server): PASS
+PASS
+PASS
+Test 2 (put a): PASS
+Test 3 (substr positive offset): FAIL
+Expected:
+$ ./pps-client-substr a 3 2 b
+OK
+Actual:
+$ ./pps-client-substr a 3 2 b
+
+
+------
+stderr:
+
 -----------
-Unable to run test '07.basic.sh' because the following executables weren't found: pps-client-put, pps-client-get, pps-launch-server
+Test 07.basic.sh returned code 0
+stdout:
+>> running 07.basic.sh
+Test 1 (launch 1st server): PASS
+Test 2 (launch 2nd server): PASS
+Test 3 (put, 2 servers): PASS
+Test 4 (get, 2 servers): PASS
+SUCCESS
+
+------
+stderr:
+
 -----------
-Unable to run test '08.basic.sh' because the following executables weren't found: pps-dump-node, pps-list-nodes, pps-client-put, pps-client-get, pps-launch-server
+Test 06.basic.sh returned code 0
+stdout:
+>> running 06.basic.sh
+Test 1 (launch 1st server): PASS
+Test 2 (launch 2nd server): PASS
+Test 3 (put, 2 servers): PASS
+Test 4 (get, 2 servers): PASS
+SUCCESS
+
+------
+stderr:
+
 -----------
-Unable to run test '09.basic-find.sh' because the following executables weren't found: pps-client-substr, pps-client-put, pps-dump-node, pps-client-find, pps-client-cat, pps-launch-server, pps-list-nodes, pps-client-get
+Test 11.basic-network-ring.sh returned code 1
+stdout:
+>> running 11.basic-network-ring.sh
+Test 1 (launch server): PASS
+PASS
+PASS
+Test 2 (put with skip): PASS
+Test 3 (get with skip): FAIL
+Expected:
+$ ./pps-client-get -n 3 -r 3 -- 'b'
+OK 1
+Actual:
+$ ./pps-client-get -n 3 -r 3 -- 'b'
+FAIL
+
+------
+stderr:
+
 -----------
-Unable to run test '10.basic-quorum.sh' because the following executables weren't found: pps-client-substr, pps-client-put, pps-dump-node, pps-client-find, pps-client-cat, pps-launch-server, pps-list-nodes, pps-client-get
+Test 08.basic.sh returned code 1
+stdout:
+>> running 08.basic.sh
+Test 1 (launch server): PASS
+Test 2 (list server): PASS
+Test 3 (list failed servers): PASS
+Test 4 (dump server): PASS
+FAIL
+Expected:
+$ ./pps-client-put -n 1 -w 1 -- 'b' '2'
+OK
+Actual:
+$ ./pps-client-put -n 1 -w 1 -- 'b' '2'
+
+
+------
+stderr:
+
 -----------
-Unable to run test '09.basic-substr.sh' because the following executables weren't found: pps-client-substr, pps-client-put, pps-dump-node, pps-client-find, pps-client-cat, pps-launch-server, pps-list-nodes, pps-client-get
+Test 05.basic.sh returned code 0
+stdout:
+>> running 05.basic.sh
+Test 1 (server launch): PASS
+Test 2 (client put): PASS
+Test 3 (client get): PASS
+SUCCESS
+
+------
+stderr:
+
 -----------
-Unable to run test '09.basic-cat.sh' because the following executables weren't found: pps-client-substr, pps-client-put, pps-dump-node, pps-client-find, pps-client-cat, pps-launch-server, pps-list-nodes, pps-client-get
+Test 09.basic-find.sh returned code 1
+stdout:
+>> running 09.basic-find.sh
+Test 1 (launch server): PASS
+PASS
+PASS
+Test 2 (put a): PASS
+Test 3 (put b): FAIL
+Expected:
+$ ./pps-client-put -n 3 -w 3 -- 'b' '34'
+OK
+Actual:
+$ ./pps-client-put -n 3 -w 3 -- 'b' '34'
+
+
+------
+stderr:
+
 
