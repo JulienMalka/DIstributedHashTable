@@ -25,3 +25,5 @@ test-hashtable
 CMakeLists.txt
 cmake-build-debug/
 done/launch_servers.txt
+.DS_Store
+
