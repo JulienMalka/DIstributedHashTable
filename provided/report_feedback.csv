@@ -1,2 +1,0 @@
-name,ratio,comment
-IndigoMagicPorcupines,51.6666666666667,"You open with a discussion about the size of a hashtable vs. the number of keys it holds but don’t follow-up with any experiment on that. The actual experiment just measures the time taken to perform a sequence of put/get operations in sequence, which doesn’t reveal any compelling effect."

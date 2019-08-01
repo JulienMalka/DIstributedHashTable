@@ -1,3 +1,0 @@
-CFLAGS = -g
-all:
-	gcc -o tests tests.c node_list.o error.c node.o ring.c system.o args.o -lcheck -lm -lrt -pthread -lsubunit -g -lcrypto
